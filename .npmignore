@@ -1,0 +1,24 @@
+# Source files
+src/
+scripts/
+tests/
+
+# Development files
+*.md
+!README.md
+.editorconfig
+.eslintrc*
+.prettierrc*
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# Archives
+*.tar.gz
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db

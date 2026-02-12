@@ -1,0 +1,51 @@
+{
+  "name": "kracked-skill",
+  "version": "3.3.0",
+  "description": "KRACKED - Structured Multi-Role AI Product Execution System for Claude Code",
+  "author": "KrackedAI",
+  "license": "MIT",
+  "homepage": "https://github.com/KrackedAI/kracked-skill#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KrackedAI/kracked-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/KrackedAI/kracked-skill/issues"
+  },
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "ai",
+    "product-management",
+    "workflow",
+    "multi-agent",
+    "agile",
+    "devops"
+  ],
+  "scripts": {
+    "install": "node scripts/install.js",
+    "postinstall": "node scripts/verify.js",
+    "uninstall": "node scripts/uninstall.js"
+  },
+  "bin": {
+    "kracked-install": "./scripts/install.js"
+  },
+  "claude": {
+    "plugin": {
+      "id": "kracked-skill",
+      "name": "KRACKED",
+      "version": "3.3.0",
+      "minClaudeVersion": "1.0.0"
+    }
+  },
+  "files": [
+    "plugin.json",
+    "README.md",
+    "LICENSE",
+    "commands/",
+    "agents/",
+    "skills/",
+    "templates/",
+    "docs/"
+  ]
+}

@@ -1,0 +1,193 @@
+{
+  "$schema": "https://claude.ai/api/plugins/v1/schema.json",
+  "name": "kracked-skill",
+  "version": "3.3.0",
+  "description": "KRACKED - Structured Multi-Role AI Product Execution System with Multi-Language Support (English & Bahasa Melayu)",
+  "author": "KrackedAI",
+  "homepage": "https://github.com/KrackedAI/kracked-skill",
+  "repository": "https://github.com/KrackedAI/kracked-skill",
+  "license": "MIT",
+  "categories": [
+    "productivity",
+    "development",
+    "project-management"
+  ],
+  "capabilities": [
+    "multi-agent",
+    "workflow-automation",
+    "code-generation",
+    "documentation"
+  ],
+  "settings": {
+    "defaultLanguage": "EN",
+    "supportedLanguages": ["EN", "MS"],
+    "scale": "standard"
+  },
+  "mcpServers": [],
+  "hooks": {},
+  "commands": [
+    {
+      "name": "analyze",
+      "description": "Stage 1 - Discovery and risk identification by Analyst role",
+      "path": "commands/skills/analyze.md"
+    },
+    {
+      "name": "product-brief",
+      "description": "Create product brief artifact",
+      "path": "commands/skills/product-brief.md"
+    },
+    {
+      "name": "prd",
+      "description": "Stage 2 - Product Requirements Document by Product Manager",
+      "path": "commands/skills/prd.md"
+    },
+    {
+      "name": "architecture",
+      "description": "Stage 3 - System architecture design with depth selection",
+      "path": "commands/skills/architecture.md"
+    },
+    {
+      "name": "epics-and-stories",
+      "description": "Create backlog with epics and user stories",
+      "path": "commands/skills/epics-and-stories.md"
+    },
+    {
+      "name": "dev-story",
+      "description": "Stage 4 - Implement single story with focus selection",
+      "path": "commands/skills/dev-story.md"
+    },
+    {
+      "name": "code-review",
+      "description": "Stage 5 - Quality and security code review",
+      "path": "commands/skills/code-review.md"
+    },
+    {
+      "name": "deployment-plan",
+      "description": "Stage 6 - Deployment strategy and infrastructure setup",
+      "path": "commands/skills/deployment-plan.md"
+    },
+    {
+      "name": "scale-review",
+      "description": "Stage 7 - Post-deployment review and metrics",
+      "path": "commands/skills/scale-review.md"
+    },
+    {
+      "name": "party-mode",
+      "description": "Multi-agent parallel ideation mode",
+      "path": "commands/multi-agent/party-mode.md"
+    },
+    {
+      "name": "swarm",
+      "description": "Multi-agent parallel task execution mode",
+      "path": "commands/multi-agent/swarm.md"
+    },
+    {
+      "name": "language",
+      "description": "Display or change language setting",
+      "path": "commands/utility/language.md"
+    },
+    {
+      "name": "status",
+      "description": "Display current project state from status.md",
+      "path": "commands/utility/status.md"
+    },
+    {
+      "name": "help",
+      "description": "Display KRACKED command reference",
+      "path": "commands/utility/help.md"
+    },
+    {
+      "name": "rollback",
+      "description": "Return to previous workflow stage",
+      "path": "commands/utility/rollback.md"
+    },
+    {
+      "name": "retry",
+      "description": "Retry current failed operation",
+      "path": "commands/utility/retry.md"
+    },
+    {
+      "name": "compress-context",
+      "description": "Reduce context usage by archiving",
+      "path": "commands/utility/compress-context.md"
+    },
+    {
+      "name": "show",
+      "description": "Display specific artifact",
+      "path": "commands/utility/show.md"
+    }
+  ],
+  "agents": [
+    {
+      "name": "kracked-analyst",
+      "description": "Discovery, research, and risk identification specialist",
+      "color": "#3B82F6",
+      "path": "agents/analyst.md"
+    },
+    {
+      "name": "kracked-product-manager",
+      "description": "PRD, personas, and success metrics specialist",
+      "color": "#8B5CF6",
+      "path": "agents/product-manager.md"
+    },
+    {
+      "name": "kracked-architect",
+      "description": "System design, tech stack, and data model specialist",
+      "color": "#EC4899",
+      "path": "agents/architect.md"
+    },
+    {
+      "name": "kracked-tech-lead",
+      "description": "Task breakdown and implementation planning specialist",
+      "color": "#F59E0B",
+      "path": "agents/tech-lead.md"
+    },
+    {
+      "name": "kracked-engineer",
+      "description": "Code implementation and unit testing specialist",
+      "color": "#10B981",
+      "path": "agents/engineer.md"
+    },
+    {
+      "name": "kracked-qa",
+      "description": "Testing and quality validation specialist",
+      "color": "#06B6D4",
+      "path": "agents/qa.md"
+    },
+    {
+      "name": "kracked-security",
+      "description": "Security audit and vulnerability check specialist",
+      "color": "#EF4444",
+      "path": "agents/security.md"
+    },
+    {
+      "name": "kracked-devops",
+      "description": "Deployment, infrastructure, and monitoring specialist",
+      "color": "#6366F1",
+      "path": "agents/devops.md"
+    },
+    {
+      "name": "kracked-release-manager",
+      "description": "Release notes and post-deploy metrics specialist",
+      "color": "#84CC16",
+      "path": "agents/release-manager.md"
+    }
+  ],
+  "skills": [
+    {
+      "name": "kracked-workflow",
+      "description": "Complete KRACKED v3.3 workflow system with multi-language support",
+      "path": "skills/kracked-workflow.md"
+    },
+    {
+      "name": "kracked-multi-agent",
+      "description": "Multi-agent system with Party Mode and Agent Swarm",
+      "path": "skills/kracked-multi-agent.md"
+    },
+    {
+      "name": "kracked-language",
+      "description": "Language system supporting English and Bahasa Melayu",
+      "path": "skills/kracked-language.md"
+    }
+  ]
+}
