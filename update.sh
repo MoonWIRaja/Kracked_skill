@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 # ============================================================================
-# KRACKED_skill (KD) - Update Script
+# KRACKED_skill (KD) v2.0.0-beta — Update Script
 # AI Skill by KRACKEDDEVS | https://krackeddevs.com/
+# Works on: macOS, Linux, Git Bash (Windows), WSL
 # ============================================================================
 
 set -euo pipefail
 
+readonly KD_VERSION="2.0.0-beta"
 readonly KD_DIR=".kracked"
 readonly KD_REPO="MoonWIRaja/Kracked_skill"
 readonly KD_RAW_URL="https://raw.githubusercontent.com/${KD_REPO}/main"
@@ -30,10 +32,16 @@ TARGET_DIR="${1:-.}"
 download_file() {
     local url="$1"
     local dest="$2"
+
+    mkdir -p "$(dirname "$dest")"
+
     if command -v curl &>/dev/null; then
         curl -fsSL "$url" -o "$dest" 2>/dev/null
     elif command -v wget &>/dev/null; then
         wget -qO "$dest" "$url" 2>/dev/null
+    else
+        log_error "Neither curl nor wget found."
+        return 1
     fi
 }
 
@@ -55,7 +63,7 @@ fetch_latest_version() {
     tmp_version=$(mktemp)
 
     if download_file "${KD_RAW_URL}/VERSION" "$tmp_version"; then
-        cat "$tmp_version"
+        tr -d '[:space:]' < "$tmp_version"
         rm -f "$tmp_version"
     else
         rm -f "$tmp_version"
@@ -64,12 +72,11 @@ fetch_latest_version() {
 }
 
 version_gt() {
-    # Returns 0 if $1 > $2
     [ "$(printf '%s\n' "$1" "$2" | sort -V | head -n1)" != "$1" ]
 }
 
 # ---------------------------------------------------------------------------
-# Backup Config
+# Backup Config + Status
 # ---------------------------------------------------------------------------
 backup_config() {
     local backup_dir="${TARGET_DIR}/${KD_DIR}/.backup_$(date +%Y%m%d_%H%M%S)"
@@ -80,16 +87,21 @@ backup_config() {
         cp "${TARGET_DIR}/${KD_DIR}/config/settings.json" "$backup_dir/"
     fi
 
-    # Backup status.md
-    if [[ -f "${TARGET_DIR}/status.md" ]]; then
-        cp "${TARGET_DIR}/status.md" "$backup_dir/"
+    # Backup status.md (new path)
+    if [[ -f "${TARGET_DIR}/${KD_DIR}/KD_output/status/status.md" ]]; then
+        cp "${TARGET_DIR}/${KD_DIR}/KD_output/status/status.md" "$backup_dir/"
+    fi
+
+    # Backup all KD_output content
+    if [[ -d "${TARGET_DIR}/${KD_DIR}/KD_output" ]]; then
+        cp -r "${TARGET_DIR}/${KD_DIR}/KD_output" "$backup_dir/KD_output_backup"
     fi
 
     echo "$backup_dir"
 }
 
 # ---------------------------------------------------------------------------
-# Restore Config
+# Restore Config + Status
 # ---------------------------------------------------------------------------
 restore_config() {
     local backup_dir="$1"
@@ -100,8 +112,58 @@ restore_config() {
     fi
 
     if [[ -f "${backup_dir}/status.md" ]]; then
-        cp "${backup_dir}/status.md" "${TARGET_DIR}/status.md"
+        cp "${backup_dir}/status.md" "${TARGET_DIR}/${KD_DIR}/KD_output/status/status.md"
         log_info "status.md restored."
+    fi
+
+    # Restore all KD_output content (epics, stories, etc.)
+    if [[ -d "${backup_dir}/KD_output_backup" ]]; then
+        for category in "${backup_dir}/KD_output_backup"/*/; do
+            local category_name
+            category_name=$(basename "$category")
+            if [[ "$category_name" != "status" ]]; then
+                if [[ -d "$category" ]]; then
+                    cp -r "$category" "${TARGET_DIR}/${KD_DIR}/KD_output/${category_name}"
+                fi
+            fi
+        done
+        log_info "KD_output content restored."
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Read current target tools from settings
+# ---------------------------------------------------------------------------
+get_current_targets() {
+    if [[ -f "${TARGET_DIR}/${KD_DIR}/config/settings.json" ]]; then
+        # Try multi-target format first
+        local targets
+        targets=$(grep -o '"target_tools"[[:space:]]*:[[:space:]]*\[[^]]*\]' \
+            "${TARGET_DIR}/${KD_DIR}/config/settings.json" 2>/dev/null | \
+            grep -o '"[a-z-]*"' | tr -d '"' | paste -sd',' - 2>/dev/null || true)
+
+        if [[ -n "$targets" ]]; then
+            echo "$targets"
+            return
+        fi
+
+        # Fallback: single target format
+        targets=$(grep -o '"target_tool"[[:space:]]*:[[:space:]]*"[^"]*"' \
+            "${TARGET_DIR}/${KD_DIR}/config/settings.json" | \
+            grep -o '"[^"]*"$' | tr -d '"' || echo "claude-code")
+        echo "$targets"
+    else
+        echo "claude-code"
+    fi
+}
+
+get_current_language() {
+    if [[ -f "${TARGET_DIR}/${KD_DIR}/config/settings.json" ]]; then
+        grep -o '"language"[[:space:]]*:[[:space:]]*"[^"]*"' \
+            "${TARGET_DIR}/${KD_DIR}/config/settings.json" | \
+            grep -o '"[^"]*"$' | tr -d '"' || echo "EN"
+    else
+        echo "EN"
     fi
 }
 
@@ -110,13 +172,16 @@ restore_config() {
 # ---------------------------------------------------------------------------
 main() {
     echo ""
-    echo -e "  ${BOLD}KD Update${NC}"
-    echo -e "  AI Skill by KRACKEDDEVS | https://krackeddevs.com/"
+    echo -e "  ${BOLD}========================================${NC}"
+    echo -e "  ${BOLD}  KD Update — KRACKED_skill${NC}"
+    echo -e "  ${BOLD}  AI Skill by KRACKEDDEVS${NC}"
+    echo -e "  ${BOLD}========================================${NC}"
     echo ""
 
     # Check if KD is installed
     if [[ ! -d "${TARGET_DIR}/${KD_DIR}" ]]; then
         log_error "KD is not installed in ${TARGET_DIR}"
+        log_error "Run install.sh first to install KD."
         exit 1
     fi
 
@@ -150,10 +215,18 @@ main() {
     fi
 
     # Backup
-    log_info "Backing up configuration..."
+    log_info "Backing up configuration and output files..."
     local backup_dir
     backup_dir=$(backup_config)
     log_success "Backup created at ${backup_dir}"
+
+    # Get current settings
+    local target_tools
+    target_tools=$(get_current_targets)
+    local language
+    language=$(get_current_language)
+
+    log_info "Restoring with: target=${target_tools}, language=${language}"
 
     # Download and run installer
     log_info "Downloading update..."
@@ -161,20 +234,8 @@ main() {
     install_script=$(mktemp)
 
     if download_file "${KD_RAW_URL}/install.sh" "$install_script"; then
-        # Get current settings
-        local target_tool
-        target_tool=$(grep -o '"target_tool"[[:space:]]*:[[:space:]]*"[^"]*"' \
-            "${TARGET_DIR}/${KD_DIR}/config/settings.json" | \
-            grep -o '"[^"]*"$' | tr -d '"' || echo "claude-code")
-
-        local language
-        language=$(grep -o '"language"[[:space:]]*:[[:space:]]*"[^"]*"' \
-            "${TARGET_DIR}/${KD_DIR}/config/settings.json" | \
-            grep -o '"[^"]*"$' | tr -d '"' || echo "EN")
-
-        # Run installer with force
         bash "$install_script" "$TARGET_DIR" \
-            --target="$target_tool" \
+            --target="$target_tools" \
             --language="$language" \
             --force \
             --non-interactive
@@ -188,10 +249,19 @@ main() {
         exit 1
     fi
 
-    # Restore user config
+    # Restore user config and output
     restore_config "$backup_dir"
 
+    echo ""
     log_success "KD updated to v${latest_version}!"
+    echo ""
+    echo -e "  ${BOLD}What's new:${NC}"
+    echo -e "    • Type ${CYAN}/KD${NC} for the interactive command menu"
+    echo -e "    • New ${CYAN}/KD-brainstorm${NC} stage for ideation"
+    echo -e "    • Named agent personalities in multi-agent modes"
+    echo -e "    • Auto-debug before status updates"
+    echo -e "    • Organized epics-and-stories directory"
+    echo ""
 }
 
 main "$@"

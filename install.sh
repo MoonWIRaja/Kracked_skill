@@ -10,7 +10,7 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-readonly KD_VERSION="1.0.0"
+readonly KD_VERSION="2.0.0-beta"
 readonly KD_REPO="MoonWIRaja/Kracked_skill"
 readonly KD_RAW_URL="https://raw.githubusercontent.com/${KD_REPO}/main"
 readonly KD_DIR=".kracked"
@@ -28,7 +28,7 @@ readonly NC='\033[0m' # No Color
 
 # Defaults
 TARGET_DIR="."
-TARGET_TOOL=""
+TARGET_TOOLS=""
 LANGUAGE=""
 NON_INTERACTIVE=false
 FORCE_INSTALL=false
@@ -77,7 +77,7 @@ Arguments:
   TARGET_DIR                  Target project directory (default: current directory)
 
 Options:
-  --target=<tool>             AI tool target: claude-code, cursor, antigravity
+  --target=<tools>            AI tools (comma-separated): claude-code, cursor, antigravity, all
   --language=<lang>           Language preference: EN, MS
   --non-interactive           Skip interactive prompts, use defaults
   --force                     Overwrite existing installation
@@ -86,7 +86,8 @@ Options:
 
 Examples:
   curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
-  bash install.sh /path/to/project --target=claude-code --language=MS
+  bash install.sh /path/to/project --target=claude-code,cursor --language=MS
+  bash install.sh . --target=all --language=EN
   bash install.sh . --non-interactive --force
 
 USAGE
@@ -183,30 +184,54 @@ detect_platform() {
 # Interactive Prompts
 # ---------------------------------------------------------------------------
 ask_target() {
-    if [[ -n "$TARGET_TOOL" ]]; then
+    if [[ -n "$TARGET_TOOLS" ]]; then
+        if [[ "$TARGET_TOOLS" == "all" ]]; then
+            TARGET_TOOLS="claude-code,cursor,antigravity"
+        fi
         return
     fi
 
     if [[ "$NON_INTERACTIVE" == true ]]; then
-        TARGET_TOOL="claude-code"
+        TARGET_TOOLS="claude-code"
         return
     fi
 
     echo ""
-    echo -e "  ${BOLD}Select target AI tool:${NC}"
+    echo -e "  ${BOLD}Select target AI tool(s) — choose multiple with commas (e.g. 1,3):${NC}"
     echo -e "    ${CYAN}[1]${NC} Claude Code"
     echo -e "    ${CYAN}[2]${NC} Cursor"
     echo -e "    ${CYAN}[3]${NC} Antigravity"
+    echo -e "    ${YELLOW}[A]${NC} All of the above"
     echo ""
 
     while true; do
-        read -rp "  Enter choice [1-3]: " choice
-        case "$choice" in
-            1) TARGET_TOOL="claude-code"; break ;;
-            2) TARGET_TOOL="cursor"; break ;;
-            3) TARGET_TOOL="antigravity"; break ;;
-            *) echo -e "  ${RED}Invalid choice. Please enter 1, 2, or 3.${NC}" ;;
-        esac
+        read -rp "  Enter choice(s) [1-3, A]: " choice
+        choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
+
+        if [[ "$choice" == "A" ]]; then
+            TARGET_TOOLS="claude-code,cursor,antigravity"
+            break
+        fi
+
+        local selections=""
+        local valid=true
+        IFS=',' read -ra parts <<< "$choice"
+        for part in "${parts[@]}"; do
+            part=$(echo "$part" | tr -d ' ')
+            case "$part" in
+                1) selections="${selections:+$selections,}claude-code" ;;
+                2) selections="${selections:+$selections,}cursor" ;;
+                3) selections="${selections:+$selections,}antigravity" ;;
+                *) valid=false ;;
+            esac
+        done
+
+        if [[ "$valid" == true && -n "$selections" ]]; then
+            TARGET_TOOLS="$selections"
+            break
+        fi
+
+        echo -e "  ${RED}Invalid choice. Enter numbers 1-3 separated by commas, or A for all.${NC}"
     done
 }
 
@@ -244,7 +269,7 @@ confirm_installation() {
 
     echo ""
     echo -e "  ${BOLD}Installation Summary:${NC}"
-    echo -e "    Target:    ${CYAN}${TARGET_TOOL}${NC}"
+    echo -e "    Target(s): ${CYAN}${TARGET_TOOLS}${NC}"
     echo -e "    Language:  ${CYAN}${LANGUAGE}${NC}"
     echo -e "    Directory: ${CYAN}$(cd "$TARGET_DIR" && pwd)${NC}"
     echo ""
@@ -308,6 +333,18 @@ create_directories() {
         "${KD_DIR}/workflows"
         "${KD_DIR}/config"
         "${KD_DIR}/config/language"
+        "${KD_DIR}/KD_output"
+        "${KD_DIR}/KD_output/status"
+        "${KD_DIR}/KD_output/brainstorm"
+        "${KD_DIR}/KD_output/product-brief"
+        "${KD_DIR}/KD_output/PRD"
+        "${KD_DIR}/KD_output/architecture"
+        "${KD_DIR}/KD_output/epics-and-stories"
+        "${KD_DIR}/KD_output/code-review"
+        "${KD_DIR}/KD_output/deployment"
+        "${KD_DIR}/KD_output/release"
+        "${KD_DIR}/KD_output/decisions"
+        "${KD_DIR}/KD_output/risks"
     )
 
     for dir in "${dirs[@]}"; do
@@ -340,7 +377,7 @@ download_files() {
     done
 
     # ---- Stages ----
-    local stages=("_stage-template" "discovery" "requirements" "architecture" "implementation" "quality" "deployment" "release")
+    local stages=("_stage-template" "discovery" "brainstorm" "requirements" "architecture" "implementation" "quality" "deployment" "release")
     for stage in "${stages[@]}"; do
         download_and_track "${base}/prompts/stages/${stage}.md" \
             "${KD_DIR}/prompts/stages/${stage}.md" "Stage: ${stage}"
@@ -361,24 +398,24 @@ download_files() {
     done
 
     # ---- Checklists ----
-    local checklists=("stage-completion" "decision-validation" "checkpoint-approval" "security-audit" "error-recovery" "pre-deployment")
+    local checklists=("stage-completion" "decision-validation" "checkpoint-approval" "security-audit" "pre-deployment" "code-quality")
     for cl in "${checklists[@]}"; do
         download_and_track "${base}/checklists/${cl}.md" \
             "${KD_DIR}/checklists/${cl}.md" "Checklist: ${cl}"
     done
 
     # ---- Workflows ----
-    local workflows=("main.flow" "quick-start.flow" "full-product.flow" "maintenance.flow")
+    local workflows=("main" "quick-start" "full-product" "maintenance")
     for wf in "${workflows[@]}"; do
         download_and_track "${base}/workflows/${wf}.md" \
             "${KD_DIR}/workflows/${wf}.md" "Workflow: ${wf}"
     done
 
     # ---- Config ----
-    download_and_track "${base}/config/settings.schema.json" \
-        "${KD_DIR}/config/settings.schema.json" "Config: schema"
-    download_and_track "${base}/config/default-settings.json" \
-        "${KD_DIR}/config/default-settings.json" "Config: defaults"
+    download_and_track "${base}/config/settings-schema.json" \
+        "${KD_DIR}/config/settings-schema.json" "Config: schema"
+    download_and_track "${base}/config/defaults.json" \
+        "${KD_DIR}/config/defaults.json" "Config: defaults"
     download_and_track "${base}/config/language/en.json" \
         "${KD_DIR}/config/language/en.json" "Language: EN"
     download_and_track "${base}/config/language/ms.json" \
@@ -412,7 +449,7 @@ create_config() {
     "version": "${KD_VERSION}",
     "project_name": "$(basename "$(cd "$TARGET_DIR" && pwd)")",
     "language": "${LANGUAGE}",
-    "target_tool": "${TARGET_TOOL}",
+    "target_tools": "${TARGET_TOOLS}",
     "scale": "auto",
     "installed_date": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
     "site": "${KD_SITE}",
@@ -421,7 +458,9 @@ create_config() {
         "multi_agent": true,
         "status_tracking": true,
         "decision_validation": true,
-        "checkpoints": true
+        "checkpoints": true,
+        "web_research": true,
+        "agent_personalities": true
     }
 }
 SETTINGS
@@ -440,7 +479,7 @@ init_status() {
     local current_date
     current_date="$(date +"%Y-%m-%d")"
 
-    cat > "${TARGET_DIR}/status.md" << STATUS
+    cat > "${TARGET_DIR}/${KD_DIR}/KD_output/status/status.md" << STATUS
 # PROJECT STATUS
 
 ## Meta
@@ -462,6 +501,7 @@ init_status() {
 | Stage | Status | Completed Date | Key Artifact |
 |-------|--------|----------------|--------------|
 | Discovery | pending | - | - |
+| Brainstorm | pending | - | - |
 | Requirements | pending | - | - |
 | Architecture | pending | - | - |
 | Implementation | pending | - | - |
@@ -535,59 +575,16 @@ STATUS
 setup_claude_code() {
     log_info "Setting up for Claude Code..."
 
-    cat > "${TARGET_DIR}/CLAUDE.md" << 'CLAUDE_ADAPTER'
-# KD - AI Skill by KRACKEDDEVS
-
-Official Site: https://krackeddevs.com/
-
-## Activation
-
-KD is active in this project. Read the system prompt:
-
-```
-Read the file at .kracked/prompts/system-prompt.md
-```
-
-## Quick Start Commands
-
-| Command                    | Description                    |
-|---------------------------|--------------------------------|
-| /KD-analyze               | Start discovery phase          |
-| /KD-product-brief         | Create product brief           |
-| /KD-prd                   | Product requirements document  |
-| /KD-architecture          | System architecture design     |
-| /KD-epics-and-stories     | Create backlog                 |
-| /KD-dev-story [id]        | Implement a story              |
-| /KD-code-review           | Quality and security review    |
-| /KD-deployment-plan       | Deployment strategy            |
-| /KD-status                | Show current project state     |
-| /KD-help                  | Display command reference      |
-
-## Multi-Agent Commands
-
-| Command                                         | Description              |
-|------------------------------------------------|--------------------------|
-| /KD-party-mode --agents=N --topic="topic"      | Parallel brainstorming   |
-| /KD-swarm --agents=N --tasks="task1,task2"     | Parallel execution       |
-
-## Workflow
-
-1. Read `.kracked/prompts/system-prompt.md` for full instructions
-2. Read `status.md` for current project state
-3. Execute commands following workflow stages
-4. Update `status.md` after each major action
-
-## Files Reference
-
-- System Prompt: `.kracked/prompts/system-prompt.md`
-- Status: `status.md`
-- Templates: `.kracked/templates/`
-- Checklists: `.kracked/checklists/`
-
-## Official Site
-
-https://krackeddevs.com/
-CLAUDE_ADAPTER
+    local url="${KD_RAW_URL}/src/adapters/claude-code/CLAUDE.md"
+    local dest="${TARGET_DIR}/CLAUDE.md"
+    if download_file "$url" "$dest"; then
+        log_verbose "Downloaded CLAUDE.md from repo"
+    else
+        log_warn "Could not download CLAUDE.md, creating local copy..."
+        echo '# KD - AI Skill by KRACKEDDEVS
+Read .kracked/prompts/system-prompt.md for full instructions.
+Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest"
+    fi
 
     log_success "Claude Code setup complete."
 }
@@ -595,77 +592,16 @@ CLAUDE_ADAPTER
 setup_cursor() {
     log_info "Setting up for Cursor..."
 
-    cat > "${TARGET_DIR}/.cursorrules" << 'CURSOR_ADAPTER'
-# KD - AI Skill by KRACKEDDEVS
-# Official Site: https://krackeddevs.com/
-
-You are operating with KD - Structured Multi-Role AI Product Execution System.
-
-## Initialization
-
-Before starting any work:
-1. Read `.kracked/prompts/system-prompt.md` for full system instructions
-2. Read `status.md` for current project state
-3. Follow the workflow stage indicated in status.md
-
-## Core Rules
-
-1. SINGLE ROLE ACTIVATION
-   Only one role active at a time.
-   Always state: [ACTIVE ROLE: <Role Name>]
-
-2. LANGUAGE CONSISTENCY
-   Follow language preference in `.kracked/config/settings.json`
-   - EN: English for all interactions
-   - MS: Bahasa Melayu for all interactions
-   - Code always in English
-
-3. STATUS TRACKING
-   Update `status.md` after every major decision or action.
-
-4. DECISION VALIDATION
-   For architecture, schema, deployment decisions:
-   Run the decision validation block (see system-prompt.md)
-
-5. CHECKPOINTS
-   Stages require human approval:
-   - /KD-product-brief
-   - /KD-prd
-   - /KD-architecture
-   - /KD-deployment-plan (production)
-
-## Commands
-
-All commands start with /KD prefix:
-- /KD-analyze - Discovery phase
-- /KD-product-brief - Product brief
-- /KD-prd - Requirements
-- /KD-architecture - System design
-- /KD-epics-and-stories - Create backlog
-- /KD-dev-story [id] - Implementation
-- /KD-code-review - Quality check
-- /KD-deployment-plan - Deploy strategy
-- /KD-status - Current state
-- /KD-help - Command reference
-
-## Multi-Agent
-
-- /KD-party-mode --agents=N --topic="topic"
-- /KD-swarm --agents=N --tasks="tasks"
-
-## File Structure
-
-Reference these files:
-- System prompt: `.kracked/prompts/system-prompt.md`
-- Templates: `.kracked/templates/`
-- Checklists: `.kracked/checklists/`
-- Status: `status.md`
-
-## Error Handling
-
-On errors, follow error recovery protocol in system-prompt.md.
-Always document in status.md under Blockers section.
-CURSOR_ADAPTER
+    local url="${KD_RAW_URL}/src/adapters/cursor/.cursorrules"
+    local dest="${TARGET_DIR}/.cursorrules"
+    if download_file "$url" "$dest"; then
+        log_verbose "Downloaded .cursorrules from repo"
+    else
+        log_warn "Could not download .cursorrules, creating local copy..."
+        echo '# KD - AI Skill by KRACKEDDEVS
+Read .kracked/prompts/system-prompt.md for full instructions.
+Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest"
+    fi
 
     log_success "Cursor setup complete."
 }
@@ -675,61 +611,19 @@ setup_antigravity() {
 
     mkdir -p "${TARGET_DIR}/.antigravity"
 
-    cat > "${TARGET_DIR}/.antigravity/SKILL.md" << 'AG_SKILL'
----
-name: KD
+    local url="${KD_RAW_URL}/src/adapters/antigravity/SKILL.md"
+    local dest="${TARGET_DIR}/.antigravity/SKILL.md"
+    if download_file "$url" "$dest"; then
+        log_verbose "Downloaded SKILL.md from repo"
+    else
+        log_warn "Could not download SKILL.md, creating local copy..."
+        echo '---
+name: KRACKED_skill (KD)
 description: Structured Multi-Role AI Product Execution System by KRACKEDDEVS
 ---
-
-# KD Skill
-
-## Metadata
-- Name: KD
-- Version: 1.0.0
-- Author: KRACKEDDEVS
-- Site: https://krackeddevs.com/
-- Description: Structured Multi-Role AI Product Execution System
-
-## Activation
-
-Read `.kracked/prompts/system-prompt.md` to activate KD.
-
-## Commands
-
-All commands use /KD prefix:
-
-| Command                    | Description                    |
-|---------------------------|--------------------------------|
-| /KD-analyze               | Start discovery phase          |
-| /KD-product-brief         | Create product brief           |
-| /KD-prd                   | Product requirements document  |
-| /KD-architecture          | System architecture design     |
-| /KD-epics-and-stories     | Create backlog                 |
-| /KD-dev-story [id]        | Implement a story              |
-| /KD-code-review           | Quality and security review    |
-| /KD-deployment-plan       | Deployment strategy            |
-| /KD-status                | Show current project state     |
-| /KD-help                  | Display command reference      |
-
-## Multi-Agent Commands
-
-| Command                                         | Description              |
-|------------------------------------------------|--------------------------|
-| /KD-party-mode --agents=N --topic="topic"      | Parallel brainstorming   |
-| /KD-swarm --agents=N --tasks="task1,task2"     | Parallel execution       |
-
-## Configuration
-
-- Language: Set in `.kracked/config/settings.json`
-- Status: `status.md`
-
-## Workflow
-
-1. Read `.kracked/prompts/system-prompt.md` for full instructions
-2. Read `status.md` for current project state
-3. Execute commands following workflow stages
-4. Update `status.md` after each major action
-AG_SKILL
+Read .kracked/prompts/system-prompt.md for full instructions.
+Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest"
+    fi
 
     log_success "Antigravity setup complete."
 }
@@ -755,22 +649,22 @@ print_success() {
         echo -e "    1. Baca system prompt:"
         echo -e "       ${CYAN}${project_dir}/${KD_DIR}/prompts/system-prompt.md${NC}"
         echo ""
-        echo -e "    2. Mulakan AI tool anda dan mulakan dengan:"
-        echo -e "       ${CYAN}/KD-analyze${NC}"
+        echo -e "    2. Mulakan AI tool anda dan taipkan:"
+        echo -e "       ${CYAN}/KD${NC}"
         echo ""
         echo -e "    3. Jejak kemajuan anda dalam:"
-        echo -e "       ${CYAN}${project_dir}/status.md${NC}"
+        echo -e "       ${CYAN}${project_dir}/${KD_DIR}/KD_output/status/status.md${NC}"
     else
         echo -e "  ${BOLD}Next Steps:${NC}"
         echo ""
         echo -e "    1. Read the system prompt:"
         echo -e "       ${CYAN}${project_dir}/${KD_DIR}/prompts/system-prompt.md${NC}"
         echo ""
-        echo -e "    2. Open your AI tool and start with:"
-        echo -e "       ${CYAN}/KD-analyze${NC}"
+        echo -e "    2. Open your AI tool and type:"
+        echo -e "       ${CYAN}/KD${NC}"
         echo ""
         echo -e "    3. Track your progress in:"
-        echo -e "       ${CYAN}${project_dir}/status.md${NC}"
+        echo -e "       ${CYAN}${project_dir}/${KD_DIR}/KD_output/status/status.md${NC}"
     fi
 
     echo ""
@@ -787,11 +681,10 @@ parse_args() {
     for arg in "$@"; do
         case "$arg" in
             --target=*)
-                TARGET_TOOL="${arg#*=}"
-                case "$TARGET_TOOL" in
-                    claude-code|cursor|antigravity) ;;
-                    *) log_error "Invalid target: ${TARGET_TOOL}. Use: claude-code, cursor, antigravity"; exit 1 ;;
-                esac
+                TARGET_TOOLS="${arg#*=}"
+                if [[ "$TARGET_TOOLS" == "all" ]]; then
+                    TARGET_TOOLS="claude-code,cursor,antigravity"
+                fi
                 ;;
             --language=*)
                 LANGUAGE=$(echo "${arg#*=}" | tr '[:lower:]' '[:upper:]')
@@ -836,12 +729,15 @@ main() {
     create_config
     init_status
 
-    # Setup adapter
-    case "$TARGET_TOOL" in
-        claude-code)  setup_claude_code ;;
-        cursor)       setup_cursor ;;
-        antigravity)  setup_antigravity ;;
-    esac
+    # Setup adapters (multiple)
+    IFS=',' read -ra targets <<< "$TARGET_TOOLS"
+    for t in "${targets[@]}"; do
+        case "$t" in
+            claude-code)  setup_claude_code ;;
+            cursor)       setup_cursor ;;
+            antigravity)  setup_antigravity ;;
+        esac
+    done
 
     print_success
 }

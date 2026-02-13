@@ -36,9 +36,10 @@ check_kracked_exists() {
 # Backup status.md
 # ---------------------------------------------------------------------------
 backup_status() {
-    if [[ -f "${TARGET_DIR}/status.md" ]]; then
+    local status_file="${TARGET_DIR}/${KD_DIR}/KD_output/status/status.md"
+    if [[ -f "$status_file" ]]; then
         local backup_name="status.md.backup.$(date +%Y%m%d_%H%M%S)"
-        cp "${TARGET_DIR}/status.md" "${TARGET_DIR}/${backup_name}"
+        cp "$status_file" "${TARGET_DIR}/${backup_name}"
         log_info "status.md backed up as ${backup_name}"
     fi
 }
@@ -67,11 +68,7 @@ remove_files() {
         log_info "Removed .antigravity/"
     fi
 
-    # Remove status.md (backup already created)
-    if [[ -f "${TARGET_DIR}/status.md" ]]; then
-        rm -f "${TARGET_DIR}/status.md"
-        log_info "Removed status.md (backup preserved)"
-    fi
+    # Note: status.md is inside .kracked/KD_output/status/ and already removed with KD_DIR
 }
 
 # ---------------------------------------------------------------------------

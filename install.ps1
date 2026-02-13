@@ -1,11 +1,11 @@
 <# 
 .SYNOPSIS
-    KRACKED_skill (KD) - PowerShell Installation Script (Windows)
+    KRACKED_skill (KD) v2.0.0-beta — PowerShell Installation Script (Windows)
     AI Skill by KRACKEDDEVS - https://krackeddevs.com/
 .PARAMETER TargetDir
     Target project directory (default: current directory)
 .PARAMETER Target
-    AI tool target: claude-code, cursor, antigravity
+    AI tool targets (comma-separated): claude-code, cursor, antigravity, all
 .PARAMETER Language
     Language preference: EN, MS
 .PARAMETER NonInteractive
@@ -17,7 +17,6 @@
 #>
 param(
     [string]$TargetDir = ".",
-    [ValidateSet("claude-code", "cursor", "antigravity", "")]
     [string]$Target = "",
     [ValidateSet("EN", "MS", "")]
     [string]$Language = "",
@@ -29,7 +28,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Constants
-$KD_VERSION = "1.0.0"
+$KD_VERSION = "2.0.0-beta"
 $KD_REPO = "MoonWIRaja/Kracked_skill"
 $KD_RAW_URL = "https://raw.githubusercontent.com/$KD_REPO/main"
 $KD_DIR = ".kracked"
@@ -69,7 +68,7 @@ if ($Help) {
     Write-Host ''
     Write-Host 'Options:'
     Write-Host '  -TargetDir [path]        Target project directory (default: .)'
-    Write-Host '  -Target [tool]           AI tool: claude-code, cursor, antigravity'
+    Write-Host '  -Target [tools]          AI tools (comma-separated): claude-code, cursor, antigravity, all'
     Write-Host '  -Language [lang]         Language: EN, MS'
     Write-Host '  -NonInteractive          Skip prompts, use defaults'
     Write-Host '  -Force                   Overwrite existing installation'
@@ -78,6 +77,8 @@ if ($Help) {
     Write-Host 'Examples:'
     Write-Host '  .\install.ps1'
     Write-Host '  .\install.ps1 -Target claude-code -Language EN'
+    Write-Host '  .\install.ps1 -Target "claude-code,cursor" -Language EN'
+    Write-Host '  .\install.ps1 -Target all -Language MS'
     Write-Host '  .\install.ps1 -TargetDir C:\Projects\MyApp -Target cursor -Language MS'
     Write-Host '  .\install.ps1 -NonInteractive -Force'
     Write-Host ''
@@ -88,24 +89,43 @@ if ($Help) {
 # Interactive Prompts
 # ---------------------------------------------------------------------------
 function Ask-Target {
-    if ($Target) { return $Target }
-    if ($NonInteractive) { return "claude-code" }
+    if ($Target) {
+        if ($Target -eq 'all') { return @('claude-code', 'cursor', 'antigravity') }
+        return ($Target -split ',').Trim()
+    }
+    if ($NonInteractive) { return @('claude-code') }
 
     Write-Host ""
-    Write-Host "  Select target AI tool:" -ForegroundColor White
+    Write-Host '  Select target AI tool(s) - choose multiple with commas (e.g. 1,3):' -ForegroundColor White
     Write-Host "    [1] Claude Code" -ForegroundColor Cyan
     Write-Host "    [2] Cursor" -ForegroundColor Cyan
     Write-Host "    [3] Antigravity" -ForegroundColor Cyan
+    Write-Host "    [A] All of the above" -ForegroundColor Yellow
     Write-Host ""
 
     while ($true) {
-        $choice = Read-Host "  Enter choice [1-3]"
-        switch ($choice) {
-            "1" { return "claude-code" }
-            "2" { return "cursor" }
-            "3" { return "antigravity" }
-            default { Write-Host "  Invalid choice. Please enter 1, 2, or 3." -ForegroundColor Red }
+        $choice = (Read-Host '  Enter choice(s) [1-3, A]').Trim()
+
+        if ($choice -match '^[Aa]$') {
+            return @('claude-code', 'cursor', 'antigravity')
         }
+
+        $selections = @()
+        $valid = $true
+        foreach ($c in ($choice -split ',')) {
+            switch ($c.Trim()) {
+                "1" { $selections += 'claude-code' }
+                "2" { $selections += 'cursor' }
+                "3" { $selections += 'antigravity' }
+                default { $valid = $false }
+            }
+        }
+
+        if ($valid -and $selections.Count -gt 0) {
+            return ($selections | Select-Object -Unique)
+        }
+
+        Write-Host "  Invalid choice. Enter numbers 1-3 separated by commas, or A for all." -ForegroundColor Red
     }
 }
 
@@ -120,7 +140,7 @@ function Ask-Language {
     Write-Host ""
 
     while ($true) {
-        $choice = (Read-Host "  Enter choice [EN/MS]").ToUpper()
+        $choice = (Read-Host '  Enter choice [EN/MS]').ToUpper()
         switch ($choice) {
             "EN" { return "EN" }
             "MS" { return "MS" }
@@ -130,15 +150,17 @@ function Ask-Language {
 }
 
 function Confirm-Install {
-    param([string]$T, [string]$L, [string]$D)
+    param([string[]]$T, [string]$L, [string]$D)
 
     if ($NonInteractive) { return }
 
+    $targetList = $T -join ', '
     Write-Host ""
     Write-Host "  Installation Summary:" -ForegroundColor White
-    Write-Host "    Target:    $T" -ForegroundColor Cyan
+    Write-Host "    Target(s): $targetList" -ForegroundColor Cyan
     Write-Host "    Language:  $L" -ForegroundColor Cyan
-    Write-Host "    Directory: $(Resolve-Path $D)" -ForegroundColor Cyan
+    $resolvedDir = Resolve-Path $D
+    Write-Host "    Directory: $resolvedDir" -ForegroundColor Cyan
     Write-Host ""
 
     $confirm = Read-Host "  Proceed with installation? [Y/n]"
@@ -196,6 +218,18 @@ function New-KDDirs {
         "$KD_DIR\workflows"
         "$KD_DIR\config"
         "$KD_DIR\config\language"
+        "$KD_DIR\KD_output"
+        "$KD_DIR\KD_output\status"
+        "$KD_DIR\KD_output\brainstorm"
+        "$KD_DIR\KD_output\product-brief"
+        "$KD_DIR\KD_output\PRD"
+        "$KD_DIR\KD_output\architecture"
+        "$KD_DIR\KD_output\epics-and-stories"
+        "$KD_DIR\KD_output\code-review"
+        "$KD_DIR\KD_output\deployment"
+        "$KD_DIR\KD_output\release"
+        "$KD_DIR\KD_output\decisions"
+        "$KD_DIR\KD_output\risks"
     )
 
     foreach ($dir in $dirs) {
@@ -224,8 +258,8 @@ function Get-KDFiles {
         Get-AndTrack "$base/prompts/roles/$r.md" "$KD_DIR\prompts\roles\$r.md" "Role: $r"
     }
 
-    # Stages
-    foreach ($s in @('_stage-template','discovery','requirements','architecture','implementation','quality','deployment','release')) {
+    # Stages (now 8 with brainstorm)
+    foreach ($s in @('_stage-template','discovery','brainstorm','requirements','architecture','implementation','quality','deployment','release')) {
         Get-AndTrack "$base/prompts/stages/$s.md" "$KD_DIR\prompts\stages\$s.md" "Stage: $s"
     }
 
@@ -262,7 +296,7 @@ function Get-KDFiles {
 # Create Config (settings.json)
 # ---------------------------------------------------------------------------
 function New-KDConfig {
-    param([string]$T, [string]$L)
+    param([string[]]$T, [string]$L)
 
     Write-Info "Creating configuration..."
 
@@ -273,7 +307,7 @@ function New-KDConfig {
         version = $KD_VERSION
         project_name = $projName
         language = $L
-        target_tool = $T
+        target_tools = $T
         scale = 'auto'
         installed_date = $now
         site = $KD_SITE
@@ -283,6 +317,8 @@ function New-KDConfig {
             status_tracking = $true
             decision_validation = $true
             checkpoints = $true
+            web_research = $true
+            agent_personalities = $true
         }
     } | ConvertTo-Json -Depth 3
 
@@ -293,7 +329,7 @@ function New-KDConfig {
 }
 
 # ---------------------------------------------------------------------------
-# Initialize status.md
+# Initialize status.md (in KD_output/status/)
 # ---------------------------------------------------------------------------
 function New-StatusFile {
     param([string]$L)
@@ -303,7 +339,6 @@ function New-StatusFile {
     $projName = Split-Path -Leaf (Resolve-Path $TargetDir)
     $d = Get-Date -Format 'yyyy-MM-dd'
 
-    # Use single-quoted here-string (no interpolation) with placeholder replacement
     $tmpl = '# PROJECT STATUS
 
 ## Meta
@@ -325,6 +360,7 @@ function New-StatusFile {
 | Stage | Status | Completed Date | Key Artifact |
 |-------|--------|----------------|--------------|
 | Discovery | pending | - | - |
+| Brainstorm | pending | - | - |
 | Requirements | pending | - | - |
 | Architecture | pending | - | - |
 | Implementation | pending | - | - |
@@ -390,7 +426,7 @@ function New-StatusFile {
 
     $content = $tmpl.Replace('__P__', $projName).Replace('__L__', $L).Replace('__D__', $d).Replace('__V__', $KD_VERSION)
 
-    $path = Join-Path $TargetDir 'status.md'
+    $path = Join-Path $TargetDir "$KD_DIR\KD_output\status\status.md"
     [System.IO.File]::WriteAllText($path, $content, [System.Text.Encoding]::UTF8)
 
     Write-Ok "status.md initialized."
@@ -402,60 +438,15 @@ function New-StatusFile {
 function Setup-ClaudeCode {
     Write-Info "Setting up for Claude Code..."
 
-    $content = '# KD - AI Skill by KRACKEDDEVS
-
-Official Site: https://krackeddevs.com/
-
-## Activation
-
-KD is active in this project. Read the system prompt:
-
-```
-Read the file at .kracked/prompts/system-prompt.md
-```
-
-## Quick Start Commands
-
-| Command | Description |
-|---|---|
-| /KD-analyze | Start discovery phase |
-| /KD-product-brief | Create product brief |
-| /KD-prd | Product requirements document |
-| /KD-architecture | System architecture design |
-| /KD-epics-and-stories | Create backlog |
-| /KD-dev-story [id] | Implement a story |
-| /KD-code-review | Quality and security review |
-| /KD-deployment-plan | Deployment strategy |
-| /KD-status | Show current project state |
-| /KD-help | Display command reference |
-
-## Multi-Agent Commands
-
-| Command | Description |
-|---|---|
-| /KD-party-mode --agents=N --topic=TOPIC | Parallel brainstorming |
-| /KD-swarm --agents=N --tasks=TASKS | Parallel execution |
-
-## Workflow
-
-1. Read `.kracked/prompts/system-prompt.md` for full instructions
-2. Read `status.md` for current project state
-3. Execute commands following workflow stages
-4. Update `status.md` after each major action
-
-## Files Reference
-
-- System Prompt: `.kracked/prompts/system-prompt.md`
-- Status: `status.md`
-- Templates: `.kracked/templates/`
-- Checklists: `.kracked/checklists/`
-
-## Official Site
-
-https://krackeddevs.com/'
-
-    $path = Join-Path $TargetDir 'CLAUDE.md'
-    [System.IO.File]::WriteAllText($path, $content, [System.Text.Encoding]::UTF8)
+    $url = "$KD_RAW_URL/src/adapters/claude-code/CLAUDE.md"
+    $dest = Join-Path $TargetDir 'CLAUDE.md'
+    if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
+        Write-Warn "Could not download CLAUDE.md, creating local copy..."
+        $content = '# KD - AI Skill by KRACKEDDEVS
+Read .kracked/prompts/system-prompt.md for full instructions.
+Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
+        [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
+    }
     Write-Ok "Claude Code setup complete."
 }
 
@@ -465,45 +456,15 @@ https://krackeddevs.com/'
 function Setup-Cursor {
     Write-Info "Setting up for Cursor..."
 
-    $content = '# KD - AI Skill by KRACKEDDEVS
-# Official Site: https://krackeddevs.com/
-
-You are operating with KD - Structured Multi-Role AI Product Execution System.
-
-## Initialization
-
-Before starting any work:
-1. Read `.kracked/prompts/system-prompt.md` for full system instructions
-2. Read `status.md` for current project state
-3. Follow the workflow stage indicated in status.md
-
-## Core Rules
-
-1. SINGLE ROLE ACTIVATION - Only one role active at a time
-2. LANGUAGE CONSISTENCY - Follow language in `.kracked/config/settings.json`
-3. STATUS TRACKING - Update `status.md` after every major action
-4. DECISION VALIDATION - Run validation for architecture/schema/deploy decisions
-5. CHECKPOINTS - Get human approval at /KD-product-brief, /KD-prd, /KD-architecture
-
-## Commands
-
-/KD-analyze, /KD-product-brief, /KD-prd, /KD-architecture, /KD-epics-and-stories,
-/KD-dev-story [id], /KD-code-review, /KD-deployment-plan, /KD-status, /KD-help
-
-## Multi-Agent
-
-/KD-party-mode --agents=N --topic=TOPIC
-/KD-swarm --agents=N --tasks=TASKS
-
-## Files
-
-- System prompt: `.kracked/prompts/system-prompt.md`
-- Templates: `.kracked/templates/`
-- Checklists: `.kracked/checklists/`
-- Status: `status.md`'
-
-    $path = Join-Path $TargetDir '.cursorrules'
-    [System.IO.File]::WriteAllText($path, $content, [System.Text.Encoding]::UTF8)
+    $url = "$KD_RAW_URL/src/adapters/cursor/.cursorrules"
+    $dest = Join-Path $TargetDir '.cursorrules'
+    if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
+        Write-Warn "Could not download .cursorrules, creating local copy..."
+        $content = '# KD - AI Skill by KRACKEDDEVS
+Read .kracked/prompts/system-prompt.md for full instructions.
+Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
+        [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
+    }
     Write-Ok "Cursor setup complete."
 }
 
@@ -518,59 +479,18 @@ function Setup-Antigravity {
         New-Item -ItemType Directory -Path $agDir -Force | Out-Null
     }
 
-    $content = '---
-name: KD
+    $url = "$KD_RAW_URL/src/adapters/antigravity/SKILL.md"
+    $dest = Join-Path $agDir 'SKILL.md'
+    if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
+        Write-Warn "Could not download SKILL.md, creating local copy..."
+        $content = '---
+name: KRACKED_skill (KD)
 description: Structured Multi-Role AI Product Execution System by KRACKEDDEVS
 ---
-
-# KD Skill
-
-## Metadata
-- Name: KD
-- Version: 1.0.0
-- Author: KRACKEDDEVS
-- Site: https://krackeddevs.com/
-
-## Activation
-
-Read `.kracked/prompts/system-prompt.md` to activate KD.
-
-## Commands
-
-| Command | Description |
-|---|---|
-| /KD-analyze | Start discovery phase |
-| /KD-product-brief | Create product brief |
-| /KD-prd | Product requirements document |
-| /KD-architecture | System architecture design |
-| /KD-epics-and-stories | Create backlog |
-| /KD-dev-story [id] | Implement a story |
-| /KD-code-review | Quality and security review |
-| /KD-deployment-plan | Deployment strategy |
-| /KD-status | Show current project state |
-| /KD-help | Display command reference |
-
-## Multi-Agent
-
-| Command | Description |
-|---|---|
-| /KD-party-mode --agents=N --topic=TOPIC | Parallel brainstorming |
-| /KD-swarm --agents=N --tasks=TASKS | Parallel execution |
-
-## Configuration
-
-- Language: `.kracked/config/settings.json`
-- Status: `status.md`
-
-## Workflow
-
-1. Read `.kracked/prompts/system-prompt.md` for full instructions
-2. Read `status.md` for current project state
-3. Execute commands following workflow stages
-4. Update `status.md` after each major action'
-
-    $path = Join-Path $agDir 'SKILL.md'
-    [System.IO.File]::WriteAllText($path, $content, [System.Text.Encoding]::UTF8)
+Read .kracked/prompts/system-prompt.md for full instructions.
+Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
+        [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
+    }
     Write-Ok "Antigravity setup complete."
 }
 
@@ -578,9 +498,10 @@ Read `.kracked/prompts/system-prompt.md` to activate KD.
 # Print Success
 # ---------------------------------------------------------------------------
 function Show-Success {
-    param([string]$T, [string]$L)
+    param([string[]]$T, [string]$L)
 
     $projDir = Resolve-Path $TargetDir
+    $targetList = $T -join ', '
 
     Write-Host ""
     Write-Host "  =================================================================" -ForegroundColor Green
@@ -589,6 +510,8 @@ function Show-Success {
     Write-Host "  $KD_SITE" -ForegroundColor Green
     Write-Host "  =================================================================" -ForegroundColor Green
     Write-Host ""
+    Write-Host "  Adapters: $targetList" -ForegroundColor Cyan
+    Write-Host ""
 
     if ($L -eq 'MS') {
         Write-Host "  Langkah Seterusnya:" -ForegroundColor White
@@ -596,22 +519,22 @@ function Show-Success {
         Write-Host "    1. Baca system prompt:"
         Write-Host "       $projDir\$KD_DIR\prompts\system-prompt.md" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "    2. Mulakan AI tool anda dan mulakan dengan:"
-        Write-Host "       /KD-analyze" -ForegroundColor Cyan
+        Write-Host "    2. Mulakan AI tool anda dan taipkan:"
+        Write-Host "       /KD" -ForegroundColor Cyan
         Write-Host ""
         Write-Host "    3. Jejak kemajuan anda dalam:"
-        Write-Host "       $projDir\status.md" -ForegroundColor Cyan
+        Write-Host "       $projDir\$KD_DIR\KD_output\status\status.md" -ForegroundColor Cyan
     } else {
         Write-Host "  Next Steps:" -ForegroundColor White
         Write-Host ""
         Write-Host "    1. Read the system prompt:"
         Write-Host "       $projDir\$KD_DIR\prompts\system-prompt.md" -ForegroundColor Cyan
         Write-Host ""
-        Write-Host "    2. Open your AI tool and start with:"
-        Write-Host "       /KD-analyze" -ForegroundColor Cyan
+        Write-Host "    2. Open your AI tool and type:"
+        Write-Host "       /KD" -ForegroundColor Cyan
         Write-Host ""
         Write-Host "    3. Track your progress in:"
-        Write-Host "       $projDir\status.md" -ForegroundColor Cyan
+        Write-Host "       $projDir\$KD_DIR\KD_output\status\status.md" -ForegroundColor Cyan
     }
 
     Write-Host ""
@@ -643,27 +566,30 @@ function Main {
         }
     }
 
-    Write-Info "Platform: Windows (PowerShell $($PSVersionTable.PSVersion))"
+    $psVer = $PSVersionTable.PSVersion.ToString()
+    Write-Info "Platform: Windows `(PowerShell $psVer`)"
 
     # Prompts
-    $selTarget = Ask-Target
+    $selTargets = Ask-Target
     $selLang = Ask-Language
-    Confirm-Install -T $selTarget -L $selLang -D $TargetDir
+    Confirm-Install -T $selTargets -L $selLang -D $TargetDir
 
     # Install
     New-KDDirs
     Get-KDFiles
-    New-KDConfig -T $selTarget -L $selLang
+    New-KDConfig -T $selTargets -L $selLang
     New-StatusFile -L $selLang
 
-    # Adapter
-    switch ($selTarget) {
-        'claude-code'  { Setup-ClaudeCode }
-        'cursor'       { Setup-Cursor }
-        'antigravity'  { Setup-Antigravity }
+    # Setup adapters (multiple)
+    foreach ($t in $selTargets) {
+        switch ($t) {
+            'claude-code'  { Setup-ClaudeCode }
+            'cursor'       { Setup-Cursor }
+            'antigravity'  { Setup-Antigravity }
+        }
     }
 
-    Show-Success -T $selTarget -L $selLang
+    Show-Success -T $selTargets -L $selLang
 }
 
 Main
