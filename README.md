@@ -23,14 +23,14 @@
 
 ### One-Line Install
 
-**macOS / Linux / Windows** (curl built-in):
+**macOS / Linux** (bash + curl):
 ```bash
 curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
 ```
 
-**Windows** (PowerShell):
+**Windows** (PowerShell — no WSL/bash needed):
 ```powershell
-irm https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
+irm https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.ps1 | iex
 ```
 
 **Windows** (Git Bash / WSL):
@@ -38,12 +38,14 @@ irm https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh |
 curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
 ```
 
-> **Note:** `install.sh` is a bash script. Windows users need **Git Bash**, **WSL**, or **MSYS2** to run it.
-
 ### Non-Interactive Install
 
 ```bash
+# macOS / Linux
 curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash -s -- --target=claude-code --language=EN --non-interactive
+
+# Windows PowerShell
+.\install.ps1 -Target claude-code -Language EN -NonInteractive
 ```
 
 ### After Installation
