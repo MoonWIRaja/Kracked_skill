@@ -10,7 +10,7 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-readonly KD_VERSION="2.1.0-beta"
+readonly KD_VERSION="3.0.0"
 readonly KD_REPO="MoonWIRaja/Kracked_skill"
 readonly KD_RAW_URL="https://raw.githubusercontent.com/${KD_REPO}/main"
 readonly KD_DIR=".kracked"
@@ -602,7 +602,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest
         KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux
         KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch
         KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach
-        KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow
+        KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design
     )
     for cmd in "${cmd_names[@]}"; do
         download_file "${KD_RAW_URL}/src/adapters/claude-code/commands/${cmd}.md" \
@@ -643,7 +643,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest
         KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux
         KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch
         KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach
-        KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow
+        KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design
     )
     for cmd in "${cmd_names[@]}"; do
         download_file "${KD_RAW_URL}/src/adapters/cursor/commands/${cmd}.md" \
@@ -689,7 +689,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest
         KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux
         KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch
         KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach
-        KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow
+        KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design
     )
     for cmd in "${cmd_names[@]}"; do
         download_file "${KD_RAW_URL}/src/adapters/antigravity/workflows/${cmd}.md" \

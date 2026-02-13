@@ -28,7 +28,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Constants
-$KD_VERSION = "2.1.0-beta"
+$KD_VERSION = "3.0.0"
 $KD_REPO = "MoonWIRaja/Kracked_skill"
 $KD_RAW_URL = "https://raw.githubusercontent.com/$KD_REPO/main"
 $KD_DIR = ".kracked"
@@ -46,7 +46,7 @@ function Show-Banner {
     Write-Host "                                                                          " -ForegroundColor Cyan
     Write-Host "  =======================================================================" -ForegroundColor Cyan
     Write-Host ""
-    Write-Host "  KRACKED_skill v$KD_VERSION" -ForegroundColor White
+    Write-Host "  Kracked_Skills v$KD_VERSION" -ForegroundColor White
     Write-Host "  Structured Multi-Role AI Product Execution System"
     Write-Host ""
 }
@@ -464,7 +464,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         'KD-role-pm','KD-role-qa','KD-role-scrum-master','KD-role-solo-dev','KD-role-tech-writer','KD-role-ux',
         'KD-scale-review','KD-sprint-planning','KD-sprint-status','KD-status','KD-swarm','KD-tech-research','KD-test-arch',
         'KD-test-atdd','KD-test-automate','KD-test-ci','KD-test-design','KD-test-frame','KD-test-nfr','KD-test-teach',
-        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow'
+        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow','KD-kickoff','KD-refactor','KD-test','KD-api-design'
     )
     foreach ($cmd in $cmdNames) {
         $cmdUrl = "$KD_RAW_URL/src/adapters/claude-code/commands/$cmd.md"
@@ -508,7 +508,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         'KD-role-pm','KD-role-qa','KD-role-scrum-master','KD-role-solo-dev','KD-role-tech-writer','KD-role-ux',
         'KD-scale-review','KD-sprint-planning','KD-sprint-status','KD-status','KD-swarm','KD-tech-research','KD-test-arch',
         'KD-test-atdd','KD-test-automate','KD-test-ci','KD-test-design','KD-test-frame','KD-test-nfr','KD-test-teach',
-        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow'
+        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow','KD-kickoff','KD-refactor','KD-test','KD-api-design'
     )
     foreach ($cmd in $cmdNames) {
         $cmdUrl = "$KD_RAW_URL/src/adapters/cursor/commands/$cmd.md"
@@ -560,7 +560,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         'KD-role-pm','KD-role-qa','KD-role-scrum-master','KD-role-solo-dev','KD-role-tech-writer','KD-role-ux',
         'KD-scale-review','KD-sprint-planning','KD-sprint-status','KD-status','KD-swarm','KD-tech-research','KD-test-arch',
         'KD-test-atdd','KD-test-automate','KD-test-ci','KD-test-design','KD-test-frame','KD-test-nfr','KD-test-teach',
-        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow'
+        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow','KD-kickoff','KD-refactor','KD-test','KD-api-design'
     )
     foreach ($cmd in $cmdNames) {
         $cmdUrl = "$KD_RAW_URL/src/adapters/antigravity/workflows/$cmd.md"

@@ -133,12 +133,14 @@ All AI-generated files are organized into `.kracked/KD_output/` with category su
 
 | Category | Commands (Examples) | Description |
 |----------|---------------------|-------------|
+| **Setup** | `/KD-kickoff`, `/KD-help` | **NEW** Project init and context loading |
 | **Core Process** | `/KD`, `/KD-analyze`, `/KD-brainstorm`, `/KD-prd` | Manage the full product lifecycle from idea to launch |
-| **Agile/Exec** | `/KD-sprint-planning`, `/KD-dev-story`, `/KD-code-review` | Execute sprints, implement stories (TDD), review code |
+| **Agile/Exec** | `/KD-sprint-planning`, `/KD-dev-story`, `/KD-refactor` | Execute sprints, implement stories (TDD), refactor code |
+| **Backend** | `/KD-api-design` | **NEW** Design robust, secure API endpoints & models |
 | **Roles** | `/KD-role-analyst`, `/KD-role-architect`, `/KD-role-dev` | **NEW** specialized personas for every aspect of development |
 | **Game Dev** | `/KD-game-gdd`, `/KD-game-mechanics`, `/KD-game-qa` | **NEW** specialized suite for Game Design & Development |
 | **Innovation** | `/KD-idea-design-thinking`, `/KD-idea-storyteller` | **NEW** tools for creative ideation and strategy |
-| **Testing** | `/KD-test-arch`, `/KD-test-automate`, `/KD-test-perf` | **NEW** rigorous QA and test engineering tools |
+| **Testing** | `/KD-test`, `/KD-test-arch`, `/KD-test-automate` | **NEW** rigorous QA and test engineering tools |
 | **Validation** | `/KD-validate`, `/KD-fix-course`, `/KD-retrospective` | **NEW** safety checks and course correction tools |
 
 *Total 80+ commands available across all categories.*
