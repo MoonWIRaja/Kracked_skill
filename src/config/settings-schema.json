@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KD Settings",
+  "description": "KRACKED_skill configuration schema",
+  "type": "object",
+  "required": ["version", "language", "target_tool"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "KD version",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "language": {
+      "type": "string",
+      "description": "User interface language",
+      "enum": ["EN", "MS"],
+      "default": "EN"
+    },
+    "target_tool": {
+      "type": "string",
+      "description": "Target AI tool adapter",
+      "enum": ["claude-code", "cursor", "antigravity", "generic"],
+      "default": "claude-code"
+    },
+    "project_name": {
+      "type": "string",
+      "description": "Project name",
+      "default": ""
+    },
+    "created_at": {
+      "type": "string",
+      "description": "Installation timestamp (ISO 8601)",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "description": "Last update timestamp (ISO 8601)",
+      "format": "date-time"
+    },
+    "scale": {
+      "type": "string",
+      "description": "Project scale assessment",
+      "enum": ["SMALL", "STANDARD", "DEEP", ""],
+      "default": ""
+    },
+    "auto_update": {
+      "type": "boolean",
+      "description": "Check for updates automatically",
+      "default": false
+    },
+    "verbose": {
+      "type": "boolean",
+      "description": "Enable verbose output",
+      "default": false
+    }
+  }
+}

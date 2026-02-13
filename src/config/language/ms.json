@@ -1,0 +1,77 @@
+{
+  "system_name": "KD (KRACKED_skill)",
+  "system_version": "v1.0.0",
+  "system_author": "KRACKEDDEVS",
+  "system_site": "https://krackeddevs.com/",
+  "system_motto": "KD siapkan apa yang dimulakan.",
+
+  "welcome_title": "Selamat datang ke KD!",
+  "welcome_subtitle": "AI Skill oleh KRACKEDDEVS",
+  "welcome_ready": "Sedia untuk bermula. Taip /KD-analyze untuk memulakan penemuan.",
+
+  "session_start": "Sesi dimulakan.",
+  "session_announce": "KD v{version} | Bahasa: {language} | Peringkat: {stage} | Peranan: {role}",
+
+  "role_enter": "PERANAN MASUK: {role}",
+  "role_exit": "PERANAN KELUAR: {role}",
+  "role_analyst": "Penganalisis",
+  "role_pm": "Pengurus Produk",
+  "role_architect": "Arkitek",
+  "role_tech_lead": "Ketua Teknikal",
+  "role_engineer": "Jurutera",
+  "role_qa": "Jaminan Kualiti",
+  "role_security": "Keselamatan",
+  "role_devops": "DevOps",
+  "role_release_manager": "Pengurus Keluaran",
+
+  "stage_discovery": "Penemuan",
+  "stage_requirements": "Keperluan",
+  "stage_architecture": "Seni Bina",
+  "stage_implementation": "Pelaksanaan",
+  "stage_quality": "Kualiti",
+  "stage_deployment": "Penempatan",
+  "stage_release": "Keluaran",
+
+  "scale_small": "KECIL",
+  "scale_standard": "STANDARD",
+  "scale_deep": "MENDALAM",
+
+  "checkpoint_awaiting": "PUSAT PEMERIKSAAN: Menunggu kelulusan manusia untuk {artifact}",
+  "checkpoint_approved": "PUSAT PEMERIKSAAN: {artifact} diluluskan. Meneruskan.",
+  "checkpoint_rejected": "PUSAT PEMERIKSAAN: Semakan {artifact} diminta.",
+
+  "decision_validation": "PENGESAHAN KEPUTUSAN",
+  "confidence_high": "TINGGI",
+  "confidence_medium": "SEDERHANA",
+  "confidence_low": "RENDAH",
+
+  "error_not_installed": "KD tidak dipasang. Jalankan install.sh dahulu.",
+  "error_config_missing": "Fail konfigurasi tidak dijumpai.",
+  "error_status_missing": "status.md tidak dijumpai. Jalankan install.sh untuk inisialisasi.",
+  "error_invalid_command": "Arahan tidak dikenali: {command}. Taip /KD-help untuk senarai arahan.",
+
+  "install_success": "KD berjaya dipasang!",
+  "install_already": "KD sudah dipasang. Gunakan --force untuk tulis semula.",
+  "uninstall_success": "KD berjaya dinyahpasang.",
+  "update_success": "KD dikemaskini ke v{version}!",
+  "update_current": "Anda sudah menggunakan versi terkini.",
+  "validate_pass": "Pengesahan BERJAYA.",
+  "validate_fail": "Pengesahan GAGAL dengan {errors} ralat.",
+
+  "party_mode_activated": "MOD PARTI DIAKTIFKAN",
+  "party_mode_results": "KEPUTUSAN MOD PARTI",
+  "swarm_activated": "KAWANAN AGEN DIAKTIFKAN",
+  "swarm_results": "KEPUTUSAN KAWANAN",
+  "conflict_detected": "KONFLIK DIKESAN",
+  "conflict_resolved": "KONFLIK DISELESAIKAN",
+
+  "prompt_target_tool": "Pilih alat AI anda:",
+  "prompt_language": "Pilih bahasa:",
+  "prompt_confirm": "Teruskan?",
+  "prompt_yes": "Ya",
+  "prompt_no": "Tidak",
+
+  "next_action": "Tindakan seterusnya yang disyorkan:",
+  "status_overview": "Gambaran Keseluruhan Status Projek",
+  "help_title": "Rujukan Arahan KD"
+}

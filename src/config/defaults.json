@@ -1,0 +1,11 @@
+{
+  "version": "1.0.0",
+  "language": "EN",
+  "target_tool": "claude-code",
+  "project_name": "",
+  "created_at": "",
+  "updated_at": "",
+  "scale": "",
+  "auto_update": false,
+  "verbose": false
+}

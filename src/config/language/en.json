@@ -1,0 +1,77 @@
+{
+  "system_name": "KD (KRACKED_skill)",
+  "system_version": "v1.0.0",
+  "system_author": "KRACKEDDEVS",
+  "system_site": "https://krackeddevs.com/",
+  "system_motto": "KD finishes what it starts.",
+
+  "welcome_title": "Welcome to KD!",
+  "welcome_subtitle": "AI Skill by KRACKEDDEVS",
+  "welcome_ready": "Ready to begin. Type /KD-analyze to start discovery.",
+
+  "session_start": "Session started.",
+  "session_announce": "KD v{version} | Language: {language} | Stage: {stage} | Role: {role}",
+
+  "role_enter": "ROLE ENTER: {role}",
+  "role_exit": "ROLE EXIT: {role}",
+  "role_analyst": "Analyst",
+  "role_pm": "Product Manager",
+  "role_architect": "Architect",
+  "role_tech_lead": "Tech Lead",
+  "role_engineer": "Engineer",
+  "role_qa": "QA",
+  "role_security": "Security",
+  "role_devops": "DevOps",
+  "role_release_manager": "Release Manager",
+
+  "stage_discovery": "Discovery",
+  "stage_requirements": "Requirements",
+  "stage_architecture": "Architecture",
+  "stage_implementation": "Implementation",
+  "stage_quality": "Quality",
+  "stage_deployment": "Deployment",
+  "stage_release": "Release",
+
+  "scale_small": "SMALL",
+  "scale_standard": "STANDARD",
+  "scale_deep": "DEEP",
+
+  "checkpoint_awaiting": "CHECKPOINT: Awaiting human approval for {artifact}",
+  "checkpoint_approved": "CHECKPOINT: {artifact} approved. Proceeding.",
+  "checkpoint_rejected": "CHECKPOINT: {artifact} revisions requested.",
+
+  "decision_validation": "DECISION VALIDATION",
+  "confidence_high": "HIGH",
+  "confidence_medium": "MEDIUM",
+  "confidence_low": "LOW",
+
+  "error_not_installed": "KD is not installed. Run install.sh first.",
+  "error_config_missing": "Configuration file not found.",
+  "error_status_missing": "status.md not found. Run install.sh to initialize.",
+  "error_invalid_command": "Unknown command: {command}. Type /KD-help for available commands.",
+
+  "install_success": "KD installed successfully!",
+  "install_already": "KD is already installed. Use --force to overwrite.",
+  "uninstall_success": "KD uninstalled successfully.",
+  "update_success": "KD updated to v{version}!",
+  "update_current": "You are on the latest version.",
+  "validate_pass": "Validation PASSED.",
+  "validate_fail": "Validation FAILED with {errors} error(s).",
+
+  "party_mode_activated": "PARTY MODE ACTIVATED",
+  "party_mode_results": "PARTY MODE RESULTS",
+  "swarm_activated": "AGENT SWARM ACTIVATED",
+  "swarm_results": "SWARM RESULTS",
+  "conflict_detected": "CONFLICT DETECTED",
+  "conflict_resolved": "CONFLICT RESOLVED",
+
+  "prompt_target_tool": "Select your AI tool:",
+  "prompt_language": "Select language:",
+  "prompt_confirm": "Continue?",
+  "prompt_yes": "Yes",
+  "prompt_no": "No",
+
+  "next_action": "Next recommended action:",
+  "status_overview": "Project Status Overview",
+  "help_title": "KD Command Reference"
+}
