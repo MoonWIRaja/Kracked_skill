@@ -23,13 +23,22 @@
 
 ### One-Line Install
 
+**macOS / Linux / Windows** (curl built-in):
 ```bash
-# Using curl
 curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
-
-# Using wget
-wget -qO- https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
 ```
+
+**Windows** (PowerShell):
+```powershell
+irm https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
+```
+
+**Windows** (Git Bash / WSL):
+```bash
+curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_skill/main/install.sh | bash
+```
+
+> **Note:** `install.sh` is a bash script. Windows users need **Git Bash**, **WSL**, or **MSYS2** to run it.
 
 ### Non-Interactive Install
 
