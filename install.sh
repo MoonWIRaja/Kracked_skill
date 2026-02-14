@@ -215,16 +215,12 @@ ask_target() {
     set +e
     
     while true; do
-        if [ -t 0 ]; then
-            read -rp "  Enter choice(s) [1-3, A]: " choice
+        if [ -c /dev/tty ]; then
+            printf "  Enter choice(s) [1-3, A]: " > /dev/tty
+            read choice < /dev/tty
         else
-            # If piped, try reading from tty
-            if [ -c /dev/tty ]; then
-                read -rp "  Enter choice(s) [1-3, A]: " choice < /dev/tty
-            else
-                log_error "Cannot read input (no tty). Use --non-interactive or run script directly."
-                exit 1
-            fi
+            printf "  Enter choice(s) [1-3, A]: "
+            read choice
         fi
 
         choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
@@ -279,15 +275,12 @@ ask_language() {
     set +e
 
     while true; do
-        if [ -t 0 ]; then
-            read -rp "  Enter choice [EN/MS]: " choice
+        if [ -c /dev/tty ]; then
+            printf "  Enter choice [EN/MS]: " > /dev/tty
+            read choice < /dev/tty
         else
-            if [ -c /dev/tty ]; then
-                read -rp "  Enter choice [EN/MS]: " choice < /dev/tty
-            else
-                log_error "Cannot read input (no tty). Use --non-interactive or run script directly."
-                exit 1
-            fi
+            printf "  Enter choice [EN/MS]: "
+            read choice
         fi
         
         choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
@@ -312,27 +305,31 @@ confirm_installation() {
     echo -e "    Target(s): ${CYAN}${TARGET_TOOLS}${NC}"
     echo -e "    Language:  ${CYAN}${LANGUAGE}${NC}"
     echo -e "    Directory: ${CYAN}$(cd "$TARGET_DIR" && pwd)${NC}"
+    echo ""
+
     # Disable exit-on-error for interactive input
     set +e
     
-    if [ -t 0 ]; then
-        read -rp "  Proceed with installation? [Y/n]: " confirm
+    if [ -c /dev/tty ]; then
+        printf "  Proceed with installation? [Y/n]: " > /dev/tty
+        read confirm < /dev/tty
     else
-        if [ -c /dev/tty ]; then
-            read -rp "  Proceed with installation? [Y/n]: " confirm < /dev/tty
-        else
-            confirm="Y" # Assume yes if no TTY in non-interactive mode? Or fail.
-        fi
+        printf "  Proceed with installation? [Y/n]: "
+        read confirm
     fi
     
     set -e
     
     confirm="${confirm:-Y}"
 
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-        log_info "Installation cancelled."
-        exit 0
-    fi
+    case "$confirm" in
+        [yY][eE][sS]|[yY]) 
+            ;;
+        *)
+            log_info "Installation cancelled."
+            exit 0
+            ;;
+    esac
 }
 
 # ---------------------------------------------------------------------------

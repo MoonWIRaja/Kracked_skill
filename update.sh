@@ -206,13 +206,26 @@ main() {
 
     echo ""
     echo -e "  Update available: ${YELLOW}${current_version}${NC} → ${GREEN}${latest_version}${NC}"
-    read -rp "  Proceed with update? [Y/n]: " confirm < /dev/tty
+    
+    # Explicitly print prompt to TTY
+    if [ -c /dev/tty ]; then
+        printf "  Proceed with update? [Y/n]: " > /dev/tty
+        read confirm < /dev/tty
+    else
+        printf "  Proceed with update? [Y/n]: "
+        read confirm
+    fi
+    
     confirm="${confirm:-Y}"
 
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-        log_info "Update cancelled."
-        exit 0
-    fi
+    case "$confirm" in
+        [yY][eE][sS]|[yY]) 
+            ;;
+        *)
+            log_info "Update cancelled."
+            exit 0
+            ;;
+    esac
 
     # Backup
     log_info "Backing up configuration and output files..."
