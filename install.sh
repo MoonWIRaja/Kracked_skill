@@ -104,21 +104,25 @@ check_dependencies() {
         log_warn "Bash 4+ recommended (current: ${BASH_VERSION}). Proceeding anyway."
     fi
 
+    # Temporarily disable exit-on-error for checks
+    set +e
+
     # Check for download tool
     local has_curl=false
     local has_wget=false
 
-    if command -v curl &>/dev/null; then
+    if type curl >/dev/null 2>&1; then
         has_curl=true
-        log_verbose "curl found: $(command -v curl)"
+        log_verbose "curl found: $(type curl)"
     fi
 
-    if command -v wget &>/dev/null; then
+    if type wget >/dev/null 2>&1; then
         has_wget=true
-        log_verbose "wget found: $(command -v wget)"
+        log_verbose "wget found: $(type wget)"
     fi
 
     if [[ "$has_curl" == false && "$has_wget" == false ]]; then
+        set -e
         log_error "Neither curl nor wget found. Please install one of them."
         log_error "  Ubuntu/Debian: sudo apt install curl"
         log_error "  macOS: brew install curl"
@@ -127,11 +131,14 @@ check_dependencies() {
     fi
 
     # Check for git (optional)
-    if command -v git &>/dev/null; then
-        log_verbose "git found: $(command -v git)"
+    if type git >/dev/null 2>&1; then
+        log_verbose "git found: $(type git)"
     else
         log_verbose "git not found (optional)"
     fi
+    
+    # Re-enable exit-on-error
+    set -e
 
     # Check write permission
     if [[ ! -w "${TARGET_DIR}" ]]; then
