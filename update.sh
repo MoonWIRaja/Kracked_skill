@@ -206,7 +206,7 @@ main() {
 
     echo ""
     echo -e "  Update available: ${YELLOW}${current_version}${NC} → ${GREEN}${latest_version}${NC}"
-    read -rp "  Proceed with update? [Y/n]: " confirm
+    read -rp "  Proceed with update? [Y/n]: " confirm < /dev/tty
     confirm="${confirm:-Y}"
 
     if [[ ! "$confirm" =~ ^[Yy]$ ]]; then

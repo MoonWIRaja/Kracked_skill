@@ -212,7 +212,7 @@ ask_target() {
     echo ""
 
     while true; do
-        read -rp "  Enter choice(s) [1-3, A]: " choice
+        read -rp "  Enter choice(s) [1-3, A]: " choice < /dev/tty
         choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
 
         if [[ "$choice" == "A" ]]; then
@@ -259,7 +259,7 @@ ask_language() {
     echo ""
 
     while true; do
-        read -rp "  Enter choice [EN/MS]: " choice
+        read -rp "  Enter choice [EN/MS]: " choice < /dev/tty
         choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
         case "$choice" in
             EN) LANGUAGE="EN"; break ;;
@@ -281,7 +281,7 @@ confirm_installation() {
     echo -e "    Directory: ${CYAN}$(cd "$TARGET_DIR" && pwd)${NC}"
     echo ""
 
-    read -rp "  Proceed with installation? [Y/n]: " confirm
+    read -rp "  Proceed with installation? [Y/n]: " confirm < /dev/tty
     confirm="${confirm:-Y}"
 
     if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
