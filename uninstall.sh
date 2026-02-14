@@ -89,29 +89,37 @@ confirm_uninstall() {
     echo -e "    - The status.md backup"
     echo ""
 
-    # Disable exit-on-error for interactive input
+    # Explicitly print prompt to TTY to ensure visibility in pipes
+    if [ -c /dev/tty ]; then
+        printf "  Proceed with uninstallation? [y/N]: " > /dev/tty
+    else
+        printf "  Proceed with uninstallation? [y/N]: "
+    fi
+    
+    # Disable exit-on-error for read
     set +e
     
     local confirm=""
-    if [ -t 0 ]; then
-        read -rp "  Proceed with uninstallation? [y/N]: " confirm
+    if [ -c /dev/tty ]; then
+        read confirm < /dev/tty
     else
-        if [ -c /dev/tty ]; then
-            read -rp "  Proceed with uninstallation? [y/N]: " confirm < /dev/tty
-        else
-            log_error "Cannot read input (no tty). Run script directly or use --non-interactive if available."
-            exit 1
-        fi
+        read confirm
     fi
     
     set -e
     
+    # Default to No
     confirm="${confirm:-N}"
-
-    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-        log_info "Uninstallation cancelled."
-        exit 0
-    fi
+    
+    # Use Case instead of Regex for maximum compatibility
+    case "$confirm" in
+        [yY][eE][sS]|[yY]) 
+            ;;
+        *)
+            log_info "Uninstallation cancelled."
+            exit 0
+            ;;
+    esac
 }
 
 # ---------------------------------------------------------------------------
