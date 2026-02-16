@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-readonly KD_VERSION="4.0.1"
+readonly KD_VERSION="4.0.2"
 readonly KD_DIR=".kracked"
 readonly KD_REPO="MoonWIRaja/Kracked_Skills"
 readonly KD_RAW_URL="https://raw.githubusercontent.com/${KD_REPO}/main"

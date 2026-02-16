@@ -28,7 +28,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Constants
-$KD_VERSION = "4.0.1"
+$KD_VERSION = "4.0.2"
 $KD_REPO = "MoonWIRaja/Kracked_Skills"
 $KD_RAW_URL = "https://raw.githubusercontent.com/$KD_REPO/main"
 $KD_DIR = ".kracked"
@@ -621,14 +621,15 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-Cline {
     Write-Info "Setting up for Cline..."
 
-    $url = "$KD_RAW_URL/src/adapters/cline/.clinerules"
-    $dest = Join-Path $TargetDir '.clinerules'
-    if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
-        Write-Warn "Could not download .clinerules, creating local copy..."
-        $content = '# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
-        [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
+    $url = "$KD_RAW_URL/src/adapters/cline/clinerules.zip"
+    $dest = Join-Path $TargetDir 'clinerules.zip'
+    
+    if (Get-RemoteFile -Url $url -Dest $dest) {
+        Expand-Archive -Path $dest -DestinationPath $TargetDir -Force
+        Remove-Item $dest -Force
+        Write-Ok "Extracted .clinerules from zip"
+    } else {
+        Write-Warn "Could not download clinerules.zip."
     }
 
     Write-Ok "Cline setup complete."
@@ -640,14 +641,21 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-KiloCode {
     Write-Info "Setting up for Kilo Code..."
 
-    $url = "$KD_RAW_URL/src/adapters/kilocode/.kilocode"
-    $dest = Join-Path $TargetDir '.kilocode'
-    if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
-        Write-Warn "Could not download .kilocode, creating local copy..."
-        $content = '# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
-        [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
+    $url = "$KD_RAW_URL/src/adapters/kilocode/kilocode.zip"
+    $dest = Join-Path $TargetDir 'kilocode.zip'
+    
+    if (Get-RemoteFile -Url $url -Dest $dest) {
+        Expand-Archive -Path $dest -DestinationPath $TargetDir -Force
+        Remove-Item $dest -Force
+        Write-Ok "Extracted .kilocode from zip"
+        
+        # Also download standalone config if needed
+        $url_modes = "$KD_RAW_URL/src/adapters/kilocode/.kilocodemodes"
+        $dest_modes = Join-Path $TargetDir '.kilocodemodes'
+        Get-RemoteFile -Url $url_modes -Dest $dest_modes | Out-Null
+        
+    } else {
+        Write-Warn "Could not download kilocode.zip."
     }
 
     Write-Ok "Kilo Code setup complete."
@@ -659,14 +667,15 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-RooCode {
     Write-Info "Setting up for Roo Code..."
 
-    $url = "$KD_RAW_URL/src/adapters/roo-code/.roo"
-    $dest = Join-Path $TargetDir '.roo'
-    if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
-        Write-Warn "Could not download .roo, creating local copy..."
-        $content = '# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
-        [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
+    $url = "$KD_RAW_URL/src/adapters/roo-code/roo.zip"
+    $dest = Join-Path $TargetDir 'roo.zip'
+    
+    if (Get-RemoteFile -Url $url -Dest $dest) {
+        Expand-Archive -Path $dest -DestinationPath $TargetDir -Force
+        Remove-Item $dest -Force
+        Write-Ok "Extracted .roo from zip"
+    } else {
+        Write-Warn "Could not download roo.zip."
     }
 
     Write-Ok "Roo Code setup complete."

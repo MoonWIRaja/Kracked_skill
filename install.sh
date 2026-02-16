@@ -13,7 +13,7 @@ trap 'echo "Error on line $LINENO"' ERR
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-readonly KD_VERSION="4.0.1"
+readonly KD_VERSION="4.0.2"
 readonly KD_REPO="MoonWIRaja/Kracked_Skills"
 readonly KD_RAW_URL="https://raw.githubusercontent.com/${KD_REPO}/main"
 readonly KD_DIR=".kracked"
@@ -822,52 +822,69 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest
 
 setup_cline() {
     log_info "Setting up for Cline..."
-
-    local url="${KD_RAW_URL}/src/adapters/cline/.clinerules"
-    local dest="${TARGET_DIR}/.clinerules"
+    local url="${KD_RAW_URL}/src/adapters/cline/clinerules.zip"
+    local dest="${TARGET_DIR}/clinerules.zip"
+    
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .clinerules from repo"
+        if command -v unzip &>/dev/null; then
+            unzip -o "$dest" -d "${TARGET_DIR}" >/dev/null 2>&1
+        elif command -v python3 &>/dev/null; then
+            python3 -m zipfile -e "$dest" "${TARGET_DIR}" >/dev/null 2>&1
+        else
+            log_warn "Cannot unzip clinerules.zip (unzip/python3 missing)."
+        fi
+        rm -f "$dest"
+        log_verbose "Extracted .clinerules from zip"
     else
-        log_warn "Could not download .clinerules, creating local copy..."
-        echo '# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest"
+        log_warn "Could not download clinerules.zip, checking for local copy..."
     fi
-
     log_success "Cline setup complete."
 }
 
 setup_kilocode() {
     log_info "Setting up for Kilo Code..."
+    local url="${KD_RAW_URL}/src/adapters/kilocode/kilocode.zip"
+    local dest="${TARGET_DIR}/kilocode.zip"
 
-    local url="${KD_RAW_URL}/src/adapters/kilocode/.kilocode"
-    local dest="${TARGET_DIR}/.kilocode"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .kilocode from repo"
+        if command -v unzip &>/dev/null; then
+            unzip -o "$dest" -d "${TARGET_DIR}" >/dev/null 2>&1
+        elif command -v python3 &>/dev/null; then
+            python3 -m zipfile -e "$dest" "${TARGET_DIR}" >/dev/null 2>&1
+        else
+            log_warn "Cannot unzip kilocode.zip (unzip/python3 missing)."
+        fi
+        rm -f "$dest"
+        
+        # Also download standalone config if needed
+        local url_modes="${KD_RAW_URL}/src/adapters/kilocode/.kilocodemodes"
+        download_file "$url_modes" "${TARGET_DIR}/.kilocodemodes"
+        
+        log_verbose "Extracted .kilocode from zip"
     else
-        log_warn "Could not download .kilocode, creating local copy..."
-        echo '# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest"
+        log_warn "Could not download kilocode.zip, checking for local copy..."
     fi
-
     log_success "Kilo Code setup complete."
 }
 
 setup_roo_code() {
     log_info "Setting up for Roo Code..."
+    local url="${KD_RAW_URL}/src/adapters/roo-code/roo.zip"
+    local dest="${TARGET_DIR}/roo.zip"
 
-    local url="${KD_RAW_URL}/src/adapters/roo-code/.roo"
-    local dest="${TARGET_DIR}/.roo"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .roo from repo"
+        if command -v unzip &>/dev/null; then
+            unzip -o "$dest" -d "${TARGET_DIR}" >/dev/null 2>&1
+        elif command -v python3 &>/dev/null; then
+            python3 -m zipfile -e "$dest" "${TARGET_DIR}" >/dev/null 2>&1
+        else
+            log_warn "Cannot unzip roo.zip (unzip/python3 missing)."
+        fi
+        rm -f "$dest"
+        log_verbose "Extracted .roo from zip"
     else
-        log_warn "Could not download .roo, creating local copy..."
-        echo '# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md' > "$dest"
+        log_warn "Could not download roo.zip, checking for local copy..."
     fi
-
     log_success "Roo Code setup complete."
 }
 
