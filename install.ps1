@@ -28,7 +28,7 @@ param(
 $ErrorActionPreference = "Stop"
 
 # Constants
-$KD_VERSION = "4.0.0"
+$KD_VERSION = "4.0.1"
 $KD_REPO = "MoonWIRaja/Kracked_Skills"
 $KD_RAW_URL = "https://raw.githubusercontent.com/$KD_REPO/main"
 $KD_DIR = ".kracked"

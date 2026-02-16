@@ -13,7 +13,7 @@ trap 'echo "Error on line $LINENO"' ERR
 # ---------------------------------------------------------------------------
 # Constants
 # ---------------------------------------------------------------------------
-readonly KD_VERSION="4.0.0"
+readonly KD_VERSION="4.0.1"
 readonly KD_REPO="MoonWIRaja/Kracked_Skills"
 readonly KD_RAW_URL="https://raw.githubusercontent.com/${KD_REPO}/main"
 readonly KD_DIR=".kracked"
@@ -214,6 +214,7 @@ ask_target() {
     echo -e "  ${BOLD}Select target AI tool(s) — choose multiple with commas (e.g. 1,3):${NC}"
     echo -e "    ${CYAN}[1]${NC} Claude Code"
     echo -e "    ${CYAN}[2]${NC} Cursor"
+    echo -e "    ${CYAN}[3]${NC} Antigravity"
     echo -e "    ${CYAN}[4]${NC} Cline"
     echo -e "    ${CYAN}[5]${NC} Kilo Code"
     echo -e "    ${CYAN}[6]${NC} Roo Code"
