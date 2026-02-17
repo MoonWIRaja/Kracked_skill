@@ -53,7 +53,7 @@ remove_files() {
     log_success "Removed ${KD_DIR}/ directory"
 
     # Remove adapter folders
-    local folders=".antigravity .agent .claude .cursor .cline .clinerules .kilocode .kilo .roo"
+    local folders=".antigravity .agent .claude .cursor .cline .clinerules .kilocode .kilo .roo .roo-code"
     for f in $folders; do
         if [[ -d "${TARGET_DIR}/$f" ]]; then
             rm -rf "${TARGET_DIR}/$f"
@@ -61,12 +61,12 @@ remove_files() {
         fi
     done
 
-    # Remove legacy root files
-    local legacy="CLAUDE.md .cursorrules .clinerules .kilocode .kilocodemodes .roo"
-    for f in $legacy; do
+    # Remove root configuration files
+    local files="CLAUDE.md .cursorrules .clinerules .kilocode .kilocodemodes .roo"
+    for f in $files; do
         if [[ -f "${TARGET_DIR}/$f" ]]; then
             rm -f "${TARGET_DIR}/$f"
-            log_info "Removed legacy file: $f"
+            log_info "Removed configuration file: $f"
         fi
     done
 }

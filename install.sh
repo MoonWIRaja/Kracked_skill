@@ -540,7 +540,6 @@ deploy_commands() {
     local downloaded=0
     for cmd in $cmd_names; do
         if download_file "${KD_RAW_URL}/src/adapters/${adapter}/${source_dir}/${cmd}.md" "${target_cmd_dir}/${cmd}.md"; then
-            files_downloaded=$((files_downloaded + 1))
             downloaded=$((downloaded + 1))
         fi
     done
@@ -699,9 +698,9 @@ setup_claude_code() {
 
     mkdir -p "${TARGET_DIR}/.claude"
     local url="${KD_RAW_URL}/src/adapters/claude-code/CLAUDE.md"
-    local dest="${TARGET_DIR}/.claude/CLAUDE.md"
+    local dest="${TARGET_DIR}/CLAUDE.md"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded CLAUDE.md to .claude/"
+        log_verbose "Downloaded CLAUDE.md to project root"
     else
         log_warn "Could not download CLAUDE.md, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -719,9 +718,9 @@ setup_cursor() {
 
     mkdir -p "${TARGET_DIR}/.cursor"
     local url="${KD_RAW_URL}/src/adapters/cursor/.cursorrules"
-    local dest="${TARGET_DIR}/.cursor/.cursorrules"
+    local dest="${TARGET_DIR}/.cursorrules"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .cursorrules to .cursor/"
+        log_verbose "Downloaded .cursorrules to project root"
     else
         log_warn "Could not download .cursorrules, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -758,14 +757,14 @@ Status: .kracked/KD_output/status/status.md' > "$dest"
 }
 
 setup_cline() {
-    log_info "Setting up for Cline (BMAD style)..."
+    log_info "Setting up for Cline..."
 
-    # Use .clinerules as folder name to match BMAD
-    mkdir -p "${TARGET_DIR}/.clinerules"
+    # Use .cline as folder name for workflows
+    mkdir -p "${TARGET_DIR}/.cline"
     local url="${KD_RAW_URL}/src/adapters/cline/.clinerules"
-    local dest="${TARGET_DIR}/.clinerules/.clinerules"
+    local dest="${TARGET_DIR}/.clinerules"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .clinerules to .clinerules/"
+        log_verbose "Downloaded .clinerules to project root"
     else
         log_warn "Could not download .clinerules, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -774,19 +773,19 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    deploy_commands "cline" ".clinerules/workflows" "workflows"
+    deploy_commands "cline" ".cline/workflows" "workflows"
     log_success "Cline setup complete."
 }
 
 setup_kilocode() {
-    log_info "Setting up for Kilo Code (BMAD style)..."
+    log_info "Setting up for Kilo Code..."
 
-    # Use .kilocode as folder name to match BMAD
-    mkdir -p "${TARGET_DIR}/.kilocode"
+    # Use .kilo as folder name for workflows
+    mkdir -p "${TARGET_DIR}/.kilo"
     local url="${KD_RAW_URL}/src/adapters/kilocode/.kilocode"
-    local dest="${TARGET_DIR}/.kilocode/.kilocode"
+    local dest="${TARGET_DIR}/.kilocode"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .kilocode to .kilocode/"
+        log_verbose "Downloaded .kilocode to project root"
     else
         log_warn "Could not download .kilocode, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -795,18 +794,18 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    deploy_commands "kilocode" ".kilocode/workflows" "workflows"
+    deploy_commands "kilocode" ".kilo/workflows" "workflows"
     log_success "Kilo Code setup complete."
 }
 
 setup_roo_code() {
     log_info "Setting up for Roo Code..."
 
-    mkdir -p "${TARGET_DIR}/.roo"
+    mkdir -p "${TARGET_DIR}/.roo-code"
     local url="${KD_RAW_URL}/src/adapters/roo/.roo"
-    local dest="${TARGET_DIR}/.roo/.roo"
+    local dest="${TARGET_DIR}/.roo"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .roo to .roo/"
+        log_verbose "Downloaded .roo to project root"
     else
         log_warn "Could not download .roo, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -815,7 +814,7 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    deploy_commands "roo" ".roo/commands" "commands"
+    deploy_commands "roo" ".roo-code/commands" "commands"
     log_success "Roo Code setup complete."
 }
 

@@ -38,7 +38,7 @@ test_install_creates_directory() {
     echo ""
     echo "  Test: install creates .kracked directory"
 
-    bash install.sh "$TEST_DIR" --target=claude-code --language=EN --non-interactive --force 2>/dev/null
+    bash install.sh "$TEST_DIR" --target=claude-code --language=EN --non-interactive --force
 
     if [[ -d "${TEST_DIR}/.kracked" ]]; then
         log_pass "Directory .kracked/ created"
@@ -51,7 +51,7 @@ test_install_creates_status() {
     echo ""
     echo "  Test: install creates status.md"
 
-    if [[ -f "${TEST_DIR}/status.md" ]]; then
+    if [[ -f "${TEST_DIR}/.kracked/KD_output/status/status.md" ]]; then
         log_pass "status.md created"
     else
         log_fail "status.md not created"
