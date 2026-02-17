@@ -583,9 +583,10 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 # Adapter: Cline
 # ---------------------------------------------------------------------------
 function Setup-Cline {
-    Write-Info "Setting up for Cline..."
+    Write-Info "Setting up for Cline (BMAD style)..."
 
-    $adapterDir = Join-Path $TargetDir '.cline'
+    # Use .clinerules as folder name to match BMAD
+    $adapterDir = Join-Path $TargetDir '.clinerules'
     New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
 
     $url = "$KD_RAW_URL/src/adapters/cline/.clinerules"
@@ -598,7 +599,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
 
-    Deploy-Commands -Adapter 'cline' -RelDir '.cline\workflows' -SourceDir 'workflows'
+    Deploy-Commands -Adapter 'cline' -RelDir '.clinerules\workflows' -SourceDir 'workflows'
 
     Write-Ok "Cline setup complete."
 }
@@ -607,9 +608,10 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 # Adapter: Kilo Code
 # ---------------------------------------------------------------------------
 function Setup-KiloCode {
-    Write-Info "Setting up for Kilo Code..."
+    Write-Info "Setting up for Kilo Code (BMAD style)..."
 
-    $adapterDir = Join-Path $TargetDir '.kilo'
+    # Use .kilocode as folder name to match BMAD
+    $adapterDir = Join-Path $TargetDir '.kilocode'
     New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
 
     $url = "$KD_RAW_URL/src/adapters/kilocode/.kilocode"
@@ -622,7 +624,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
 
-    Deploy-Commands -Adapter 'kilocode' -RelDir '.kilo\workflows' -SourceDir 'workflows'
+    Deploy-Commands -Adapter 'kilocode' -RelDir '.kilocode\workflows' -SourceDir 'workflows'
 
     Write-Ok "Kilo Code setup complete."
 }
@@ -699,20 +701,7 @@ function Show-Success {
     Write-Host ""
 }
 
-function Remove-Legacy {
-    Write-Info "Cleaning up legacy adapter files..."
-    $legacy = @(
-        ".antigravity", "CLAUDE.md", ".cursorrules", ".clinerules", 
-        ".kilocode", ".kilocodemodes", ".kilocodemodes.json"
-    )
-    foreach ($item in $legacy) {
-        $p = Join-Path $TargetDir $item
-        if (Test-Path $p) {
-            Remove-Item $p -Recurse -Force | Out-Null
-            Write-Verbose "  Cleaned up legacy: $item"
-        }
-    }
-}
+
 
 # ---------------------------------------------------------------------------
 # Main
@@ -745,9 +734,6 @@ function Main {
     $selTargets = Ask-Target
     $selLang = Ask-Language
     Confirm-Install -T $selTargets -L $selLang -D $TargetDir
-
-    # Clean legacy before install starts
-    Remove-Legacy
 
     # Install
     New-KDDirs

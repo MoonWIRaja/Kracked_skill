@@ -758,13 +758,14 @@ Status: .kracked/KD_output/status/status.md' > "$dest"
 }
 
 setup_cline() {
-    log_info "Setting up for Cline..."
+    log_info "Setting up for Cline (BMAD style)..."
 
-    mkdir -p "${TARGET_DIR}/.cline"
+    # Use .clinerules as folder name to match BMAD
+    mkdir -p "${TARGET_DIR}/.clinerules"
     local url="${KD_RAW_URL}/src/adapters/cline/.clinerules"
-    local dest="${TARGET_DIR}/.cline/.clinerules"
+    local dest="${TARGET_DIR}/.clinerules/.clinerules"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .clinerules to .cline/"
+        log_verbose "Downloaded .clinerules to .clinerules/"
     else
         log_warn "Could not download .clinerules, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -773,18 +774,19 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    deploy_commands "cline" ".cline/workflows" "workflows"
+    deploy_commands "cline" ".clinerules/workflows" "workflows"
     log_success "Cline setup complete."
 }
 
 setup_kilocode() {
-    log_info "Setting up for Kilo Code..."
+    log_info "Setting up for Kilo Code (BMAD style)..."
 
-    mkdir -p "${TARGET_DIR}/.kilo"
+    # Use .kilocode as folder name to match BMAD
+    mkdir -p "${TARGET_DIR}/.kilocode"
     local url="${KD_RAW_URL}/src/adapters/kilocode/.kilocode"
-    local dest="${TARGET_DIR}/.kilo/.kilocode"
+    local dest="${TARGET_DIR}/.kilocode/.kilocode"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .kilocode to .kilo/"
+        log_verbose "Downloaded .kilocode to .kilocode/"
     else
         log_warn "Could not download .kilocode, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -793,7 +795,7 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    deploy_commands "kilocode" ".kilo/workflows" "workflows"
+    deploy_commands "kilocode" ".kilocode/workflows" "workflows"
     log_success "Kilo Code setup complete."
 }
 
@@ -910,16 +912,7 @@ parse_args() {
     done
 }
 
-remove_legacy() {
-    log_info "Cleaning up legacy adapter files..."
-    local legacy=".antigravity CLAUDE.md .cursorrules .clinerules .kilocode .kilocodemodes .kilocodemodes.json"
-    for item in $legacy; do
-        if [[ -e "${TARGET_DIR}/$item" ]]; then
-            rm -rf "${TARGET_DIR}/$item"
-            log_verbose "  Cleaned up legacy: $item"
-        fi
-    done
-}
+
 
 # ---------------------------------------------------------------------------
 # Main
@@ -934,9 +927,6 @@ main() {
     ask_language
     confirm_installation
     
-    # Clean legacy before install starts
-    remove_legacy
-
     create_directories
     download_files
     create_config

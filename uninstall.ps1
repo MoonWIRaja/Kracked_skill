@@ -74,7 +74,7 @@ Remove-Item -Path (Join-Path $TargetDir $KD_DIR) -Recurse -Force
 Write-Ok "Removed $KD_DIR\ directory"
 
 # Remove adapter files/folders
-$adapters = @(".antigravity", ".agent", ".claude", ".cursor", ".cline", ".kilo", ".roo")
+$adapters = @(".antigravity", ".agent", ".claude", ".cursor", ".cline", ".clinerules", ".kilo", ".kilocode", ".roo")
 foreach ($a in $adapters) {
     $p = Join-Path $TargetDir $a
     if (Test-Path $p) {

@@ -53,7 +53,7 @@ remove_files() {
     log_success "Removed ${KD_DIR}/ directory"
 
     # Remove adapter folders
-    local folders=".antigravity .agent .claude .cursor .cline .kilocode .kilo .roo"
+    local folders=".antigravity .agent .claude .cursor .cline .clinerules .kilocode .kilo .roo"
     for f in $folders; do
         if [[ -d "${TARGET_DIR}/$f" ]]; then
             rm -rf "${TARGET_DIR}/$f"
