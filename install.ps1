@@ -207,6 +207,38 @@ function Get-AndTrack {
     }
 }
 
+function Deploy-Commands {
+    param([string]$Adapter, [string]$RelDir, [string]$SourceDir)
+
+    $cmdDir = Join-Path $TargetDir $RelDir
+    New-Item -ItemType Directory -Path $cmdDir -Force | Out-Null
+
+    $cmdNames = @(
+        'KD','KD-analyze','KD-architecture','KD-brainstorm','KD-build-agent','KD-build-module','KD-build-workflow',
+        'KD-code-review','KD-deployment-plan','KD-dev-story','KD-doc-project','KD-domain-research','KD-epics-and-stories',
+        'KD-fix-course','KD-game-arch','KD-game-architect','KD-game-brainstorm','KD-game-brief','KD-game-designer',
+        'KD-game-dev','KD-game-dev-story','KD-game-gdd','KD-game-narrative','KD-game-qa','KD-game-scrum-master',
+        'KD-game-solo','KD-game-story','KD-game-test-auto','KD-game-test-design','KD-game-test-perf','KD-game-test-plan',
+        'KD-game-writer','KD-help','KD-idea-coach','KD-idea-design-thinking','KD-idea-innovation','KD-idea-presenter',
+        'KD-idea-problem-solving','KD-idea-solver','KD-idea-storyteller','KD-idea-storytelling','KD-idea-strategist',
+        'KD-market-research','KD-party-mode','KD-prd','KD-product-brief','KD-project-context','KD-qa-automate','KD-quick-dev',
+        'KD-quick-spec','KD-retrospective','KD-role-analyst','KD-role-architect','KD-role-bmad-master','KD-role-dev',
+        'KD-role-pm','KD-role-qa','KD-role-scrum-master','KD-role-solo-dev','KD-role-tech-writer','KD-role-ux',
+        'KD-scale-review','KD-sprint-planning','KD-sprint-status','KD-status','KD-swarm','KD-tech-research','KD-test-arch',
+        'KD-test-atdd','KD-test-automate','KD-test-ci','KD-test-design','KD-test-frame','KD-test-nfr','KD-test-teach',
+        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow','KD-kickoff','KD-refactor','KD-test','KD-api-design',
+        'KD-role-data-scientist','KD-role-mobile-dev','KD-role-dba','KD-test-sprite','KD-tool-selector'
+    )
+
+    foreach ($cmd in $cmdNames) {
+        # Some adapters use 'workflows' folder instead of 'commands'
+        $cmdUrl = "$KD_RAW_URL/src/adapters/$Adapter/$SourceDir/$cmd.md"
+        $cmdDest = Join-Path $cmdDir "$cmd.md"
+        Get-RemoteFile -Url $cmdUrl -Dest $cmdDest | Out-Null
+    }
+    Write-Verbose "  Deployed $($cmdNames.Count) slash commands to $RelDir"
+}
+
 # ---------------------------------------------------------------------------
 # Create Directories
 # ---------------------------------------------------------------------------
@@ -478,8 +510,11 @@ function New-StatusFile {
 function Setup-ClaudeCode {
     Write-Info "Setting up for Claude Code..."
 
+    $adapterDir = Join-Path $TargetDir '.claude'
+    New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
+
     $url = "$KD_RAW_URL/src/adapters/claude-code/CLAUDE.md"
-    $dest = Join-Path $TargetDir 'CLAUDE.md'
+    $dest = Join-Path $adapterDir 'CLAUDE.md'
     if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
         Write-Warn "Could not download CLAUDE.md, creating local copy..."
         $content = '# KD - AI Skill by KRACKEDDEVS
@@ -488,31 +523,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
 
-    # Deploy slash command files
-    $cmdDir = Join-Path $TargetDir '.claude\commands'
-    New-Item -ItemType Directory -Path $cmdDir -Force | Out-Null
-    $cmdNames = @(
-        'KD','KD-analyze','KD-architecture','KD-brainstorm','KD-build-agent','KD-build-module','KD-build-workflow',
-        'KD-code-review','KD-deployment-plan','KD-dev-story','KD-doc-project','KD-domain-research','KD-epics-and-stories',
-        'KD-fix-course','KD-game-arch','KD-game-architect','KD-game-brainstorm','KD-game-brief','KD-game-designer',
-        'KD-game-dev','KD-game-dev-story','KD-game-gdd','KD-game-narrative','KD-game-qa','KD-game-scrum-master',
-        'KD-game-solo','KD-game-story','KD-game-test-auto','KD-game-test-design','KD-game-test-perf','KD-game-test-plan',
-        'KD-game-writer','KD-help','KD-idea-coach','KD-idea-design-thinking','KD-idea-innovation','KD-idea-presenter',
-        'KD-idea-problem-solving','KD-idea-solver','KD-idea-storyteller','KD-idea-storytelling','KD-idea-strategist',
-        'KD-market-research','KD-party-mode','KD-prd','KD-product-brief','KD-project-context','KD-qa-automate','KD-quick-dev',
-        'KD-quick-spec','KD-retrospective','KD-role-analyst','KD-role-architect','KD-role-bmad-master','KD-role-dev',
-        'KD-role-pm','KD-role-qa','KD-role-scrum-master','KD-role-solo-dev','KD-role-tech-writer','KD-role-ux',
-        'KD-scale-review','KD-sprint-planning','KD-sprint-status','KD-status','KD-swarm','KD-tech-research','KD-test-arch',
-        'KD-test-atdd','KD-test-automate','KD-test-ci','KD-test-design','KD-test-frame','KD-test-nfr','KD-test-teach',
-        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow','KD-kickoff','KD-refactor','KD-test','KD-api-design',
-        'KD-role-data-scientist','KD-role-mobile-dev','KD-role-dba','KD-test-sprite','KD-tool-selector'
-    )
-    foreach ($cmd in $cmdNames) {
-        $cmdUrl = "$KD_RAW_URL/src/adapters/claude-code/commands/$cmd.md"
-        $cmdDest = Join-Path $cmdDir "$cmd.md"
-        Get-RemoteFile -Url $cmdUrl -Dest $cmdDest | Out-Null
-    }
-    Write-Verbose "  Deployed $($cmdNames.Count) slash commands to .claude/commands/"
+    Deploy-Commands -Adapter 'claude-code' -RelDir '.claude\commands' -SourceDir 'commands'
 
     Write-Ok "Claude Code setup complete."
 }
@@ -523,8 +534,11 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-Cursor {
     Write-Info "Setting up for Cursor..."
 
+    $adapterDir = Join-Path $TargetDir '.cursor'
+    New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
+
     $url = "$KD_RAW_URL/src/adapters/cursor/.cursorrules"
-    $dest = Join-Path $TargetDir '.cursorrules'
+    $dest = Join-Path $adapterDir '.cursorrules'
     if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
         Write-Warn "Could not download .cursorrules, creating local copy..."
         $content = '# KD - AI Skill by KRACKEDDEVS
@@ -533,31 +547,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
 
-    # Deploy slash command files
-    $cmdDir = Join-Path $TargetDir '.cursor\commands'
-    New-Item -ItemType Directory -Path $cmdDir -Force | Out-Null
-    $cmdNames = @(
-        'KD','KD-analyze','KD-architecture','KD-brainstorm','KD-build-agent','KD-build-module','KD-build-workflow',
-        'KD-code-review','KD-deployment-plan','KD-dev-story','KD-doc-project','KD-domain-research','KD-epics-and-stories',
-        'KD-fix-course','KD-game-arch','KD-game-architect','KD-game-brainstorm','KD-game-brief','KD-game-designer',
-        'KD-game-dev','KD-game-dev-story','KD-game-gdd','KD-game-narrative','KD-game-qa','KD-game-scrum-master',
-        'KD-game-solo','KD-game-story','KD-game-test-auto','KD-game-test-design','KD-game-test-perf','KD-game-test-plan',
-        'KD-game-writer','KD-help','KD-idea-coach','KD-idea-design-thinking','KD-idea-innovation','KD-idea-presenter',
-        'KD-idea-problem-solving','KD-idea-solver','KD-idea-storyteller','KD-idea-storytelling','KD-idea-strategist',
-        'KD-market-research','KD-party-mode','KD-prd','KD-product-brief','KD-project-context','KD-qa-automate','KD-quick-dev',
-        'KD-quick-spec','KD-retrospective','KD-role-analyst','KD-role-architect','KD-role-bmad-master','KD-role-dev',
-        'KD-role-pm','KD-role-qa','KD-role-scrum-master','KD-role-solo-dev','KD-role-tech-writer','KD-role-ux',
-        'KD-scale-review','KD-sprint-planning','KD-sprint-status','KD-status','KD-swarm','KD-tech-research','KD-test-arch',
-        'KD-test-atdd','KD-test-automate','KD-test-ci','KD-test-design','KD-test-frame','KD-test-nfr','KD-test-teach',
-        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow','KD-kickoff','KD-refactor','KD-test','KD-api-design',
-        'KD-role-data-scientist','KD-role-mobile-dev','KD-role-dba','KD-test-sprite','KD-tool-selector'
-    )
-    foreach ($cmd in $cmdNames) {
-        $cmdUrl = "$KD_RAW_URL/src/adapters/cursor/commands/$cmd.md"
-        $cmdDest = Join-Path $cmdDir "$cmd.md"
-        Get-RemoteFile -Url $cmdUrl -Dest $cmdDest | Out-Null
-    }
-    Write-Verbose "  Deployed $($cmdNames.Count) slash commands to .cursor/commands/"
+    Deploy-Commands -Adapter 'cursor' -RelDir '.cursor\commands' -SourceDir 'commands'
 
     Write-Ok "Cursor setup complete."
 }
@@ -568,13 +558,11 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-Antigravity {
     Write-Info "Setting up for Antigravity..."
 
-    $agDir = Join-Path $TargetDir '.antigravity'
-    if (-not (Test-Path $agDir)) {
-        New-Item -ItemType Directory -Path $agDir -Force | Out-Null
-    }
+    $adapterDir = Join-Path $TargetDir '.agent'
+    New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
 
     $url = "$KD_RAW_URL/src/adapters/antigravity/SKILL.md"
-    $dest = Join-Path $agDir 'SKILL.md'
+    $dest = Join-Path $adapterDir 'SKILL.md'
     if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
         Write-Warn "Could not download SKILL.md, creating local copy..."
         $content = '---
@@ -586,31 +574,7 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
 
-    # Deploy slash command files (Antigravity uses .agent/workflows/)
-    $cmdDir = Join-Path $TargetDir '.agent\workflows'
-    New-Item -ItemType Directory -Path $cmdDir -Force | Out-Null
-    $cmdNames = @(
-        'KD','KD-analyze','KD-architecture','KD-brainstorm','KD-build-agent','KD-build-module','KD-build-workflow',
-        'KD-code-review','KD-deployment-plan','KD-dev-story','KD-doc-project','KD-domain-research','KD-epics-and-stories',
-        'KD-fix-course','KD-game-arch','KD-game-architect','KD-game-brainstorm','KD-game-brief','KD-game-designer',
-        'KD-game-dev','KD-game-dev-story','KD-game-gdd','KD-game-narrative','KD-game-qa','KD-game-scrum-master',
-        'KD-game-solo','KD-game-story','KD-game-test-auto','KD-game-test-design','KD-game-test-perf','KD-game-test-plan',
-        'KD-game-writer','KD-help','KD-idea-coach','KD-idea-design-thinking','KD-idea-innovation','KD-idea-presenter',
-        'KD-idea-problem-solving','KD-idea-solver','KD-idea-storyteller','KD-idea-storytelling','KD-idea-strategist',
-        'KD-market-research','KD-party-mode','KD-prd','KD-product-brief','KD-project-context','KD-qa-automate','KD-quick-dev',
-        'KD-quick-spec','KD-retrospective','KD-role-analyst','KD-role-architect','KD-role-bmad-master','KD-role-dev',
-        'KD-role-pm','KD-role-qa','KD-role-scrum-master','KD-role-solo-dev','KD-role-tech-writer','KD-role-ux',
-        'KD-scale-review','KD-sprint-planning','KD-sprint-status','KD-status','KD-swarm','KD-tech-research','KD-test-arch',
-        'KD-test-atdd','KD-test-automate','KD-test-ci','KD-test-design','KD-test-frame','KD-test-nfr','KD-test-teach',
-        'KD-test-trace','KD-ux-design','KD-validate','KD-validate-agent','KD-validate-workflow','KD-kickoff','KD-refactor','KD-test','KD-api-design',
-        'KD-role-data-scientist','KD-role-mobile-dev','KD-role-dba','KD-test-sprite','KD-tool-selector'
-    )
-    foreach ($cmd in $cmdNames) {
-        $cmdUrl = "$KD_RAW_URL/src/adapters/antigravity/workflows/$cmd.md"
-        $cmdDest = Join-Path $cmdDir "$cmd.md"
-        Get-RemoteFile -Url $cmdUrl -Dest $cmdDest | Out-Null
-    }
-    Write-Verbose "  Deployed $($cmdNames.Count) slash commands to .agent/workflows/"
+    Deploy-Commands -Adapter 'antigravity' -RelDir '.agent\workflows' -SourceDir 'workflows'
 
     Write-Ok "Antigravity setup complete."
 }
@@ -621,8 +585,11 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-Cline {
     Write-Info "Setting up for Cline..."
 
+    $adapterDir = Join-Path $TargetDir '.cline'
+    New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
+
     $url = "$KD_RAW_URL/src/adapters/cline/.clinerules"
-    $dest = Join-Path $TargetDir '.clinerules'
+    $dest = Join-Path $adapterDir '.clinerules'
     if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
         Write-Warn "Could not download .clinerules, creating local copy..."
         $content = '# KD - AI Skill by KRACKEDDEVS
@@ -630,6 +597,8 @@ Read .kracked/prompts/system-prompt.md for full instructions.
 Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
+
+    Deploy-Commands -Adapter 'cline' -RelDir '.cline\workflows' -SourceDir 'workflows'
 
     Write-Ok "Cline setup complete."
 }
@@ -640,8 +609,11 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-KiloCode {
     Write-Info "Setting up for Kilo Code..."
 
+    $adapterDir = Join-Path $TargetDir '.kilo'
+    New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
+
     $url = "$KD_RAW_URL/src/adapters/kilocode/.kilocode"
-    $dest = Join-Path $TargetDir '.kilocode'
+    $dest = Join-Path $adapterDir '.kilocode'
     if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
         Write-Warn "Could not download .kilocode, creating local copy..."
         $content = '# KD - AI Skill by KRACKEDDEVS
@@ -649,6 +621,8 @@ Read .kracked/prompts/system-prompt.md for full instructions.
 Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
+
+    Deploy-Commands -Adapter 'kilocode' -RelDir '.kilo\workflows' -SourceDir 'workflows'
 
     Write-Ok "Kilo Code setup complete."
 }
@@ -659,8 +633,11 @@ Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
 function Setup-RooCode {
     Write-Info "Setting up for Roo Code..."
 
+    $adapterDir = Join-Path $TargetDir '.roo'
+    New-Item -ItemType Directory -Path $adapterDir -Force | Out-Null
+
     $url = "$KD_RAW_URL/src/adapters/roo-code/.roo"
-    $dest = Join-Path $TargetDir '.roo'
+    $dest = Join-Path $adapterDir '.roo'
     if (-not (Get-RemoteFile -Url $url -Dest $dest)) {
         Write-Warn "Could not download .roo, creating local copy..."
         $content = '# KD - AI Skill by KRACKEDDEVS
@@ -668,6 +645,8 @@ Read .kracked/prompts/system-prompt.md for full instructions.
 Type /KD for command menu. Status: .kracked/KD_output/status/status.md'
         [System.IO.File]::WriteAllText($dest, $content, [System.Text.Encoding]::UTF8)
     }
+
+    Deploy-Commands -Adapter 'roo' -RelDir '.roo\commands' -SourceDir 'commands'
 
     Write-Ok "Roo Code setup complete."
 }
@@ -703,7 +682,7 @@ function Show-Success {
         Write-Host "    3. Jejak kemajuan anda dalam:"
         Write-Host "       $projDir\$KD_DIR\KD_output\status\status.md" -ForegroundColor Cyan
     } else {
-        Write-Host "  Next Steps:" -ForegroundColor White
+        Write-Host "  Langkah Seterusnya:" -ForegroundColor White
         Write-Host ""
         Write-Host "    1. Read the system prompt:"
         Write-Host "       $projDir\$KD_DIR\prompts\system-prompt.md" -ForegroundColor Cyan

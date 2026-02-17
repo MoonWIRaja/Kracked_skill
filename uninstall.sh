@@ -52,65 +52,23 @@ remove_files() {
     rm -rf "${TARGET_DIR}/${KD_DIR}"
     log_success "Removed ${KD_DIR}/ directory"
 
-    # Remove Claude Code adapter files
-    if [[ -f "${TARGET_DIR}/CLAUDE.md" ]]; then
-        rm -f "${TARGET_DIR}/CLAUDE.md"
-        log_info "Removed CLAUDE.md"
-    fi
-    if [[ -d "${TARGET_DIR}/.claude" ]]; then
-        rm -rf "${TARGET_DIR}/.claude"
-        log_info "Removed .claude/"
-    fi
+    # Remove adapter folders
+    local folders=".antigravity .agent .claude .cursor .cline .kilocode .kilo .roo"
+    for f in $folders; do
+        if [[ -d "${TARGET_DIR}/$f" ]]; then
+            rm -rf "${TARGET_DIR}/$f"
+            log_info "Removed $f/ directory"
+        fi
+    done
 
-    # Remove Cursor adapter files
-    if [[ -f "${TARGET_DIR}/.cursorrules" ]]; then
-        rm -f "${TARGET_DIR}/.cursorrules"
-        log_info "Removed .cursorrules"
-    fi
-    if [[ -d "${TARGET_DIR}/.cursor" ]]; then
-        rm -rf "${TARGET_DIR}/.cursor"
-        log_info "Removed .cursor/"
-    fi
-
-    # Remove Antigravity adapter files
-    if [[ -d "${TARGET_DIR}/.antigravity" ]]; then
-        rm -rf "${TARGET_DIR}/.antigravity"
-        log_info "Removed .antigravity/"
-    fi
-    if [[ -d "${TARGET_DIR}/.agent" ]]; then
-        rm -rf "${TARGET_DIR}/.agent"
-        log_info "Removed .agent/"
-    fi
-
-    # Remove Cline adapter files
-    if [[ -f "${TARGET_DIR}/.clinerules" ]]; then
-        rm -f "${TARGET_DIR}/.clinerules"
-        log_info "Removed .clinerules"
-    fi
-    if [[ -d "${TARGET_DIR}/.cline" ]]; then
-        rm -rf "${TARGET_DIR}/.cline"
-        log_info "Removed .cline/"
-    fi
-
-    # Remove Kilo Code adapter files
-    if [[ -f "${TARGET_DIR}/.kilocode" ]]; then
-        rm -f "${TARGET_DIR}/.kilocode"
-        log_info "Removed .kilocode"
-    fi
-    if [[ -d "${TARGET_DIR}/.kilocode" ]]; then
-        rm -rf "${TARGET_DIR}/.kilocode"
-        log_info "Removed .kilocode/ (directory)"
-    fi
-
-    # Remove Roo Code adapter files
-    if [[ -f "${TARGET_DIR}/.roo" ]]; then
-        rm -f "${TARGET_DIR}/.roo"
-        log_info "Removed .roo"
-    fi
-    if [[ -d "${TARGET_DIR}/.roo" ]]; then
-        rm -rf "${TARGET_DIR}/.roo"
-        log_info "Removed .roo/"
-    fi
+    # Remove legacy root files
+    local legacy="CLAUDE.md .cursorrules .clinerules .kilocode .kilocodemodes .roo"
+    for f in $legacy; do
+        if [[ -f "${TARGET_DIR}/$f" ]]; then
+            rm -f "${TARGET_DIR}/$f"
+            log_info "Removed legacy file: $f"
+        fi
+    done
 }
 
 # ---------------------------------------------------------------------------

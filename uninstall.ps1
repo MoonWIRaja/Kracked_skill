@@ -73,50 +73,24 @@ if (Test-Path $statusFile) {
 Remove-Item -Path (Join-Path $TargetDir $KD_DIR) -Recurse -Force
 Write-Ok "Removed $KD_DIR\ directory"
 
-# Remove adapter files
-$claudeFile = Join-Path $TargetDir "CLAUDE.md"
-if (Test-Path $claudeFile) {
-    Remove-Item $claudeFile -Force
-    Write-Info "Removed CLAUDE.md"
+# Remove adapter files/folders
+$adapters = @(".antigravity", ".agent", ".claude", ".cursor", ".cline", ".kilo", ".roo")
+foreach ($a in $adapters) {
+    $p = Join-Path $TargetDir $a
+    if (Test-Path $p) {
+        Remove-Item $p -Recurse -Force
+        Write-Info "Removed $a/"
+    }
 }
 
-$cursorFile = Join-Path $TargetDir ".cursorrules"
-if (Test-Path $cursorFile) {
-    Remove-Item $cursorFile -Force
-    Write-Info "Removed .cursorrules"
-}
-
-$antigravityDir = Join-Path $TargetDir ".antigravity"
-if (Test-Path $antigravityDir) {
-    Remove-Item $antigravityDir -Recurse -Force
-    Write-Info "Removed .antigravity/"
-}
-
-# Remove Cline adapter files
-$clinerulesFile = Join-Path $TargetDir ".clinerules"
-if (Test-Path $clinerulesFile) {
-    Remove-Item $clinerulesFile -Force
-    Write-Info "Removed .clinerules"
-}
-
-$clineDir = Join-Path $TargetDir ".cline"
-if (Test-Path $clineDir) {
-    Remove-Item $clineDir -Recurse -Force
-    Write-Info "Removed .cline/"
-}
-
-# Remove Kilo Code adapter files
-$kilocodeFile = Join-Path $TargetDir ".kilocode"
-if (Test-Path $kilocodeFile) {
-    Remove-Item $kilocodeFile -Force
-    Write-Info "Removed .kilocode"
-}
-
-# Remove Roo Code adapter files
-$rooFile = Join-Path $TargetDir ".roo"
-if (Test-Path $rooFile) {
-    Remove-Item $rooFile -Force
-    Write-Info "Removed .roo"
+# Legacy root files
+$legacy = @("CLAUDE.md", ".cursorrules", ".clinerules", ".kilocode", ".kilocodemodes")
+foreach ($f in $legacy) {
+    $p = Join-Path $TargetDir $f
+    if (Test-Path $p) {
+        Remove-Item $p -Force
+        Write-Info "Removed legacy file: $f"
+    }
 }
 
 Write-Host ""

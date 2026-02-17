@@ -46,7 +46,7 @@ print_banner() {
 ╔═══════════════════════════════════════════════════════════════════════╗
 ║                                                                       ║
 ║  ██╗  ██╗██████╗                                                      ║
-║  ██║ ██╔╝██╔══██╗                                                     ║
+║  ██║  ██╔╝██╔══██╗                                                    ║
 ║  █████╔╝ ██║  ██║    AI Skill by KRACKEDDEVS                          ║
 ║  ██╔═██╗ ██║  ██║    https://krackeddevs.com/                         ║
 ║  ██║  ██╗██████╔╝                                                     ║
@@ -55,19 +55,19 @@ print_banner() {
 ╚═══════════════════════════════════════════════════════════════════════╝
 BANNER
     echo -e "${NC}"
-    echo -e "${BOLD} Kracked_Skills v${KD_VERSION}${NC}"
-    echo -e " Structured Multi-Role AI Product Execution System"
+    echo -e "${BOLD}  Kracked_Skills v${KD_VERSION}${NC}"
+    echo -e "  Structured Multi-Role AI Product Execution System"
     echo ""
 }
 
 # ---------------------------------------------------------------------------
 # Logging Helpers
 # ---------------------------------------------------------------------------
-log_info() { echo -e " ${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e " ${GREEN}[SUCCESS]${NC} $1"; }
-log_warn() { echo -e " ${YELLOW}[WARN]${NC} $1"; }
-log_error() { echo -e " ${RED}[ERROR]${NC} $1"; }
-log_verbose() { if [[ "$VERBOSE" == true ]]; then echo -e " ${MAGENTA}[DEBUG]${NC} $1"; fi; }
+log_info()    { echo -e "  ${BLUE}[INFO]${NC} $1"; }
+log_success() { echo -e "  ${GREEN}[SUCCESS]${NC} $1"; }
+log_warn()    { echo -e "  ${YELLOW}[WARN]${NC} $1"; }
+log_error()   { echo -e "  ${RED}[ERROR]${NC} $1"; }
+log_verbose() { if [[ "$VERBOSE" == true ]]; then echo -e "  ${MAGENTA}[DEBUG]${NC} $1"; fi; }
 
 # ---------------------------------------------------------------------------
 # Usage
@@ -161,7 +161,6 @@ detect_platform() {
     local uname_out
 
     uname_out="$(uname -s)"
-
     case "${uname_out}" in
         Linux*)
             if grep -qi microsoft /proc/version 2>/dev/null; then
@@ -206,24 +205,24 @@ ask_target() {
     fi
 
     echo ""
-    echo -e " ${BOLD}Select target AI tool(s) — choose multiple with commas (e.g. 1,3):${NC}"
-    echo -e " ${CYAN}[1]${NC} Claude Code"
-    echo -e " ${CYAN}[2]${NC} Cursor"
-    echo -e " ${CYAN}[3]${NC} Antigravity"
-    echo -e " ${CYAN}[4]${NC} Cline"
-    echo -e " ${CYAN}[5]${NC} Kilo Code"
-    echo -e " ${CYAN}[6]${NC} Roo Code"
-    echo -e " ${YELLOW}[A]${NC} All of the above"
+    echo -e "  ${BOLD}Select target AI tool(s) — choose multiple with commas (e.g. 1,3):${NC}"
+    echo -e "  ${CYAN}[1]${NC} Claude Code"
+    echo -e "  ${CYAN}[2]${NC} Cursor"
+    echo -e "  ${CYAN}[3]${NC} Antigravity"
+    echo -e "  ${CYAN}[4]${NC} Cline"
+    echo -e "  ${CYAN}[5]${NC} Kilo Code"
+    echo -e "  ${CYAN}[6]${NC} Roo Code"
+    echo -e "  ${YELLOW}[A]${NC} All of the above"
     echo ""
 
     # Disable exit-on-error for interactive loop
     set +e
     while true; do
         if [ -c /dev/tty ]; then
-            printf " Enter choice(s) [1-6, A]: " > /dev/tty
+            printf "  Enter choice(s) [1-6, A]: " > /dev/tty
             read choice < /dev/tty
         else
-            printf " Enter choice(s) [1-6, A]: "
+            printf "  Enter choice(s) [1-6, A]: "
             read choice
         fi
 
@@ -237,7 +236,6 @@ ask_target() {
         local selections=""
         local valid=true
         IFS=',' read -ra parts <<< "$choice"
-
         for part in "${parts[@]}"; do
             part=$(echo "$part" | tr -d ' ')
             case "$part" in
@@ -256,7 +254,7 @@ ask_target() {
             break
         fi
 
-        echo -e " ${RED}Invalid choice. Enter numbers 1-6 separated by commas, or A for all.${NC}"
+        echo -e "  ${RED}Invalid choice. Enter numbers 1-6 separated by commas, or A for all.${NC}"
     done
     # Re-enable exit-on-error
     set -e
@@ -273,28 +271,27 @@ ask_language() {
     fi
 
     echo ""
-    echo -e " ${BOLD}Select preferred language:${NC}"
-    echo -e " ${CYAN}[EN]${NC} English"
-    echo -e " ${CYAN}[MS]${NC} Bahasa Melayu"
+    echo -e "  ${BOLD}Select preferred language:${NC}"
+    echo -e "  ${CYAN}[EN]${NC} English"
+    echo -e "  ${CYAN}[MS]${NC} Bahasa Melayu"
     echo ""
 
     # Disable exit-on-error for interactive loop
     set +e
     while true; do
         if [ -c /dev/tty ]; then
-            printf " Enter choice [EN/MS]: " > /dev/tty
+            printf "  Enter choice [EN/MS]: " > /dev/tty
             read choice < /dev/tty
         else
-            printf " Enter choice [EN/MS]: "
+            printf "  Enter choice [EN/MS]: "
             read choice
         fi
 
         choice=$(echo "$choice" | tr '[:lower:]' '[:upper:]')
-
         case "$choice" in
             EN) LANGUAGE="EN"; break ;;
             MS) LANGUAGE="MS"; break ;;
-            *) echo -e " ${RED}Invalid choice. Please enter EN or MS.${NC}" ;;
+            *)  echo -e "  ${RED}Invalid choice. Please enter EN or MS.${NC}" ;;
         esac
     done
     # Re-enable exit-on-error
@@ -307,7 +304,7 @@ confirm_installation() {
     fi
 
     echo ""
-    echo -e " ${BOLD}Installation Summary:${NC}"
+    echo -e "  ${BOLD}Installation Summary:${NC}"
     echo -e "  Target(s):  ${CYAN}${TARGET_TOOLS}${NC}"
     echo -e "  Language:   ${CYAN}${LANGUAGE}${NC}"
     echo -e "  Directory:  ${CYAN}$(cd "$TARGET_DIR" && pwd)${NC}"
@@ -316,16 +313,15 @@ confirm_installation() {
     # Disable exit-on-error for interactive input
     set +e
     if [ -c /dev/tty ]; then
-        printf " Proceed with installation? [Y/n]: " > /dev/tty
+        printf "  Proceed with installation? [Y/n]: " > /dev/tty
         read confirm < /dev/tty
     else
-        printf " Proceed with installation? [Y/n]: "
+        printf "  Proceed with installation? [Y/n]: "
         read confirm
     fi
     set -e
 
     confirm="${confirm:-Y}"
-
     case "$confirm" in
         [yY][eE][sS]|[yY]) ;;
         *) log_info "Installation cancelled."; exit 0 ;;
@@ -530,6 +526,28 @@ download_and_track() {
     fi
 }
 
+deploy_commands() {
+    local adapter="$1"
+    local rel_dir="$2"
+    local source_dir="$3"
+    local target_cmd_dir="${TARGET_DIR}/${rel_dir}"
+
+    mkdir -p "$target_cmd_dir"
+    log_verbose "Created ${rel_dir}/ directory"
+
+    local cmd_names="KD KD-analyze KD-architecture KD-brainstorm KD-build-agent KD-build-module KD-build-workflow KD-code-review KD-deployment-plan KD-dev-story KD-doc-project KD-domain-research KD-epics-and-stories KD-fix-course KD-game-arch KD-game-architect KD-game-brainstorm KD-game-brief KD-game-designer KD-game-dev KD-game-dev-story KD-game-gdd KD-game-narrative KD-game-qa KD-game-scrum-master KD-game-solo KD-game-story KD-game-test-auto KD-game-test-design KD-game-test-perf KD-game-test-plan KD-game-writer KD-help KD-idea-coach KD-idea-design-thinking KD-idea-innovation KD-idea-presenter KD-idea-problem-solving KD-idea-solver KD-idea-storyteller KD-idea-storytelling KD-idea-strategist KD-market-research KD-party-mode KD-prd KD-product-brief KD-project-context KD-qa-automate KD-quick-dev KD-quick-spec KD-retrospective KD-role-analyst KD-role-architect KD-role-bmad-master KD-role-dev KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design KD-role-data-scientist KD-role-mobile-dev KD-role-dba KD-test-sprite KD-tool-selector"
+
+    local downloaded=0
+    for cmd in $cmd_names; do
+        if download_file "${KD_RAW_URL}/src/adapters/${adapter}/${source_dir}/${cmd}.md" "${target_cmd_dir}/${cmd}.md"; then
+            files_downloaded=$((files_downloaded + 1))
+            downloaded=$((downloaded + 1))
+        fi
+    done
+
+    log_verbose "Deployed ${downloaded} slash commands to ${rel_dir}/"
+}
+
 # ---------------------------------------------------------------------------
 # Create Config
 # ---------------------------------------------------------------------------
@@ -590,6 +608,7 @@ init_status() {
 - Multi-Agent Mode: none
 
 ## Completed Stages
+
 | Stage | Status | Completed Date | Key Artifact |
 |-------|--------|----------------|--------------|
 | Discovery | pending | - | - |
@@ -602,26 +621,32 @@ init_status() {
 | Release | pending | - | - |
 
 ## Completed Artifacts
+
 | Artifact | Location | Stage | Date |
 |----------|----------|-------|------|
 
 ## Architecture Decisions
+
 | ID | Decision | Rationale | Impact | Date | Status |
 |----|----------|-----------|--------|------|--------|
 
 ## Tech Stack
+
 | Layer | Technology | Version | Reason |
 |-------|------------|---------|--------|
 
 ## Dependencies
+
 | Name | Type | Version | Status | Risk |
 |------|------|---------|--------|------|
 
 ## Open Risks
+
 | ID | Risk | Severity | Probability | Mitigation | Owner | Status |
 |----|------|----------|-------------|------------|-------|--------|
 
 ## Security Notes
+
 | Component | Classification | Protection | Audit Date |
 |-----------|----------------|------------|------------|
 
@@ -638,10 +663,12 @@ init_status() {
 - Dashboard: N/A
 
 ## Known Issues
+
 | ID | Issue | Severity | Workaround | Status |
 |----|-------|----------|------------|--------|
 
 ## Multi-Agent Sessions
+
 | Session ID | Mode | Agents | Topic | Consensus | Result | Date |
 |------------|------|--------|-------|-----------|--------|------|
 
@@ -649,10 +676,12 @@ init_status() {
 1. Run /KD-analyze to begin discovery phase
 
 ## Blockers
+
 | ID | Blocker | Since | Impact | Resolution Plan |
 |----|---------|-------|--------|-----------------|
 
 ## Change Log
+
 | Timestamp | Stage | Change | Role | Reason |
 |-----------|-------|--------|------|--------|
 | ${current_date} | Init | KD installed v${KD_VERSION} | System | Initial installation |
@@ -665,19 +694,14 @@ STATUS
 # Adapter Setup
 # ---------------------------------------------------------------------------
 
-# Common command list for all adapters
-get_common_commands() {
-    echo "KD KD-analyze KD-architecture KD-brainstorm KD-code-review KD-deployment-plan KD-dev-story KD-epics-and-stories KD-help KD-party-mode KD-prd KD-product-brief KD-status KD-swarm KD-validate KD-kickoff KD-refactor KD-test KD-api-design KD-role-analyst KD-role-pm KD-role-architect KD-role-dev KD-role-qa KD-role-sec KD-role-devops KD-role-rm KD-role-ux KD-role-data-scientist KD-role-dba KD-role-mobile-dev KD-test-sprite KD-tool-selector"
-}
-
 setup_claude_code() {
     log_info "Setting up for Claude Code..."
 
+    mkdir -p "${TARGET_DIR}/.claude"
     local url="${KD_RAW_URL}/src/adapters/claude-code/CLAUDE.md"
-    local dest="${TARGET_DIR}/CLAUDE.md"
-
+    local dest="${TARGET_DIR}/.claude/CLAUDE.md"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded CLAUDE.md from repo"
+        log_verbose "Downloaded CLAUDE.md to .claude/"
     else
         log_warn "Could not download CLAUDE.md, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -686,29 +710,18 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    # Deploy slash command files
-    local cmd_dir="${TARGET_DIR}/.claude/commands"
-    mkdir -p "$cmd_dir"
-
-    local cmd_names=(KD KD-analyze KD-architecture KD-brainstorm KD-build-agent KD-build-module KD-build-workflow KD-code-review KD-deployment-plan KD-dev-story KD-doc-project KD-domain-research KD-epics-and-stories KD-fix-course KD-game-arch KD-game-architect KD-game-brainstorm KD-game-brief KD-game-designer KD-game-dev KD-game-dev-story KD-game-gdd KD-game-narrative KD-game-qa KD-game-scrum-master KD-game-solo KD-game-story KD-game-test-auto KD-game-test-design KD-game-test-perf KD-game-test-plan KD-game-writer KD-help KD-idea-coach KD-idea-design-thinking KD-idea-innovation KD-idea-presenter KD-idea-problem-solving KD-idea-solver KD-idea-storyteller KD-idea-storytelling KD-idea-strategist KD-market-research KD-party-mode KD-prd KD-product-brief KD-project-context KD-qa-automate KD-quick-dev KD-quick-spec KD-retrospective KD-role-analyst KD-role-architect KD-role-bmad-master KD-role-dev KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design KD-role-data-scientist KD-role-mobile-dev KD-role-dba KD-test-sprite KD-tool-selector)
-
-    for cmd in "${cmd_names[@]}"; do
-        download_file "${KD_RAW_URL}/src/adapters/claude-code/commands/${cmd}.md" \
-            "${cmd_dir}/${cmd}.md" 2>/dev/null || true
-    done
-
-    log_verbose "Deployed ${#cmd_names[@]} slash commands to .claude/commands/"
+    deploy_commands "claude-code" ".claude/commands" "commands"
     log_success "Claude Code setup complete."
 }
 
 setup_cursor() {
     log_info "Setting up for Cursor..."
 
+    mkdir -p "${TARGET_DIR}/.cursor"
     local url="${KD_RAW_URL}/src/adapters/cursor/.cursorrules"
-    local dest="${TARGET_DIR}/.cursorrules"
-
+    local dest="${TARGET_DIR}/.cursor/.cursorrules"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .cursorrules from repo"
+        log_verbose "Downloaded .cursorrules to .cursor/"
     else
         log_warn "Could not download .cursorrules, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -717,31 +730,18 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    # Deploy slash command files
-    local cmd_dir="${TARGET_DIR}/.cursor/commands"
-    mkdir -p "$cmd_dir"
-
-    local cmd_names=(KD KD-analyze KD-architecture KD-brainstorm KD-build-agent KD-build-module KD-build-workflow KD-code-review KD-deployment-plan KD-dev-story KD-doc-project KD-domain-research KD-epics-and-stories KD-fix-course KD-game-arch KD-game-architect KD-game-brainstorm KD-game-brief KD-game-designer KD-game-dev KD-game-dev-story KD-game-gdd KD-game-narrative KD-game-qa KD-game-scrum-master KD-game-solo KD-game-story KD-game-test-auto KD-game-test-design KD-game-test-perf KD-game-test-plan KD-game-writer KD-help KD-idea-coach KD-idea-design-thinking KD-idea-innovation KD-idea-presenter KD-idea-problem-solving KD-idea-solver KD-idea-storyteller KD-idea-storytelling KD-idea-strategist KD-market-research KD-party-mode KD-prd KD-product-brief KD-project-context KD-qa-automate KD-quick-dev KD-quick-spec KD-retrospective KD-role-analyst KD-role-architect KD-role-bmad-master KD-role-dev KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design KD-role-data-scientist KD-role-mobile-dev KD-role-dba KD-test-sprite KD-tool-selector)
-
-    for cmd in "${cmd_names[@]}"; do
-        download_file "${KD_RAW_URL}/src/adapters/cursor/commands/${cmd}.md" \
-            "${cmd_dir}/${cmd}.md" 2>/dev/null || true
-    done
-
-    log_verbose "Deployed ${#cmd_names[@]} slash commands to .cursor/commands/"
+    deploy_commands "cursor" ".cursor/commands" "commands"
     log_success "Cursor setup complete."
 }
 
 setup_antigravity() {
     log_info "Setting up for Antigravity..."
 
-    mkdir -p "${TARGET_DIR}/.antigravity"
-
+    mkdir -p "${TARGET_DIR}/.agent"
     local url="${KD_RAW_URL}/src/adapters/antigravity/SKILL.md"
-    local dest="${TARGET_DIR}/.antigravity/SKILL.md"
-
+    local dest="${TARGET_DIR}/.agent/SKILL.md"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded SKILL.md from repo"
+        log_verbose "Downloaded SKILL.md to .agent/"
     else
         log_warn "Could not download SKILL.md, creating local copy..."
         echo '---
@@ -753,29 +753,18 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    # Deploy slash command files (Antigravity uses .agent/workflows/)
-    local cmd_dir="${TARGET_DIR}/.agent/workflows"
-    mkdir -p "$cmd_dir"
-
-    local cmd_names=(KD KD-analyze KD-architecture KD-brainstorm KD-build-agent KD-build-module KD-build-workflow KD-code-review KD-deployment-plan KD-dev-story KD-doc-project KD-domain-research KD-epics-and-stories KD-fix-course KD-game-arch KD-game-architect KD-game-brainstorm KD-game-brief KD-game-designer KD-game-dev KD-game-dev-story KD-game-gdd KD-game-narrative KD-game-qa KD-game-scrum-master KD-game-solo KD-game-story KD-game-test-auto KD-game-test-design KD-game-test-perf KD-game-test-plan KD-game-writer KD-help KD-idea-coach KD-idea-design-thinking KD-idea-innovation KD-idea-presenter KD-idea-problem-solving KD-idea-solver KD-idea-storyteller KD-idea-storytelling KD-idea-strategist KD-market-research KD-party-mode KD-prd KD-product-brief KD-project-context KD-qa-automate KD-quick-dev KD-quick-spec KD-retrospective KD-role-analyst KD-role-architect KD-role-bmad-master KD-role-dev KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design KD-role-data-scientist KD-role-mobile-dev KD-role-dba KD-test-sprite KD-tool-selector)
-
-    for cmd in "${cmd_names[@]}"; do
-        download_file "${KD_RAW_URL}/src/adapters/antigravity/workflows/${cmd}.md" \
-            "${cmd_dir}/${cmd}.md" 2>/dev/null || true
-    done
-
-    log_verbose "Deployed ${#cmd_names[@]} slash commands to .agent/workflows/"
+    deploy_commands "antigravity" ".agent/workflows" "workflows"
     log_success "Antigravity setup complete."
 }
 
 setup_cline() {
     log_info "Setting up for Cline..."
 
+    mkdir -p "${TARGET_DIR}/.cline"
     local url="${KD_RAW_URL}/src/adapters/cline/.clinerules"
-    local dest="${TARGET_DIR}/.clinerules"
-
+    local dest="${TARGET_DIR}/.cline/.clinerules"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .clinerules from repo"
+        log_verbose "Downloaded .clinerules to .cline/"
     else
         log_warn "Could not download .clinerules, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -784,29 +773,18 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    # Deploy workflow files
-    local workflow_dir="${TARGET_DIR}/.cline/workflows"
-    mkdir -p "$workflow_dir"
-
-    local cmd_names=(KD KD-analyze KD-architecture KD-brainstorm KD-code-review KD-deployment-plan KD-dev-story KD-epics-and-stories KD-help KD-party-mode KD-prd KD-product-brief KD-status KD-swarm KD-validate KD-kickoff KD-refactor KD-test KD-api-design KD-role-analyst KD-role-pm KD-role-architect KD-role-dev KD-role-qa KD-role-sec KD-role-devops KD-role-rm KD-role-ux KD-role-data-scientist KD-role-dba KD-role-mobile-dev KD-test-sprite KD-tool-selector)
-
-    for cmd in "${cmd_names[@]}"; do
-        download_file "${KD_RAW_URL}/src/adapters/cline/workflows/${cmd}.md" \
-            "${workflow_dir}/${cmd}.md" 2>/dev/null || true
-    done
-
-    log_verbose "Deployed ${#cmd_names[@]} workflow files to .cline/workflows/"
+    deploy_commands "cline" ".cline/workflows" "workflows"
     log_success "Cline setup complete."
 }
 
 setup_kilocode() {
     log_info "Setting up for Kilo Code..."
 
+    mkdir -p "${TARGET_DIR}/.kilo"
     local url="${KD_RAW_URL}/src/adapters/kilocode/.kilocode"
-    local dest="${TARGET_DIR}/.kilocode"
-
+    local dest="${TARGET_DIR}/.kilo/.kilocode"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .kilocode from repo"
+        log_verbose "Downloaded .kilocode to .kilo/"
     else
         log_warn "Could not download .kilocode, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -815,29 +793,18 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    # Deploy workflow files
-    local workflow_dir="${TARGET_DIR}/.kilocode/workflows"
-    mkdir -p "$workflow_dir"
-
-    local cmd_names=(KD KD-analyze KD-architecture KD-brainstorm KD-code-review KD-deployment-plan KD-dev-story KD-epics-and-stories KD-help KD-party-mode KD-prd KD-product-brief KD-status KD-swarm KD-validate KD-kickoff KD-refactor KD-test KD-api-design KD-role-analyst KD-role-pm KD-role-architect KD-role-dev KD-role-qa KD-role-sec KD-role-devops KD-role-rm KD-role-ux KD-role-data-scientist KD-role-dba KD-role-mobile-dev KD-test-sprite KD-tool-selector)
-
-    for cmd in "${cmd_names[@]}"; do
-        download_file "${KD_RAW_URL}/src/adapters/kilocode/workflows/${cmd}.md" \
-            "${workflow_dir}/${cmd}.md" 2>/dev/null || true
-    done
-
-    log_verbose "Deployed ${#cmd_names[@]} workflow files to .kilocode/workflows/"
+    deploy_commands "kilocode" ".kilo/workflows" "workflows"
     log_success "Kilo Code setup complete."
 }
 
 setup_roo_code() {
     log_info "Setting up for Roo Code..."
 
+    mkdir -p "${TARGET_DIR}/.roo"
     local url="${KD_RAW_URL}/src/adapters/roo/.roo"
-    local dest="${TARGET_DIR}/.roo"
-
+    local dest="${TARGET_DIR}/.roo/.roo"
     if download_file "$url" "$dest"; then
-        log_verbose "Downloaded .roo from repo"
+        log_verbose "Downloaded .roo to .roo/"
     else
         log_warn "Could not download .roo, creating local copy..."
         echo '# KD - AI Skill by KRACKEDDEVS
@@ -846,18 +813,7 @@ Type /KD for command menu.
 Status: .kracked/KD_output/status/status.md' > "$dest"
     fi
 
-    # Deploy command files
-    local cmd_dir="${TARGET_DIR}/.roo/commands"
-    mkdir -p "$cmd_dir"
-
-    local cmd_names=(KD KD-analyze KD-architecture KD-brainstorm KD-code-review KD-deployment-plan KD-dev-story KD-epics-and-stories KD-help KD-party-mode KD-prd KD-product-brief KD-status KD-swarm KD-validate KD-kickoff KD-refactor KD-test KD-api-design KD-role-analyst KD-role-pm KD-role-architect KD-role-dev KD-role-qa KD-role-sec KD-role-devops KD-role-rm KD-role-ux KD-role-data-scientist KD-role-dba KD-role-mobile-dev KD-test-sprite KD-tool-selector)
-
-    for cmd in "${cmd_names[@]}"; do
-        download_file "${KD_RAW_URL}/src/adapters/roo/commands/${cmd}.md" \
-            "${cmd_dir}/${cmd}.md" 2>/dev/null || true
-    done
-
-    log_verbose "Deployed ${#cmd_names[@]} command files to .roo/commands/"
+    deploy_commands "roo" ".roo/commands" "commands"
     log_success "Roo Code setup complete."
 }
 
@@ -870,14 +826,14 @@ print_success() {
 
     echo ""
     echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
-    echo -e "${GREEN} KD v${KD_VERSION} installed successfully!${NC}"
-    echo -e "${GREEN} AI Skill by KRACKEDDEVS${NC}"
-    echo -e "${GREEN} ${KD_SITE}${NC}"
+    echo -e "${GREEN}  KD v${KD_VERSION} installed successfully!${NC}"
+    echo -e "${GREEN}  AI Skill by KRACKEDDEVS${NC}"
+    echo -e "${GREEN}  ${KD_SITE}${NC}"
     echo -e "${GREEN}═══════════════════════════════════════════════════════════════${NC}"
     echo ""
 
     if [[ "$LANGUAGE" == "MS" ]]; then
-        echo -e " ${BOLD}Langkah Seterusnya:${NC}"
+        echo -e "  ${BOLD}Langkah Seterusnya:${NC}"
         echo ""
         echo -e "  1. Baca system prompt:"
         echo -e "     ${CYAN}${project_dir}/${KD_DIR}/prompts/system-prompt.md${NC}"
@@ -888,7 +844,7 @@ print_success() {
         echo -e "  3. Jejak kemajuan anda dalam:"
         echo -e "     ${CYAN}${project_dir}/${KD_DIR}/KD_output/status/status.md${NC}"
     else
-        echo -e " ${BOLD}Next Steps:${NC}"
+        echo -e "  ${BOLD}Next Steps:${NC}"
         echo ""
         echo -e "  1. Read the system prompt:"
         echo -e "     ${CYAN}${project_dir}/${KD_DIR}/prompts/system-prompt.md${NC}"
@@ -901,7 +857,7 @@ print_success() {
     fi
 
     echo ""
-    echo -e " ${BOLD}KD finishes what it starts.${NC}"
+    echo -e "  ${BOLD}KD finishes what it starts.${NC}"
     echo ""
 }
 
@@ -936,7 +892,8 @@ parse_args() {
                 VERBOSE=true
                 ;;
             --help)
-                show_usage; exit 0
+                show_usage
+                exit 0
                 ;;
             -*)
                 log_error "Unknown option: ${arg}"
@@ -975,11 +932,11 @@ main() {
     for tool in $(echo "$TARGET_TOOLS" | tr ',' ' '); do
         case "$tool" in
             claude-code) setup_claude_code ;;
-            cursor) setup_cursor ;;
+            cursor)      setup_cursor ;;
             antigravity) setup_antigravity ;;
-            cline) setup_cline ;;
-            kilocode) setup_kilocode ;;
-            roo-code) setup_roo_code ;;
+            cline)       setup_cline ;;
+            kilocode)    setup_kilocode ;;
+            roo-code)    setup_roo_code ;;
         esac
     done
 
