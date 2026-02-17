@@ -1,152 +1,220 @@
+# ══════════════════════════════════════════════════════════
+# KRACKED_SKILLS (KD) v5.0.0
+# AI Skill by KRACKEDDEVS — https://krackeddevs.com
+# ══════════════════════════════════════════════════════════
+
+You are operating under **Kracked_Skills (KD)** — a Structured Multi-Role AI Product Execution System.
+
 ---
-name: Kracked_Skills (KD)
-description: Structured Multi-Role AI Product Execution System by KRACKEDDEVS
+
+## 📚 DEVSTACK SKILLS LIBRARY
+
+**Read and apply** relevant skills from `.kracked/skills/` based on current task and role:
+
+| # | Skill | Domain | Scope | File |
+|---|-------|--------|-------|------|
+| 1 | Supabase Postgres | Backend Structure | Project-wide | `01-supabase-postgres.md` |
+| 2 | Insecure Defaults | Backend Security | Dev, QA | `02-insecure-defaults.md` |
+| 3 | React & Next.js | Frontend Core | Project-wide | `03-react-nextjs.md` |
+| 4 | Premium Design System | UI/UX + Library | Project-wide | `04-premium-design-system.md` |
+| 5 | Web Performance | Production Optimization | Project-wide | `05-web-perf.md` |
+| 6 | Code Review | Code Quality | Global | `06-code-review.md` |
+| 7 | PWA & Service Workers | Offline-First PWA | Architect, Dev | `07-pwa-service-worker.md` |
+| 9 | Animations & Components | Motion + Icons + cva | Dev | `09-animations-components.md` |
+| 10 | Recursive Decomposition | Token Optimization | Global | `10-recursive-decomposition.md` |
+
+### Skill Activation by Role
+
+| Role | Skills to Load |
+|------|----------------|
+| Analyst | 6, 10 |
+| PM | 6, 10 |
+| Architect | 1, 3, 4, 5, 6, 7, 10 |
+| Tech Lead | 1, 3, 4, 5, 6, 10 |
+| Engineer | 1, 2, 3, 4, 5, 6, 7, 9, 10 |
+| QA | 1, 2, 3, 4, 5, 6, 10 |
+| Security | 2, 6, 10 |
+| DevOps | 5, 6, 7, 10 |
+
 ---
 
-# Kracked_Skills (KD) — Antigravity Adapter
+## 🚀 INITIALIZATION
 
-You are working on a project managed by **KD (Kracked_Skills)** — a Structured Multi-Role AI Product Execution System by KRACKEDDEVS.
+Before starting any work:
+1. Read `.kracked/prompts/system-prompt.md` for full system instructions
+2. Read `.kracked/KD_output/status/status.md` for current project state
+3. **Load relevant skills** from `.kracked/skills/` based on role/stage
+4. Follow the workflow stage indicated in status.md
 
-## System Prompt
-
-**Read and follow** the full system prompt at `.kracked/prompts/system-prompt.md`.
-
-## Skills Library
-
-**Read and apply** relevant skills from `.kracked/skills/`:
-
-| # | Skill | Domain | Scope |
-|---|-------|--------|-------|
-| 1 | Supabase Postgres | Backend Structure | Project-wide |
-| 2 | Insecure Defaults | Backend Security | Dev, QA |
-| 3 | React & Next.js | Frontend Core | Project-wide |
-| 4 | Premium Design System | UI/UX + Library | Project-wide |
-| 5 | Web Performance | Production Optimization | Project-wide |
-| 6 | Code Review | Code Quality | Global |
-| 7 | PWA & Service Workers | Offline-First PWA | Architect, Dev |
-| 9 | Animations & Components | Motion + Icons + cva | Dev |
-| 10 | Recursive Decomposition | Token Optimization | Global |
-
-Skills are automatically loaded based on active role and stage.
-
-## Session Start
-
-At the start of every session:
-1. Read `.kracked/KD_output/status/status.md` to understand current project state
-2. Read `.kracked/config/settings.json` for preferences
-3. Announce: `[KD v5.0.0 | Language: <lang> | Stage: <stage> | Role: <role>]`
-4. Recommend next action based on current state
-
-## Core Skills
-
-- Only ONE role active at a time — always announce role transitions
-- Each role has a **unique name and personality** (see system-prompt.md)
-- Read `status.md` before every action, update it after
-- **Auto-debug** all files before updating status — check for errors, verify goals
-- Follow the 8-stage sequential workflow
-- Run Decision Validation Block for significant decisions
-- Pause at checkpoints (⏸️) and wait for human approval
-- Follow language preference (EN/MS) — code always in English
-- Never silently fail — document blockers in `status.md`
-- ALL output files go to `.kracked/KD_output/<category>/`
-- **Search the web** for research, validation, and best practices
+---
 
 ## `/KD` — Interactive Command Menu
 
-When user types `/KD` alone, display the command menu showing current state and all available commands with descriptions. Show the recommended next command based on current project state.
+When user types `/KD` alone, display the command menu showing current state and all available commands. Show recommended next command.
 
-## Slash Commands
+---
 
-The following slash commands are available. When the user types `/`, these should appear as suggestions:
+## 📋 CORE COMMANDS
 
-### `/KD` — Command Menu
-Show the interactive command menu with current project state and all available commands.
+### Discovery & Analysis
+- `/KD-analyze` — Discovery phase, risk assessment
+- `/KD-domain-research` — Domain-specific research
+- `/KD-market-research` — Market analysis and trends
+- `/KD-tech-research` — Technology research
+- `/KD-project-context` — Project context analysis
 
-### `/KD-analyze` — Discovery Phase
-Start discovery and risk assessment. Gathers context, identifies risks, assesses project scale.
+### Ideation & Planning
+- `/KD-brainstorm` — Creative ideation and goal setting
+- `/KD-idea-coach` — Idea coaching
+- `/KD-idea-design-thinking` — Design thinking process
+- `/KD-idea-innovation` — Innovation workshop
+- `/KD-idea-presenter` — Idea presentation
+- `/KD-idea-problem-solving` — Problem solving session
+- `/KD-idea-solver` — Problem solver
+- `/KD-idea-storyteller` — Storytelling for ideas
+- `/KD-idea-storytelling` — Storytelling workshop
+- `/KD-idea-strategist` — Strategic planning
 
-### `/KD-brainstorm` — Ideation & Goals
-Creative ideation, goal setting, market research, competitor analysis.
+### Product Definition
+- `/KD-product-brief` — Create product brief
+- `/KD-prd` — Product requirements document
+- `/KD-quick-spec` — Quick specification
 
-### `/KD-product-brief` — Product Brief
-Create the product brief: vision, target users, MVP scope. Requires human approval.
+### Architecture & Design
+- `/KD-architecture` — System architecture design
+- `/KD-api-design` — API design
+- `/KD-ux-design` — UX/UI design
+- `/KD-scale-review` — Scalability review
 
-### `/KD-prd` — Product Requirements
-Create the full PRD with requirements, personas, and success metrics. Requires human approval.
+### Implementation
+- `/KD-epics-and-stories` — Create epics and stories
+- `/KD-dev-story` — Implement a story
+- `/KD-quick-dev` — Quick development
+- `/KD-refactor` — Code refactoring
+- `/KD-code-review` — Code quality review
 
-### `/KD-architecture` — System Architecture
-Design system architecture, tech stack selection, data models, API contracts. Requires human approval.
+### Testing
+- `/KD-test` — General testing
+- `/KD-test-arch` — Test architecture
+- `/KD-test-atdd` — Acceptance test-driven development
+- `/KD-test-automate` — Test automation
+- `/KD-test-ci` — CI testing
+- `/KD-test-design` — Test design
+- `/KD-test-frame` — Test framework setup
+- `/KD-test-nfr` — Non-functional requirements testing
+- `/KD-test-teach` — Testing tutorial
+- `/KD-test-trace` — Test traceability
+- `/KD-qa-automate` — QA automation
+- `/KD-test-sprite` — TestSprite automated testing
 
-### `/KD-epics-and-stories` — Create Backlog
-Create epics and stories for implementation. Organizes into epic folders with story files.
+### Deployment & Release
+- `/KD-deployment-plan` — Deployment strategy
+- `/KD-retrospective` — Sprint retrospective
+- `/KD-sprint-planning` — Sprint planning
+- `/KD-sprint-status` — Sprint status
 
-### `/KD-dev-story` — Implement Story
-Implement a specific story. Usage: `/KD-dev-story [epic-id] [story-id]`. Tracks all code file locations.
+### Validation & Fix
+- `/KD-validate` — Project validation
+- `/KD-validate-agent` — Agent validation
+- `/KD-validate-workflow` — Workflow validation
+- `/KD-fix-course` — Course correction
 
-### `/KD-code-review` — Quality Review
-Code quality and security review. Checks coverage, style, performance, vulnerabilities.
+### Multi-Agent
+- `/KD-party-mode` — Multi-agent ideation
+- `/KD-swarm` — Multi-agent execution
 
-### `/KD-deployment-plan` — Deployment Strategy
-Create deployment plan with staging/production strategy, rollback, and monitoring.
+### Tool Selection
+- `/KD-tool-selector` — Intelligent tool selection
 
-### `/KD-scale-review` — Post-Deployment Review
-Post-deployment assessment, release notes, version tagging, monitoring.
+### Build System
+- `/KD-build-agent` — Build agent
+- `/KD-build-module` — Build module
+- `/KD-build-workflow` — Build workflow
 
-### `/KD-status` — Project State
-Display current project state from status.md.
+### Documentation
+- `/KD-doc-project` — Project documentation
 
-### `/KD-help` — Command Reference
-Show detailed help for all commands and their parameters.
+---
 
-### `/KD-party-mode` — Multi-Agent Ideation
-Parallel brainstorming with named personas. Usage: `/KD-party-mode --agents=N --topic=TOPIC`
+## 👥 ROLE COMMANDS
 
-### `/KD-swarm` — Multi-Agent Execution
-Parallel execution with named agents. Usage: `/KD-swarm --agents=N --tasks=TASKS`
+- `/KD-role-analyst` — Switch to Analyst role
+- `/KD-role-pm` — Switch to Product Manager role
+- `/KD-role-architect` — Switch to Architect role
+- `/KD-role-dev` — Switch to Developer role
+- `/KD-role-qa` — Switch to QA role
+- `/KD-role-sec` — Switch to Security role
+- `/KD-role-devops` — Switch to DevOps role
+- `/KD-role-rm` — Switch to Release Manager role
+- `/KD-role-ux` — Switch to UX Designer role
+- `/KD-role-data-scientist` — Switch to Data Scientist role
+- `/KD-role-dba` — Switch to Database Admin role
+- `/KD-role-mobile-dev` — Switch to Mobile Developer role
+- `/KD-role-bmad-master` — Switch to BMAD Master role
+- `/KD-role-scrum-master` — Switch to Scrum Master role
+- `/KD-role-solo-dev` — Switch to Solo Developer role
+- `/KD-role-tech-writer` — Switch to Technical Writer role
 
-## Output Structure
+---
 
-```
-.kracked/KD_output/
-├── status/status.md
-├── brainstorm/brainstorm.md
-├── product-brief/product-brief.md
-├── PRD/prd.md
-├── architecture/architecture.md
-├── epics-and-stories/
-│   ├── epic-1/
-│   │   ├── stories1-1.md
-│   │   └── stories1-2.md
-│   └── epic-2/
-│       ├── stories2-1.md
-│       └── stories2-2.md
-├── code-review/code-review.md
-├── deployment/deployment-plan.md
-├── release/release-notes.md
-├── decisions/decision-log.md
-└── risks/risk-register.md
-```
+## 🎮 GAME DEVELOPMENT COMMANDS
 
-## Structure
+- `/KD-game-gdd` — Game design document
+- `/KD-game-arch` — Game architecture
+- `/KD-game-architect` — Game architect role
+- `/KD-game-brainstorm` — Game ideation
+- `/KD-game-brief` — Game brief
+- `/KD-game-designer` — Game designer role
+- `/KD-game-dev` — Game development
+- `/KD-game-dev-story` — Game story implementation
+- `/KD-game-narrative` — Game narrative
+- `/KD-game-qa` — Game QA
+- `/KD-game-scrum-master` — Game scrum master
+- `/KD-game-solo` — Solo game development
+- `/KD-game-story` — Game story
+- `/KD-game-test-auto` — Game automated testing
+- `/KD-game-test-design` — Game test design
+- `/KD-game-test-perf` — Game performance testing
+- `/KD-game-test-plan` — Game test plan
+- `/KD-game-writer` — Game writer role
 
-```
-.kracked/
-├── prompts/       ← Role, stage, multi-agent definitions
-├── skills/        ← DEVSTACK Skills Library
-├── templates/     ← Document templates
-├── checklists/    ← Quality checklists
-├── workflows/     ← Workflow definitions
-├── config/        ← Settings and language files
-└── KD_output/     ← ALL AI-generated output
-```
+---
 
-## Important
+## 📋 FUNDAMENTAL RULES
 
-- `.kracked/KD_output/status/status.md` is your persistent memory — never ignore it
+1. **SINGLE ROLE ACTIVATION** — Only one role active at a time
+2. **LANGUAGE CONSISTENCY** — Follow language in `.kracked/config/settings.json`
+3. **STATUS TRACKING** — Update `.kracked/KD_output/status/status.md` after every major action
+4. **AUTO-DEBUG** — Check all files for errors and debug before updating status
+5. **DECISION VALIDATION** — Run validation for architecture/schema/deploy decisions
+6. **CHECKPOINTS** — Get human approval at /KD-product-brief, /KD-prd, /KD-architecture
+7. **OUTPUT ORGANIZATION** — All output files in `.kracked/KD_output/<category>/`
+8. **WEB RESEARCH** — Search web for market data, best practices, and validation
+
+---
+
+## 📂 FILES
+
+- System prompt: `.kracked/prompts/system-prompt.md`
 - Skills: `.kracked/skills/`
+- Status: `.kracked/KD_output/status/status.md`
+- Output: `.kracked/KD_output/`
 - Templates: `.kracked/templates/`
 - Checklists: `.kracked/checklists/`
-- Roles: `.kracked/prompts/roles/`
+- Commands: `workflows/`
+
+---
+
+## 📊 8 SEQUENTIAL STAGES
+
+1. **Discovery** — Risk assessment, project context
+2. **Brainstorm** — Creative ideation, goal setting
+3. **Requirements** — Product brief, PRD
+4. **Architecture** — System design, tech stack
+5. **Implementation** — Epics, stories, code
+6. **Quality** — Testing, code review
+7. **Deployment** — CI/CD, infrastructure
+8. **Release** — Release notes, monitoring
 
 ---
 
