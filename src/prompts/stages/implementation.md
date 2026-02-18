@@ -1,51 +1,68 @@
-## Implementation Stage (Updated with TestSprite)
+# Stage 6: Implementation
 
-### Auto-Trigger TestSprite
+## Metadata
+- **Stage Name:** Implementation
+- **Stage Number:** 6 of 10
+- **Primary Role:** Engineer [ENG]
+- **Commands:** Multiple (see below)
 
-After code implementation, automatically trigger TestSprite:
+## Commands Available
+| Command | Description | Priority |
+|---------|-------------|----------|
+| `/KD-dev-story` | Story implementation | Core |
+| `/KD-quick-dev` | Quick development | Small tasks |
+| `/KD-refactor` | Refactoring | Tech debt |
+| `/KD-build-module` | Module building | Advanced |
 
-```bash
-# Developer completes frontend implementation
-/KD-dev-story --story=story-1-1
+## Description
+The Implementation stage is where code is written. The Engineer implements stories according to the backlog, writes tests, and ensures code quality.
 
-# KD detects completion
-[ENG] Story implementation complete.
+## Entry Criteria
+- Stories defined
+- Architecture clear
+- Tech stack selected
 
-# Auto-trigger TestSprite
-[TESTSPRITE] 🧪 Starting automated testing...
+## Activities
 
-# Run tests
-1. Visual Regression ✅
-2. Functional Tests ✅
-3. Performance Tests ⚠️  2 issues found
-4. Accessibility Tests ⚠️  5 issues found
+### 1. Story Implementation
+For each story:
+1. Read story card
+2. Understand acceptance criteria
+3. Implement solution
+4. Write tests
+5. Self-review code
+6. Mark story complete
 
-# Generate reports
-📊 Report generated: .kracked/testsprite/reports/latest.html
+### 2. Focus Modes
+- `--focus=backend` — Backend/API only
+- `--focus=frontend` — Frontend/UI only
+- `--focus=full` — Full-stack (default)
 
-[TESTSPRITE] Found 7 issues (0 critical, 2 high, 5 medium)
+### 3. Code Standards
+- Follow language-specific best practices
+- Use consistent naming conventions
+- Handle errors gracefully
+- Write meaningful comments
+- Keep functions focused
 
-# Auto-analyze and suggest fixes
-[QA] Reviewing TestSprite report...
+### 4. Test Writing
+- Write unit tests for each component
+- Integration tests for APIs
+- Update test coverage
 
-Critical Issues:
-  None ✅
+## Exit Criteria
+- All stories implemented
+- Unit tests passing
+- Code follows architecture decisions
+- Stories marked complete
 
-High Priority Issues:
-  1. Slow page load (4.2s > 3s threshold)
-     Suggestion: Code splitting recommended
-     
-  2. Missing alt text on 3 images
-     Suggestion: Add descriptive alt text
+## Artifacts Produced
+- Source code
+- Unit tests
+- Updated story cards
 
-[ARCHITECT] Performance improvement plan:
-  - Implement React.lazy() for route-based code splitting
-  - Optimize images (use WebP format)
-  - Enable gzip compression
+## Next Stage
+- **Stage 7: Testing** (`/KD-test`)
 
-[ENG] Fix plan generated:
-  Story: Fix-001 - Performance optimization
-  Story: Fix-002 - Accessibility improvements
-
-Auto-create fix stories? (Y/n)
-```
+---
+*KD finishes what it starts. | KRACKEDDEVS | https://krackeddevs.com/*

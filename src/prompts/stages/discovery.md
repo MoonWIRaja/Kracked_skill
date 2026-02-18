@@ -2,9 +2,19 @@
 
 ## Metadata
 - **Stage Name:** Discovery
-- **Stage Number:** 1
+- **Stage Number:** 1 of 10
 - **Primary Role:** Analyst [ANALYST]
-- **Commands:** `/KD-analyze`
+- **Commands:** Multiple (see below)
+
+## Commands Available
+| Command | Description | Priority |
+|---------|-------------|----------|
+| `/KD-kickoff` | Initialize project | Core |
+| `/KD-analyze` | Risk assessment | Core |
+| `/KD-domain-research` | Domain research | Optional |
+| `/KD-market-research` | Market analysis | Optional |
+| `/KD-tech-research` | Tech research | Optional |
+| `/KD-project-context` | Context analysis | Optional |
 
 ## Description
 The Discovery stage is the starting point of every KD project. The Analyst gathers context, identifies risks, and assesses the appropriate project scale. This stage ensures that all subsequent work is informed by a thorough understanding of the project.
@@ -62,7 +72,7 @@ Update `status.md`:
 - No formal checkpoint — scale confirmation only
 
 ## Next Stage
-- **Stage 2: Requirements** (`/KD-product-brief`)
+- **Stage 2: Ideation** (`/KD-brainstorm`)
 
 ---
 *KD finishes what it starts. | KRACKEDDEVS | https://krackeddevs.com/*

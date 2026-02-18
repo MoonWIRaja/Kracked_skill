@@ -23,34 +23,57 @@ AI Skill by <a href="https://krackeddevs.com/">KRACKEDDEVS</a>
 
 ## 🚀 Quick Start
 
-### One-Line Install
+### 🎯 TUI Install (Recommended)
+
+**All Platforms** (requires Node.js):
+```bash
+# macOS / Linux / Git Bash
+curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_Skills/main/kd.sh | bash
+
+# Windows PowerShell
+irm https://raw.githubusercontent.com/MoonWIRaja/Kracked_Skills/main/kd.ps1 | iex
+```
+
+### 📦 Direct Commands
+
+```bash
+# Install (interactive)
+node kd.js install
+
+# Install (non-interactive)
+node kd.js install --target=cline,cursor --lang=ms --non-interactive
+
+# Update
+node kd.js update
+
+# Uninstall
+node kd.js uninstall
+
+# Show help
+node kd.js help
+```
+
+### 🌍 Custom Language Support
+
+KD now supports **any language**! During install, you can:
+- Select from preset languages (English, Bahasa Melayu, etc.)
+- **Type your own custom language**
+
+```bash
+# Example: Install with custom language
+node kd.js install --lang="Bahasa Indonesia"
+```
+
+### Legacy Scripts (Still Available)
 
 **macOS / Linux** (bash + curl):
 ```bash
 curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_Skills/main/install.sh | bash
 ```
 
-**Windows** (PowerShell — no WSL/bash needed):
+**Windows** (PowerShell):
 ```powershell
 irm https://raw.githubusercontent.com/MoonWIRaja/Kracked_Skills/main/install.ps1 | iex
-```
-
-**Windows** (Git Bash / WSL):
-```bash
-curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_Skills/main/install.sh | bash
-```
-
-### Non-Interactive Install
-
-```bash
-# macOS / Linux (multi-select targets)
-curl -fsSL https://raw.githubusercontent.com/MoonWIRaja/Kracked_Skills/main/install.sh | bash -s -- --target=claude-code,cursor,cline,kilocode,roo --language=EN --non-interactive
-
-# Windows PowerShell (multi-select targets)
-.\install.ps1 -Target "claude-code,cursor,cline,kilocode,roo" -Language EN -NonInteractive
-
-# Install all adapters
-.\install.ps1 -Target all -Language EN -NonInteractive
 ```
 
 ### After Installation

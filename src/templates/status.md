@@ -24,6 +24,7 @@
 | Stage | Status | Completed | Key Artifact |
 |-------|--------|-----------|-------------|
 | Discovery | pending | | |
+| Brainstorm | pending | | |
 | Requirements | pending | | |
 | Architecture | pending | | |
 | Implementation | pending | | |

@@ -1,0 +1,244 @@
+{
+  "rules": [
+    {
+      "id": "R001",
+      "tech1": "next.js",
+      "tech2": "react",
+      "constraint": "next.js 15.x+ requires react ^19.0.0",
+      "severity": "error",
+      "description": "Next.js 15+ requires React 19 for full compatibility"
+    },
+    {
+      "id": "R001b",
+      "tech1": "next.js",
+      "tech2": "react",
+      "constraint": "next.js 16.x requires react ^19.0.0",
+      "severity": "error",
+      "description": "Next.js 16 requires React 19 for full compatibility"
+    },
+    {
+      "id": "R002",
+      "tech1": "next.js",
+      "tech2": "react",
+      "constraint": "next.js 14.x requires react ^18.2.0",
+      "severity": "warning",
+      "description": "Next.js 14 works best with React 18"
+    },
+    {
+      "id": "R003",
+      "tech1": "next.js",
+      "tech2": "node",
+      "constraint": "next.js 15.x requires node >= 18.18.0",
+      "severity": "error",
+      "description": "Next.js 15 requires Node.js 18.18.0 or higher"
+    },
+    {
+      "id": "R004",
+      "tech1": "next.js",
+      "tech2": "node",
+      "constraint": "next.js 14.x requires node >= 18.17.0",
+      "severity": "warning",
+      "description": "Next.js 14 requires Node.js 18.17.0 or higher"
+    },
+    {
+      "id": "R005",
+      "tech1": "express",
+      "tech2": "node",
+      "constraint": "express 4.x requires node >= 18.0.0",
+      "severity": "warning",
+      "description": "Express 4.x works with Node.js 18+"
+    },
+    {
+      "id": "R006",
+      "tech1": "nestjs",
+      "tech2": "node",
+      "constraint": "nestjs requires node >= 18.0.0",
+      "severity": "error",
+      "description": "NestJS requires Node.js 18+"
+    },
+    {
+      "id": "R007",
+      "tech1": "react",
+      "tech2": "typescript",
+      "constraint": "react 19.x works with typescript ^5.0.0",
+      "severity": "info",
+      "description": "React 19 has better TypeScript support with TS 5+"
+    },
+    {
+      "id": "R008",
+      "tech1": "vue",
+      "tech2": "node",
+      "constraint": "vue 3.x requires node >= 18.0.0",
+      "severity": "warning",
+      "description": "Vue 3 requires Node.js 18+"
+    },
+    {
+      "id": "R009",
+      "tech1": "nuxt",
+      "tech2": "vue",
+      "constraint": "nuxt 3.x requires vue ^3.3.0",
+      "severity": "error",
+      "description": "Nuxt 3 requires Vue 3.3+"
+    },
+    {
+      "id": "R010",
+      "tech1": "angular",
+      "tech2": "node",
+      "constraint": "angular 19.x requires node >= 18.19.0",
+      "severity": "error",
+      "description": "Angular 19 requires Node.js 18.19.0+"
+    },
+    {
+      "id": "R011",
+      "tech1": "angular",
+      "tech2": "typescript",
+      "constraint": "angular 19.x requires typescript >= 5.5.0",
+      "severity": "error",
+      "description": "Angular 19 requires TypeScript 5.5+"
+    },
+    {
+      "id": "R012",
+      "tech1": "svelte",
+      "tech2": "node",
+      "constraint": "svelte 5.x requires node >= 18.0.0",
+      "severity": "warning",
+      "description": "Svelte 5 requires Node.js 18+"
+    },
+    {
+      "id": "R013",
+      "tech1": "prisma",
+      "tech2": "node",
+      "constraint": "prisma 6.x requires node >= 18.18.0",
+      "severity": "warning",
+      "description": "Prisma 6 requires Node.js 18.18+"
+    },
+    {
+      "id": "R014",
+      "tech1": "tailwindcss",
+      "tech2": "next.js",
+      "constraint": "tailwindcss 4.x has new config format for next.js",
+      "severity": "info",
+      "description": "Tailwind CSS 4 has new configuration format"
+    },
+    {
+      "id": "R015",
+      "tech1": "supabase",
+      "tech2": "next.js",
+      "constraint": "supabase works with next.js app router (recommended)",
+      "severity": "info",
+      "description": "Supabase integrates well with Next.js App Router"
+    }
+  ],
+  "knownIssues": [
+    {
+      "id": "KI001",
+      "combination": ["react@19", "@mui/material@6"],
+      "status": "partial",
+      "description": "Material-UI (MUI) may have compatibility issues with React 19. Some hooks and features may not work correctly.",
+      "suggestion": "Consider using shadcn/ui, Chakra UI v3, or wait for MUI v7 with full React 19 support"
+    },
+    {
+      "id": "KI002",
+      "combination": ["react@19", "recoil@*"],
+      "status": "partial",
+      "description": "Recoil may have issues with React 19's concurrent features",
+      "suggestion": "Consider using Zustand or Jotai for state management with React 19"
+    },
+    {
+      "id": "KI003",
+      "combination": ["next.js@15", "express@*"],
+      "status": "caution",
+      "description": "Using Next.js with Express requires custom server setup, which disables some Vercel optimizations",
+      "suggestion": "Consider using Next.js API Routes instead of Express for simpler deployment"
+    },
+    {
+      "id": "KI004",
+      "combination": ["typescript@5.7", "vue@2"],
+      "status": "partial",
+      "description": "Vue 2 has limited TypeScript support compared to Vue 3",
+      "suggestion": "Consider upgrading to Vue 3 for better TypeScript support"
+    },
+    {
+      "id": "KI005",
+      "combination": ["angular@19", "react@*"],
+      "status": "incompatible",
+      "description": "Angular and React are different frameworks and should not be used together in the same application",
+      "suggestion": "Choose either Angular or React, not both"
+    },
+    {
+      "id": "KI006",
+      "combination": ["vue@3", "react@*"],
+      "status": "incompatible",
+      "description": "Vue and React are different frameworks and should not be used together in the same application",
+      "suggestion": "Choose either Vue or React, not both"
+    },
+    {
+      "id": "KI007",
+      "combination": ["tailwindcss@4", "@mui/material@*"],
+      "status": "caution",
+      "description": "Using Tailwind CSS with Material-UI may cause style conflicts and increased bundle size",
+      "suggestion": "Use one styling solution or configure Tailwind to exclude MUI components"
+    },
+    {
+      "id": "KI008",
+      "combination": ["prisma@6", "mongoose@*"],
+      "status": "caution",
+      "description": "Using both Prisma and Mongoose in the same project can lead to confusion in data modeling",
+      "suggestion": "Choose one ORM: Prisma for SQL databases, Mongoose for MongoDB"
+    },
+    {
+      "id": "KI009",
+      "combination": ["jest@*", "vitest@*"],
+      "status": "caution",
+      "description": "Jest and Vitest are both test runners. Using both may cause configuration conflicts",
+      "suggestion": "Choose Vitest for Vite projects, Jest for webpack projects"
+    },
+    {
+      "id": "KI010",
+      "combination": ["vite@*", "webpack@*"],
+      "status": "caution",
+      "description": "Vite and Webpack are both build tools. Using both adds unnecessary complexity",
+      "suggestion": "Choose Vite for new projects, keep Webpack for legacy projects"
+    }
+  ],
+  "alternatives": {
+    "@mui/material": {
+      "for": "react@19",
+      "recommendations": ["shadcn/ui", "Chakra UI v3", "Ant Design 5.x", "Radix UI"]
+    },
+    "recoil": {
+      "for": "react@19",
+      "recommendations": ["Zustand", "Jotai", "Redux Toolkit"]
+    },
+    "express": {
+      "for": "next.js",
+      "recommendations": ["Next.js API Routes", "tRPC", "Server Actions"]
+    }
+  },
+  "versionMatrix": {
+    "next.js": {
+      "15.x": {
+        "react": "^19.0.0",
+        "node": ">=18.18.0",
+        "typescript": ">=5.0.0"
+      },
+      "14.x": {
+        "react": "^18.2.0",
+        "node": ">=18.17.0",
+        "typescript": ">=5.0.0"
+      }
+    },
+    "nuxt": {
+      "3.x": {
+        "vue": "^3.3.0",
+        "node": ">=18.0.0"
+      }
+    },
+    "angular": {
+      "19.x": {
+        "node": ">=18.19.0",
+        "typescript": ">=5.5.0"
+      }
+    }
+  }
+}

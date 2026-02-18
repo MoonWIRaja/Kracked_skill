@@ -1,63 +1,65 @@
-# Stage 7: Release
+# Stage 10: Release
 
 ## Metadata
 - **Stage Name:** Release
-- **Stage Number:** 7
+- **Stage Number:** 10 of 10
 - **Primary Role:** Release Manager [RM]
-- **Commands:** `/KD-scale-review`
+- **Commands:** Multiple (see below)
+
+## Commands Available
+| Command | Description | Priority |
+|---------|-------------|----------|
+| `/KD-scale-review` | Post-deploy review | Core |
+| `/KD-retrospective` | Sprint retrospective | Agile |
 
 ## Description
-The Release stage is the final stage of the KD workflow. The Release Manager creates release documentation, performs post-deployment assessment, and closes the development cycle.
+The Release stage closes the development cycle. The Release Manager documents the release, conducts post-deployment review, and ensures lessons learned are captured.
 
 ## Entry Criteria
-- Deployment successful
+- Production deployed
 - Health checks passing
 - Monitoring active
 
 ## Activities
 
 ### 1. Release Notes
-Create using template `release-notes.md`:
-- Version number (semantic versioning)
-- Release date
-- Feature summary
-- Bug fixes
-- Breaking changes
-- Known issues
-- Upgrade instructions
+- Document new features
+- List bug fixes
+- Note breaking changes
+- Update changelog
 
-### 2. Post-Deployment Assessment
-- Feature verification in production
-- Error rate monitoring
-- Performance metrics review
-- Security posture validation
+### 2. Post-Deployment Review
+- Performance analysis
+- User feedback review
+- Incident review
+- Success metrics
 
-### 3. Scale Review
-- Was the scale assessment accurate?
-- Process effectiveness assessment
-- Lessons learned documentation
-- Recommendations for next cycle
+### 3. Retrospective (`/KD-retrospective`)
+- What went well
+- What could improve
+- Action items
+- Team feedback
 
-### 4. Finalization
-- Mark all stages complete in `status.md`
-- Document remaining tech debt
-- Close development cycle
+### 4. Documentation
+- Update project docs
+- Archive artifacts
+- Knowledge transfer
+- Close project
 
 ## Exit Criteria
-- Release notes published
-- Post-deployment assessment complete
-- `status.md` fully updated
-- Development cycle closed
+- Release notes created
+- Retrospective complete
+- Documentation updated
+- Project closed
 
 ## Artifacts Produced
 - `release-notes.md`
-- Final `status.md`
+- Retrospective notes
+- Final status update
 
-## Checkpoint Required
-- No
-
-## Next Stage
-- Maintenance mode or new development cycle
+## Next Step
+- Project complete ✓
+- Or start new cycle
 
 ---
 *KD finishes what it starts. | KRACKEDDEVS | https://krackeddevs.com/*

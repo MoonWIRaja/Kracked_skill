@@ -1,53 +1,67 @@
-# Stage 6: Deployment
+# Stage 9: Deployment
 
 ## Metadata
 - **Stage Name:** Deployment
-- **Stage Number:** 6
+- **Stage Number:** 9 of 10
 - **Primary Role:** DevOps [DEVOPS]
-- **Commands:** `/KD-deployment-plan`
+- **Commands:** Multiple (see below)
+
+## Commands Available
+| Command | Description | Priority |
+|---------|-------------|----------|
+| `/KD-deployment-plan` | Deployment strategy | Core |
+| `/KD-validate-workflow` | Workflow validation | Recommended |
 
 ## Description
-The Deployment stage handles infrastructure planning, CI/CD configuration, and the actual deployment process. Production deployments require a human checkpoint.
+The Deployment stage handles the release of the application to production. DevOps creates deployment plans, configures infrastructure, and ensures smooth rollout.
 
 ## Entry Criteria
-- Quality checks passed (code review + security audit)
-- Architecture deployment section available
+- Quality checks passed
+- Code review approved
+- No critical issues
 
 ## Activities
 
-### 1. Deployment Plan
-Create using template `deployment-plan.md`:
-- Environment specifications
-- Step-by-step deployment procedure
-- Rollback strategy
-- Health check definitions
-- Monitoring and alerting setup
-- Environment variable management
-- Database migration plan
+### 1. Deployment Planning
+- Define deployment strategy
+- Plan rollback procedures
+- Configure environments
+- Set up monitoring
 
-### 2. Environments
-- `--env=staging` — Staging deployment
-- `--env=production` — Production deployment ⏸️
+### 2. Staging Deployment
+- Deploy to staging
+- Run smoke tests
+- Verify functionality
+- Performance check
 
-### 3. Pre-Deployment Checklist
-Run `pre-deployment.md` checklist before each deployment.
+### 3. Production Deployment
+- ⏸️ Requires approval
+- Deploy to production
+- Monitor deployment
+- Verify health
+
+### 4. Post-Deployment
+- Health checks
+- Log verification
+- Alert configuration
+- Documentation update
 
 ## Exit Criteria
-- Deployment plan created and approved (production ⏸️)
-- Deployment executed
+- Staging deployed successfully
+- Production deployed ⏸️
 - Health checks passing
 - Monitoring active
-- `status.md` Deployment State updated
 
 ## Artifacts Produced
 - `deployment-plan.md`
-- Updated `status.md` (Deployment State, Monitoring State)
+- Deployment scripts
+- Monitoring config
 
 ## Checkpoint Required
 - ⏸️ **Yes** — Production deployment requires human approval
 
 ## Next Stage
-- **Stage 7: Release** (`/KD-scale-review`)
+- **Stage 10: Release** (`/KD-scale-review`)
 
 ---
 *KD finishes what it starts. | KRACKEDDEVS | https://krackeddevs.com/*

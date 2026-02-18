@@ -2,9 +2,14 @@
 
 ## Metadata
 - **Stage Name:** [STAGE_NAME]
-- **Stage Number:** [N]
-- **Primary Role:** [ROLE]
-- **Commands:** [/KD-command]
+- **Stage Number:** [N] of 10
+- **Primary Role:** [ROLE] [PREFIX]
+- **Commands:** Multiple (see below)
+
+## Commands Available
+| Command | Description | Priority |
+|---------|-------------|----------|
+| `/KD-[command]` | [Description] | Core/Optional |
 
 ## Description
 [What happens in this stage]

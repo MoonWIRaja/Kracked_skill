@@ -498,6 +498,17 @@ download_files() {
     download_and_track "${base}/analytics/agent-performance.json" \
         "${KD_DIR}/analytics/agent-performance.json" "Analytics: Perf"
 
+    # ---- Version Checker ----
+    mkdir -p "${TARGET_DIR}/${KD_DIR}/version-checker"
+    download_and_track "${base}/version-checker/version-checker.js" \
+        "${KD_DIR}/version-checker/version-checker.js" "Version Checker: Core"
+    download_and_track "${base}/version-checker/registry.json" \
+        "${KD_DIR}/version-checker/registry.json" "Version Checker: Registry"
+    download_and_track "${base}/version-checker/compatibility-rules.json" \
+        "${KD_DIR}/version-checker/compatibility-rules.json" "Version Checker: Rules"
+    download_and_track "${base}/version-checker/README.md" \
+        "${KD_DIR}/version-checker/README.md" "Version Checker: Docs"
+
     # ---- Exporters ----
     download_and_track "${base}/exporters/export-consolidated.sh" \
         "${KD_DIR}/exporters/export-consolidated.sh" "Export: Consolidated"
@@ -509,6 +520,32 @@ download_files() {
     # ---- Artifacts ----
     download_and_track "${base}/artifacts/manifest.yaml" \
         "${KD_DIR}/artifacts/manifest.yaml" "Artifacts: Manifest"
+
+    # ---- Core System ----
+    mkdir -p "${TARGET_DIR}/${KD_DIR}/core"
+    mkdir -p "${TARGET_DIR}/${KD_DIR}/core/indexes"
+    download_and_track "${base}/core/core.md" \
+        "${KD_DIR}/core/core.md" "Core: Entry Point"
+    download_and_track "${base}/core/indexes/skills-index.md" \
+        "${KD_DIR}/core/indexes/skills-index.md" "Index: Skills"
+    download_and_track "${base}/core/indexes/commands-index.md" \
+        "${KD_DIR}/core/indexes/commands-index.md" "Index: Commands"
+    download_and_track "${base}/core/indexes/tools-index.md" \
+        "${KD_DIR}/core/indexes/tools-index.md" "Index: Tools"
+    download_and_track "${base}/core/indexes/roles-index.md" \
+        "${KD_DIR}/core/indexes/roles-index.md" "Index: Roles"
+    download_and_track "${base}/core/indexes/stages-index.md" \
+        "${KD_DIR}/core/indexes/stages-index.md" "Index: Stages"
+
+    # ---- Skills ----
+    mkdir -p "${TARGET_DIR}/${KD_DIR}/skills"
+    local skills="01-supabase-postgres 02-insecure-defaults 03-react-nextjs 04-premium-design-system 05-web-perf 06-code-review 07-pwa-service-worker 09-animations-components 10-recursive-decomposition"
+    for skill in $skills; do
+        download_and_track "${base}/skills/${skill}.md" \
+            "${KD_DIR}/skills/${skill}.md" "Skill: ${skill}"
+    done
+    download_and_track "${base}/skills/SKILLS.md" \
+        "${KD_DIR}/skills/SKILLS.md" "Skills: Index"
 
     log_success "KD files downloaded."
 }
@@ -535,7 +572,7 @@ deploy_commands() {
     mkdir -p "$target_cmd_dir"
     log_verbose "Created ${rel_dir}/ directory"
 
-    local cmd_names="KD KD-analyze KD-architecture KD-brainstorm KD-build-agent KD-build-module KD-build-workflow KD-code-review KD-deployment-plan KD-dev-story KD-doc-project KD-domain-research KD-epics-and-stories KD-fix-course KD-game-arch KD-game-architect KD-game-brainstorm KD-game-brief KD-game-designer KD-game-dev KD-game-dev-story KD-game-gdd KD-game-narrative KD-game-qa KD-game-scrum-master KD-game-solo KD-game-story KD-game-test-auto KD-game-test-design KD-game-test-perf KD-game-test-plan KD-game-writer KD-help KD-idea-coach KD-idea-design-thinking KD-idea-innovation KD-idea-presenter KD-idea-problem-solving KD-idea-solver KD-idea-storyteller KD-idea-storytelling KD-idea-strategist KD-market-research KD-party-mode KD-prd KD-product-brief KD-project-context KD-qa-automate KD-quick-dev KD-quick-spec KD-retrospective KD-role-analyst KD-role-architect KD-role-bmad-master KD-role-dev KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design KD-role-data-scientist KD-role-mobile-dev KD-role-dba KD-test-sprite KD-tool-selector"
+    local cmd_names="KD KD-analyze KD-architecture KD-brainstorm KD-build-agent KD-build-module KD-build-workflow KD-code-review KD-deployment-plan KD-dev-story KD-doc-project KD-domain-research KD-epics-and-stories KD-fix-course KD-game-arch KD-game-architect KD-game-brainstorm KD-game-brief KD-game-designer KD-game-dev KD-game-dev-story KD-game-gdd KD-game-narrative KD-game-qa KD-game-scrum-master KD-game-solo KD-game-story KD-game-test-auto KD-game-test-design KD-game-test-perf KD-game-test-plan KD-game-writer KD-help KD-idea-coach KD-idea-design-thinking KD-idea-innovation KD-idea-presenter KD-idea-problem-solving KD-idea-solver KD-idea-storyteller KD-idea-storytelling KD-idea-strategist KD-market-research KD-party-mode KD-prd KD-product-brief KD-project-context KD-qa-automate KD-quick-dev KD-quick-spec KD-retrospective KD-role-analyst KD-role-architect KD-role-bmad-master KD-role-dev KD-role-pm KD-role-qa KD-role-scrum-master KD-role-solo-dev KD-role-tech-writer KD-role-ux KD-scale-review KD-sprint-planning KD-sprint-status KD-status KD-swarm KD-tech-research KD-test-arch KD-test-atdd KD-test-automate KD-test-ci KD-test-design KD-test-frame KD-test-nfr KD-test-teach KD-test-trace KD-ux-design KD-validate KD-validate-agent KD-validate-workflow KD-kickoff KD-refactor KD-test KD-api-design KD-role-data-scientist KD-role-mobile-dev KD-role-dba KD-test-sprite KD-tool-selector KD-version-check"
 
     local downloaded=0
     for cmd in $cmd_names; do

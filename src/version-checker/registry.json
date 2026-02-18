@@ -1,0 +1,88 @@
+{
+  "lastUpdated": "2026-02-17T23:22:48.688Z",
+  "cache": {
+    "next": {
+      "latest": "16.1.6",
+      "lts": null,
+      "next": null,
+      "versions": [
+        "16.2.0-canary.38",
+        "16.2.0-canary.39",
+        "16.2.0-canary.40",
+        "16.2.0-canary.41",
+        "16.2.0-canary.42",
+        "16.2.0-canary.43",
+        "16.2.0-canary.45",
+        "16.2.0-canary.46",
+        "16.2.0-canary.47",
+        "16.2.0-canary.48"
+      ],
+      "checked": "2026-02-17T23:22:33.474Z",
+      "cached": false
+    },
+    "express": {
+      "latest": "5.2.1",
+      "lts": null,
+      "next": null,
+      "versions": [
+        "5.0.0",
+        "4.21.0",
+        "4.21.1",
+        "5.0.1",
+        "4.21.2",
+        "5.1.0",
+        "4.22.0",
+        "5.2.0",
+        "5.2.1",
+        "4.22.1"
+      ],
+      "checked": "2026-02-17T23:22:33.621Z",
+      "cached": false
+    },
+    "react": {
+      "latest": "19.2.4",
+      "lts": null,
+      "next": "19.3.0-canary-47d1ad14-20260216",
+      "versions": [
+        "19.3.0-canary-272441a9-20260209",
+        "0.0.0-experimental-272441a9-20260209",
+        "19.3.0-canary-6066c782-20260212",
+        "0.0.0-experimental-6066c782-20260212",
+        "19.3.0-canary-03ca38e6-20260213",
+        "0.0.0-experimental-03ca38e6-20260213",
+        "19.3.0-canary-e8c63626-20260213",
+        "0.0.0-experimental-e8c63626-20260213",
+        "19.3.0-canary-47d1ad14-20260216",
+        "0.0.0-experimental-47d1ad14-20260216"
+      ],
+      "checked": "2026-02-17T23:22:47.494Z",
+      "cached": false
+    },
+    "@mui/material": {
+      "latest": "7.3.8",
+      "lts": null,
+      "next": "9.0.0-alpha.0",
+      "versions": [
+        "7.3.0",
+        "7.3.1",
+        "7.3.2",
+        "7.3.3",
+        "7.3.4",
+        "7.3.5",
+        "7.3.6",
+        "7.3.7",
+        "7.3.8",
+        "9.0.0-alpha.0"
+      ],
+      "checked": "2026-02-17T23:22:48.688Z",
+      "cached": false
+    },
+    "nodejs": {
+      "latest": "25.6.1",
+      "lts": "24.13.1",
+      "ltsName": "Krypton",
+      "checked": "2026-02-18T00:37:46.748Z",
+      "cached": false
+    }
+  }
+}

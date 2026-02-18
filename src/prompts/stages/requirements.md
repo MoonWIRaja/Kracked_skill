@@ -1,16 +1,24 @@
-# Stage 2: Requirements
+# Stage 3: Requirements
 
 ## Metadata
 - **Stage Name:** Requirements
-- **Stage Number:** 2
+- **Stage Number:** 3 of 10
 - **Primary Role:** Product Manager [PM]
-- **Commands:** `/KD-product-brief`, `/KD-prd`
+- **Commands:** Multiple (see below)
+
+## Commands Available
+| Command | Description | Priority |
+|---------|-------------|----------|
+| `/KD-product-brief` | Product brief | Core |
+| `/KD-prd` | Requirements doc | Core |
+| `/KD-quick-spec` | Quick spec | Small projects |
 
 ## Description
 The Requirements stage translates discovery findings into structured product documents. The Product Manager creates a Product Brief (high-level vision) and PRD (detailed requirements). Both require human checkpoint approval.
 
 ## Entry Criteria
 - Discovery stage complete
+- Ideation stage complete
 - Scale confirmed
 - `status.md` Meta section populated
 
@@ -58,7 +66,7 @@ Create using template `prd.md`:
 - ⏸️ **Yes** — Both Product Brief AND PRD require human approval
 
 ## Next Stage
-- **Stage 3: Architecture** (`/KD-architecture`)
+- **Stage 4: Architecture** (`/KD-architecture`)
 
 ---
 *KD finishes what it starts. | KRACKEDDEVS | https://krackeddevs.com/*

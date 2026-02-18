@@ -1,7 +1,16 @@
-# Stage 2: Brainstorm (`/KD-brainstorm`)
+# Stage 2: Ideation (`/KD-brainstorm`)
 
 ## Overview
-The Brainstorm stage focuses on ideation, goal-setting, and creative exploration **before** formal requirements are written. This ensures the Product Brief and PRD are grounded in validated ideas rather than assumptions.
+The Ideation stage focuses on idea generation, goal-setting, and creative exploration **before** formal requirements are written. This ensures the Product Brief and PRD are grounded in validated ideas rather than assumptions.
+
+## Commands Available
+| Command | Description |
+|---------|-------------|
+| `/KD-brainstorm` | Core ideation (default) |
+| `/KD-idea-design-thinking` | Design thinking approach |
+| `/KD-idea-innovation` | Innovation workshop |
+| `/KD-idea-problem-solving` | Problem-solving focus |
+| `/KD-idea-strategist` | Strategic planning |
 
 ## Command
 ```

@@ -1,59 +1,67 @@
-# Stage 5: Quality
+# Stage 8: Quality
 
 ## Metadata
 - **Stage Name:** Quality
-- **Stage Number:** 5
-- **Primary Roles:** QA [QA] + Security [SEC]
-- **Commands:** `/KD-code-review`
+- **Stage Number:** 8 of 10
+- **Primary Role:** QA + Security [QA] [SEC]
+- **Commands:** Multiple (see below)
+
+## Commands Available
+| Command | Description | Priority |
+|---------|-------------|----------|
+| `/KD-code-review` | Code review | Core |
+| `/KD-validate` | Project validation | Core |
+| `/KD-fix-course` | Course correction | When issues |
 
 ## Description
-The Quality stage provides systematic code review and security audit. The QA role reviews code quality and test coverage while the Security role audits for vulnerabilities.
+The Quality stage ensures code quality through review, validation, and security audit. Both QA and Security roles collaborate to verify the implementation meets standards.
 
 ## Entry Criteria
-- Implementation complete (all stories or per batch)
-- Tests passing
-- Code committed
+- All tests passing
+- Stories complete
+- Code coverage acceptable
 
 ## Activities
 
-### 1. Code Review (QA)
-- Code quality and readability
-- Error handling completeness
-- Test coverage analysis
-- Performance review
-- Best practices compliance
-- Documentation check
+### 1. Code Review (`/KD-code-review`)
+- Review code quality
+- Check best practices
+- Identify technical debt
+- Security vulnerabilities
+- Performance issues
 
-### 2. Security Audit (Security)
-- OWASP Top 10 check
-- Input validation review
-- Authentication/authorization audit
-- Secrets management check
-- Dependency vulnerability scan
-- Data handling review
+### 2. Security Audit
+- Dependency vulnerabilities
+- Authentication review
+- Authorization checks
+- Data protection
+- OWASP compliance
 
-### 3. Review Modes
-- `--scope=full` — Entire codebase
-- `--scope=diff` — Changed files only
-- `--severity=normal` — Standard review
-- `--severity=strict` — Stricter standards
+### 3. Validation (`/KD-validate`)
+- Project structure check
+- Configuration validation
+- Environment setup
+- Integration verification
+
+### 4. Course Correction (`/KD-fix-course`)
+- Address issues found
+- Refactor if needed
+- Update documentation
+- Re-validate
 
 ## Exit Criteria
-- Code review verdict: PASS or PASS WITH CONDITIONS
-- Security audit verdict: SECURE or CONDITIONALLY SECURE
-- All critical issues resolved
-- Reports generated
+- Code review passed
+- No critical issues
+- Security audit passed
+- Validation complete
 
 ## Artifacts Produced
-- Code review report (inline)
-- Security audit report (inline)
-- Updated `status.md`
-
-## Checkpoint Required
-- No formal checkpoint (unless FAIL verdict)
+- `code-review.md`
+- Security report
+- Validation report
 
 ## Next Stage
-- **Stage 6: Deployment** (`/KD-deployment-plan`)
+- **Stage 9: Deployment** (`/KD-deployment-plan`)
 
 ---
 *KD finishes what it starts. | KRACKEDDEVS | https://krackeddevs.com/*

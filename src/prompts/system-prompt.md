@@ -181,32 +181,39 @@ For detailed role definitions, read files in `.kracked/prompts/roles/`.
 
 ---
 
-## 📊 WORKFLOW STAGES (8 Stages)
+## 📊 WORKFLOW STAGES (10 Stages)
 
 ```
-┌──────────┐    ┌────────────┐    ┌──────────────┐    ┌──────────────┐
-│ Discovery│───▶│ Brainstorm │───▶│ Requirements │───▶│ Architecture │
-│ Stage 1  │    │ Stage 2    │    │ Stage 3      │    │ Stage 4      │
-└──────────┘    └────────────┘    └──────────────┘    └──────┬───────┘
-                                                              │
-┌──────────┐    ┌────────────┐    ┌─────────────┐    ┌────────┴───────┐
-│ Release  │◀───│ Deployment │◀───│ Quality     │◀───│ Implementation │
-│ Stage 8  │    │ Stage 7    │    │ Stage 6     │    │ Stage 5        │
-└──────────┘    └────────────┘    └─────────────┘    └────────────────┘
+┌──────────┐   ┌──────────┐   ┌─────────────┐   ┌──────────────┐
+│Discovery │──▶│ Ideation │──▶│Requirements │──▶│ Architecture │
+│ Stage 1  │   │ Stage 2  │   │  Stage 3    │   │   Stage 4    │
+└──────────┘   └──────────┘   └─────────────┘   └──────┬───────┘
+                                                     │
+┌──────────┐   ┌──────────┐   ┌─────────────┐   ┌────┴────────┐
+│ Release  │◀──│Deployment│◀──│   Quality   │◀──│   Testing   │
+│ Stage 10 │   │ Stage 9  │   │   Stage 8   │   │   Stage 7   │
+└──────────┘   └──────────┘   └─────────────┘   └─────────────┘
+                                                     │
+                              ┌─────────────┐   ┌────┴────────┐
+                              │   Release   │◀──│ Deployment  │
+                              │  Stage 10   │   │   Stage 9   │
+                              └─────────────┘   └─────────────┘
 ```
 
 ### Stage Overview
 
-| Stage | Command | Role | Output |
-|-------|---------|------|--------|
-| 1. Discovery | `/KD-analyze` | Analyst | `status.md` |
-| 2. Brainstorm | `/KD-brainstorm` | Analyst + PM | `brainstorm.md` |
+| Stage | Key Commands | Role | Output |
+|-------|--------------|------|--------|
+| 1. Discovery | `/KD-analyze`, `/KD-kickoff` | Analyst | `status.md` |
+| 2. Ideation | `/KD-brainstorm`, `/KD-idea-*` | Analyst + PM | `brainstorm.md` |
 | 3. Requirements | `/KD-product-brief`, `/KD-prd` | PM | `product-brief.md`, `prd.md` |
-| 4. Architecture | `/KD-architecture` | Architect | `architecture.md` |
-| 5. Implementation | `/KD-epics-and-stories`, `/KD-dev-story` | Tech Lead → Engineer | `epic-N/storiesN-M.md` |
-| 6. Quality | `/KD-code-review` | QA + Security | `code-review.md` |
-| 7. Deployment | `/KD-deployment-plan` | DevOps | `deployment-plan.md` |
-| 8. Release | `/KD-scale-review` | Release Manager | `release-notes.md` |
+| 4. Architecture | `/KD-architecture`, `/KD-api-design` | Architect | `architecture.md` |
+| 5. Planning | `/KD-epics-and-stories` | Tech Lead | Story cards |
+| 6. Implementation | `/KD-dev-story`, `/KD-refactor` | Engineer | Code |
+| 7. Testing | `/KD-test`, `/KD-test-automate` | QA | Test reports |
+| 8. Quality | `/KD-code-review`, `/KD-validate` | QA + Security | `code-review.md` |
+| 9. Deployment | `/KD-deployment-plan` | DevOps | `deployment-plan.md` |
+| 10. Release | `/KD-scale-review` | Release Manager | `release-notes.md` |
 
 For detailed stage definitions, read files in `.kracked/prompts/stages/`.
 

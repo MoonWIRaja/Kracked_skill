@@ -1,6 +1,6 @@
 {
   "system_name": "KD (Kracked_Skills)",
-  "system_version": "v1.0.0",
+  "system_version": "v5.0.0",
   "system_author": "KRACKEDDEVS",
   "system_site": "https://krackeddevs.com/",
   "system_motto": "KD finishes what it starts.",
@@ -25,6 +25,7 @@
   "role_release_manager": "Release Manager",
 
   "stage_discovery": "Discovery",
+  "stage_brainstorm": "Brainstorm",
   "stage_requirements": "Requirements",
   "stage_architecture": "Architecture",
   "stage_implementation": "Implementation",
