@@ -23,8 +23,18 @@ const command = args[0];
 const nonInteractive = args.includes('--non-interactive') || args.includes('-ni');
 const force = args.includes('--force') || args.includes('-f');
 
-// Parse options
+// Parse options (handles both --option=value and --option value)
 function getOption(name, shortName) {
+  for (const arg of args) {
+    // Check for --option=value format
+    if (arg.startsWith(`--${name}=`)) {
+      return arg.split('=')[1];
+    }
+    if (arg.startsWith(`-${shortName}=`)) {
+      return arg.split('=')[1];
+    }
+  }
+  // Check for --option value format
   const idx = args.findIndex(a => a === `--${name}` || a === `-${shortName}`);
   if (idx !== -1 && args[idx + 1]) {
     return args[idx + 1];

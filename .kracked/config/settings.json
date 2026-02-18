@@ -1,0 +1,12 @@
+{
+  "version": "5.0.0",
+  "project_name": "Kracked_skill",
+  "language": "ms",
+  "target_tools": [
+    "cline"
+  ],
+  "scale": "auto",
+  "installed_date": "2026-02-18T02:57:10.024Z",
+  "site": "https://krackeddevs.com/",
+  "branding": "KRACKEDDEVS"
+}
