@@ -105,7 +105,7 @@ async function main() {
     
     // Interactive TUI mode
     showBanner();
-    await mainMenu();
+    await mainMenu({ installDir });
     
   } catch (error) {
     // Handle user cancel (Ctrl+C)

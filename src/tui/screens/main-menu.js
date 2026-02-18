@@ -18,7 +18,7 @@ const MENU_ITEMS = [
   { key: '5', name: '🚪 Exit', value: 'exit', description: 'Exit the application' },
 ];
 
-export async function mainMenu() {
+export async function mainMenu(options = {}) {
   console.log(chalk.white('  🚀 MAIN MENU'));
   console.log();
   
@@ -44,20 +44,20 @@ export async function mainMenu() {
       if (!item) {
         console.log(chalk.red('\n  Invalid choice. Please try again.'));
         console.log();
-        resolve(await mainMenu());
+        resolve(await mainMenu(options));
         return;
       }
 
       try {
         switch (item.value) {
           case 'install':
-            await installKD({});
+            await installKD(options);
             break;
           case 'update':
-            await updateKD({});
+            await updateKD(options);
             break;
           case 'uninstall':
-            await uninstallKD({});
+            await uninstallKD(options);
             break;
           case 'about':
             await showAbout();
