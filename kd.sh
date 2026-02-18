@@ -91,4 +91,4 @@ exec < /dev/tty
 # Run from cache folder but ALWAYS pass original directory
 # This is the key fix - always pass --install-dir
 cd "$KD_FOLDER"
-node kd.js --install-dir="$ORIGINAL_DIR" "$@"
+node kd.js --install-dir="$ORIGINAL_DIR" "$@" 2>&1
