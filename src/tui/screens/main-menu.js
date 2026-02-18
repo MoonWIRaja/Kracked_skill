@@ -18,17 +18,16 @@ const MENU_ITEMS = [
   { key: '5', name: '🚪 Exit', value: 'exit', description: 'Exit the application' },
 ];
 
-function askContinue() {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
-
+function waitForInput(prompt) {
   return new Promise((resolve) => {
-    rl.question(chalk.cyan('\n  Press [M] for Main Menu or [E] to Exit: '), (answer) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    
+    rl.question(prompt, (answer) => {
       rl.close();
-      const choice = answer.trim().toUpperCase();
-      resolve(choice === 'M' ? 'menu' : 'exit');
+      resolve(answer.trim().toUpperCase());
     });
   });
 }
@@ -44,18 +43,7 @@ export async function mainMenu(options = {}) {
     }
     console.log();
 
-    const rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-
-    const choice = await new Promise((resolve) => {
-      rl.question(chalk.white('  Enter your choice [1-5]: '), (answer) => {
-        rl.close();
-        resolve(answer.trim());
-      });
-    });
-
+    const choice = await waitForInput(chalk.white('  Enter your choice [1-5]: '));
     const item = MENU_ITEMS.find(m => m.key === choice || m.value === choice.toLowerCase());
 
     if (!item) {
@@ -63,57 +51,42 @@ export async function mainMenu(options = {}) {
       continue;
     }
 
+    if (item.value === 'exit') {
+      console.log(chalk.gray('\n  👋 Goodbye!'));
+      console.log(chalk.cyan('  KD finishes what it starts.'));
+      process.exit(0);
+    }
+
     try {
       switch (item.value) {
         case 'install':
           await installKD(options);
-          const installChoice = await askContinue();
-          if (installChoice === 'exit') {
-            console.log(chalk.gray('\n  👋 Goodbye!'));
-            console.log(chalk.cyan('  KD finishes what it starts.'));
-            process.exit(0);
-          }
           break;
-
         case 'update':
           await updateKD(options);
-          const updateChoice = await askContinue();
-          if (updateChoice === 'exit') {
-            console.log(chalk.gray('\n  👋 Goodbye!'));
-            console.log(chalk.cyan('  KD finishes what it starts.'));
-            process.exit(0);
-          }
           break;
-
         case 'uninstall':
           await uninstallKD(options);
-          const uninstallChoice = await askContinue();
-          if (uninstallChoice === 'exit') {
-            console.log(chalk.gray('\n  👋 Goodbye!'));
-            console.log(chalk.cyan('  KD finishes what it starts.'));
-            process.exit(0);
-          }
           break;
-
         case 'about':
           await showAbout();
-          const aboutChoice = await askContinue();
-          if (aboutChoice === 'exit') {
-            console.log(chalk.gray('\n  👋 Goodbye!'));
-            console.log(chalk.cyan('  KD finishes what it starts.'));
-            process.exit(0);
-          }
           break;
-
-        case 'exit':
-          console.log(chalk.gray('\n  👋 Goodbye!'));
-          console.log(chalk.cyan('  KD finishes what it starts.'));
-          process.exit(0);
       }
+
+      // After operation, ask to continue
+      console.log();
+      const cont = await waitForInput(chalk.cyan('  Press [M] for Main Menu, any other key to Exit: '));
+      
+      if (cont !== 'M') {
+        console.log(chalk.gray('\n  👋 Goodbye!'));
+        console.log(chalk.cyan('  KD finishes what it starts.'));
+        process.exit(0);
+      }
+
     } catch (error) {
       console.error(chalk.red(`\n  Error: ${error.message}`));
-      const errorChoice = await askContinue();
-      if (errorChoice === 'exit') {
+      const cont = await waitForInput(chalk.cyan('\n  Press [M] for Main Menu, any other key to Exit: '));
+      if (cont !== 'M') {
         process.exit(0);
       }
     }

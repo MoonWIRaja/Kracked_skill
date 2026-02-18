@@ -19,7 +19,7 @@ NC='\033[0m' # No Color
 # Save the original directory where user ran the command
 ORIGINAL_DIR="$(pwd)"
 
-# Banner (only shown in shell wrapper)
+# Banner
 show_banner() {
     echo -e "${CYAN}"
     echo "╔═══════════════════════════════════════════════════════════════════════╗"
@@ -86,15 +86,13 @@ echo -e "${GREEN}Launching KD TUI...${NC}"
 echo ""
 
 # Run from cache folder but ALWAYS pass original directory
-# Don't show banner again in Node.js (pass --no-banner flag)
 cd "$KD_FOLDER"
 
-# Check if we have a TTY available for interactive input
-if [ -t 0 ]; then
-    # We have a TTY, run normally
-    node kd.js --install-dir="$ORIGINAL_DIR" --no-banner "$@"
-else
-    # No TTY (piped), redirect stdin from /dev/tty
+# Check if /dev/tty exists and is readable (for interactive terminal)
+if [ -e /dev/tty ] && [ -r /dev/tty ]; then
+    # Redirect stdin from /dev/tty for interactive input
     exec < /dev/tty
-    node kd.js --install-dir="$ORIGINAL_DIR" --no-banner "$@"
 fi
+
+# Run the TUI
+node kd.js --install-dir="$ORIGINAL_DIR" --no-banner "$@"
