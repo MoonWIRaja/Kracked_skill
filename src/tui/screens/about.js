@@ -39,7 +39,7 @@ export async function showAbout() {
   console.log(chalk.cyan('  └─────────────────────────────────────────┘'));
   console.log();
   console.log(chalk.gray('  • 9 Workflow Stages (discovery → release)'));
-  console.log(chalk.gray('  • 95 Commands (analyze, prd, architecture...)'));
+  console.log(chalk.gray('  • 92 Commands (analyze, prd, architecture...)'));
   console.log(chalk.gray('  • 14 AI Roles (architect, engineer, qa...)'));
   console.log(chalk.gray('  • 16 Technical Skills (react, devops...)'));
   console.log(chalk.gray('  • 9 Templates (prd, story-card...)'));
