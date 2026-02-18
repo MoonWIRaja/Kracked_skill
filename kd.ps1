@@ -47,6 +47,9 @@ if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
     exit 1
 }
 
+# Save original directory
+$ORIGINAL_DIR = Get-Location
+
 # Check if we're in KD repo directory
 if (Test-Path "kd.js") {
     # Run local TUI
@@ -102,26 +105,26 @@ if (Test-Path "kd.js") {
     # Install dependencies if needed
     $nodeModulesPath = Join-Path $KD_FOLDER "node_modules"
     if (-not (Test-Path $nodeModulesPath)) {
-        if (Get-Command npm -ErrorAction SilentlyContinue) {
-            Write-Host "  Installing dependencies..." -ForegroundColor Cyan
-            Push-Location $KD_FOLDER
-            npm install --silent 2>$null
-            Pop-Location
-        }
+        # Use cmd /c to bypass PowerShell execution policy
+        Write-Host "  Installing dependencies..." -ForegroundColor Cyan
+        Set-Location $KD_FOLDER
+        cmd /c "npm install --silent 2>nul"
+        Set-Location $ORIGINAL_DIR
     }
     
     Write-Host "  Launching KD TUI..." -ForegroundColor Green
     Write-Host ""
     
-    # Build args
-    $args = @($Command)
+    # Build args with install-dir
+    $args = @("--install-dir", $ORIGINAL_DIR.Path, "--no-banner")
+    if ($Command) { $args = @($Command) + $args }
     if ($Target) { $args += "--target", $Target }
     if ($Language) { $args += "--lang", $Language }
     if ($NonInteractive) { $args += "--non-interactive" }
     if ($Force) { $args += "--force" }
     
     # Run from KD folder
-    Push-Location $KD_FOLDER
+    Set-Location $KD_FOLDER
     node kd.js @args
-    Pop-Location
+    Set-Location $ORIGINAL_DIR
 }
