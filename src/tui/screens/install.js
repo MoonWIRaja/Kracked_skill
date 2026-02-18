@@ -3,16 +3,12 @@
  * KD TUI Application
  */
 
-import { select, checkbox, input, confirm } from '@inquirer/prompts';
+import * as readline from 'readline';
 import chalk from 'chalk';
 import ora from 'ora';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import axios from 'axios';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const VERSION = '5.0.0';
 const KD_REPO = 'MoonWIRaja/Kracked_Skills';
@@ -21,23 +17,32 @@ const KD_DIR = '.kracked';
 
 // AI Tools available
 const AI_TOOLS = [
-  { name: 'Claude Code', value: 'claude-code', description: "Anthropic's official CLI" },
-  { name: 'Cursor', value: 'cursor', description: 'AI-powered IDE' },
-  { name: 'Cline', value: 'cline', description: 'VS Code AI assistant' },
-  { name: 'Kilo Code', value: 'kilocode', description: 'VS Code extension' },
-  { name: 'Roo Code', value: 'roo', description: 'VS Code extension' },
-  { name: 'Antigravity', value: 'antigravity', description: 'AI agent framework' },
+  { key: '1', name: 'Claude Code', value: 'claude-code' },
+  { key: '2', name: 'Cursor', value: 'cursor' },
+  { key: '3', name: 'Cline', value: 'cline' },
+  { key: '4', name: 'Kilo Code', value: 'kilocode' },
+  { key: '5', name: 'Roo Code', value: 'roo' },
+  { key: '6', name: 'Antigravity', value: 'antigravity' },
+  { key: 'A', name: 'All', value: 'all' },
 ];
 
 // Common languages
-const COMMON_LANGUAGES = [
-  { name: 'English (Default)', value: 'en' },
-  { name: 'Bahasa Melayu', value: 'ms' },
-  { name: '日本語 (Japanese)', value: '日本語' },
-  { name: '中文 (Chinese)', value: '中文' },
-  { name: 'español (Spanish)', value: 'español' },
-  { name: '✏️  Type custom language...', value: 'custom' },
+const LANGUAGES = [
+  { key: '1', name: 'English (Default)', value: 'en' },
+  { key: '2', name: 'Bahasa Melayu', value: 'ms' },
+  { key: '3', name: '日本語 (Japanese)', value: '日本語' },
+  { key: '4', name: '中文 (Chinese)', value: '中文' },
+  { key: '5', name: 'español (Spanish)', value: 'español' },
+  { key: 'C', name: 'Custom (type your own)', value: 'custom' },
 ];
+
+function ask(rl, question) {
+  return new Promise((resolve) => {
+    rl.question(question, (answer) => {
+      resolve(answer.trim());
+    });
+  });
+}
 
 export async function installKD(options = {}) {
   console.log(chalk.cyan('  ───────────────────────────────────────────'));
@@ -58,110 +63,139 @@ export async function installKD(options = {}) {
     }
   }
 
-  // Step 1: Select AI Tools
-  let selectedTools = [];
-  if (options.target) {
-    selectedTools = options.target.split(',').map(t => t.trim());
-  } else if (!options.nonInteractive) {
-    console.log(chalk.white('  Step 1 of 3: Select AI Tool(s)'));
-    console.log();
-    
-    selectedTools = await checkbox({
-      message: 'Select target AI tool(s):',
-      choices: AI_TOOLS,
-      instructions: false,
-    });
-
-    if (selectedTools.length === 0) {
-      console.log(chalk.yellow('  No tools selected. Using Claude Code as default.'));
-      selectedTools = ['claude-code'];
-    }
-  } else {
-    selectedTools = ['claude-code'];
-  }
-
-  // Step 2: Select Language
-  let language = 'en';
-  if (options.lang) {
-    language = options.lang;
-  } else if (!options.nonInteractive) {
-    console.log();
-    console.log(chalk.white('  Step 2 of 3: Select Language'));
-    console.log();
-
-    const langChoice = await select({
-      message: 'Select preferred language:',
-      choices: COMMON_LANGUAGES,
-    });
-
-    if (langChoice === 'custom') {
-      language = await input({
-        message: 'Enter your preferred language:',
-        default: 'English',
-      });
-    } else {
-      language = langChoice;
-    }
-  }
-
-  // Step 3: Confirm
-  if (!options.nonInteractive) {
-    console.log();
-    console.log(chalk.white('  Step 3 of 3: Confirm Installation'));
-    console.log();
-    
-    console.log(chalk.cyan('  ╔═══════════════════════════════════════════════════════╗'));
-    console.log(chalk.cyan('  ║') + chalk.white('           INSTALLATION SUMMARY                         ') + chalk.cyan('║'));
-    console.log(chalk.cyan('  ╠═══════════════════════════════════════════════════════╣'));
-    console.log(chalk.cyan('  ║') + chalk.white(`  Version:      ${VERSION}                                    `).padEnd(57) + chalk.cyan('║'));
-    console.log(chalk.cyan('  ║') + chalk.white(`  Directory:    ${process.cwd()}\\${KD_DIR}`).padEnd(57) + chalk.cyan('║'));
-    console.log(chalk.cyan('  ║') + chalk.white(`  Target(s):    ${selectedTools.join(', ')}`).padEnd(57) + chalk.cyan('║'));
-    console.log(chalk.cyan('  ║') + chalk.white(`  Language:     ${language}`).padEnd(57) + chalk.cyan('║'));
-    console.log(chalk.cyan('  ╚═══════════════════════════════════════════════════════╝'));
-    console.log();
-
-    const proceed = await confirm({
-      message: 'Proceed with installation?',
-      default: true,
-    });
-
-    if (!proceed) {
-      console.log(chalk.yellow('\n  Installation cancelled.'));
-      return;
-    }
-  }
-
-  // Installation
-  console.log();
-  const spinner = ora('Installing KD...').start();
+  // Create readline interface
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
   try {
-    // Create directories
-    spinner.text = 'Creating directory structure...';
-    await createDirectories();
-    
-    // Download files
-    spinner.text = 'Downloading KD files...';
-    await downloadFiles();
-    
-    // Create config
-    spinner.text = 'Creating configuration...';
-    await createConfig(selectedTools, language);
-    
-    // Setup adapters
-    spinner.text = 'Setting up adapters...';
-    for (const tool of selectedTools) {
-      await setupAdapter(tool);
+    // Step 1: Select AI Tools
+    let selectedTools = [];
+    if (options.target) {
+      selectedTools = options.target.split(',').map(t => t.trim());
+    } else if (!options.nonInteractive) {
+      console.log(chalk.white('  Step 1 of 3: Select AI Tool(s)'));
+      console.log();
+      
+      for (const tool of AI_TOOLS) {
+        console.log(chalk.cyan(`  [${tool.key}]`) + ` ${tool.name}`);
+      }
+      console.log();
+      console.log(chalk.gray('  Enter multiple numbers separated by commas (e.g., 1,3,4) or A for all'));
+      console.log();
+
+      const answer = await ask(rl, chalk.white('  Select AI tool(s): '));
+      
+      if (answer.toUpperCase() === 'A') {
+        selectedTools = AI_TOOLS.filter(t => t.value !== 'all').map(t => t.value);
+      } else {
+        const keys = answer.split(',').map(k => k.trim().toUpperCase());
+        for (const key of keys) {
+          const tool = AI_TOOLS.find(t => t.key.toUpperCase() === key);
+          if (tool && tool.value !== 'all') {
+            selectedTools.push(tool.value);
+          }
+        }
+      }
+
+      if (selectedTools.length === 0) {
+        console.log(chalk.yellow('  No tools selected. Using Claude Code as default.'));
+        selectedTools = ['claude-code'];
+      }
+    } else {
+      selectedTools = ['claude-code'];
     }
 
-    spinner.succeed('Installation complete!');
-    
-    // Success message
-    showSuccess(selectedTools, language);
+    // Step 2: Select Language
+    let language = 'en';
+    if (options.lang) {
+      language = options.lang;
+    } else if (!options.nonInteractive) {
+      console.log();
+      console.log(chalk.white('  Step 2 of 3: Select Language'));
+      console.log();
+      
+      for (const lang of LANGUAGES) {
+        console.log(chalk.cyan(`  [${lang.key}]`) + ` ${lang.name}`);
+      }
+      console.log();
+
+      const answer = await ask(rl, chalk.white('  Select language: '));
+      
+      const lang = LANGUAGES.find(l => l.key.toUpperCase() === answer.toUpperCase());
+      if (lang) {
+        if (lang.value === 'custom') {
+          language = await ask(rl, chalk.white('  Enter your language: '));
+        } else {
+          language = lang.value;
+        }
+      }
+    }
+
+    // Step 3: Confirm
+    if (!options.nonInteractive) {
+      console.log();
+      console.log(chalk.white('  Step 3 of 3: Confirm Installation'));
+      console.log();
+      
+      console.log(chalk.cyan('  ┌─────────────────────────────────────────┐'));
+      console.log(chalk.cyan('  │') + chalk.white('       INSTALLATION SUMMARY              ') + chalk.cyan('│'));
+      console.log(chalk.cyan('  ├─────────────────────────────────────────┤'));
+      console.log(chalk.cyan('  │') + chalk.white(`  Version:      ${VERSION}`) + ' '.repeat(40 - VERSION.length) + chalk.cyan('│'));
+      console.log(chalk.cyan('  │') + chalk.white(`  Directory:    ./${KD_DIR}`) + ' '.repeat(30) + chalk.cyan('│'));
+      console.log(chalk.cyan('  │') + chalk.white(`  Target(s):    ${selectedTools.join(', ')}`) + chalk.cyan('│'));
+      console.log(chalk.cyan('  │') + chalk.white(`  Language:     ${language}`) + chalk.cyan('│'));
+      console.log(chalk.cyan('  └─────────────────────────────────────────┘'));
+      console.log();
+
+      const confirm = await ask(rl, chalk.white('  Proceed with installation? [Y/n]: '));
+      
+      if (confirm && confirm.toLowerCase() === 'n') {
+        console.log(chalk.yellow('\n  Installation cancelled.'));
+        rl.close();
+        return;
+      }
+    }
+
+    rl.close();
+
+    // Installation
+    console.log();
+    const spinner = ora('Installing KD...').start();
+
+    try {
+      // Create directories
+      spinner.text = 'Creating directory structure...';
+      await createDirectories();
+      
+      // Download files
+      spinner.text = 'Downloading KD files...';
+      await downloadFiles();
+      
+      // Create config
+      spinner.text = 'Creating configuration...';
+      await createConfig(selectedTools, language);
+      
+      // Setup adapters
+      spinner.text = 'Setting up adapters...';
+      for (const tool of selectedTools) {
+        await setupAdapter(tool);
+      }
+
+      spinner.succeed('Installation complete!');
+      
+      // Success message
+      showSuccess(selectedTools, language);
+
+    } catch (error) {
+      spinner.fail('Installation failed!');
+      console.error(chalk.red(`  Error: ${error.message}`));
+      throw error;
+    }
 
   } catch (error) {
-    spinner.fail('Installation failed!');
-    console.error(chalk.red(`  Error: ${error.message}`));
+    rl.close();
     throw error;
   }
 }
@@ -193,32 +227,17 @@ async function createDirectories() {
 
 async function downloadFiles() {
   const files = [
-    // Prompts
     { url: `${KD_RAW_URL}/src/prompts/system-prompt.md`, dest: `${KD_DIR}/prompts/system-prompt.md` },
     { url: `${KD_RAW_URL}/src/prompts/role-switcher.md`, dest: `${KD_DIR}/prompts/role-switcher.md` },
-    
-    // Roles
     { url: `${KD_RAW_URL}/src/prompts/roles/analyst.md`, dest: `${KD_DIR}/prompts/roles/analyst.md` },
     { url: `${KD_RAW_URL}/src/prompts/roles/architect.md`, dest: `${KD_DIR}/prompts/roles/architect.md` },
     { url: `${KD_RAW_URL}/src/prompts/roles/engineer.md`, dest: `${KD_DIR}/prompts/roles/engineer.md` },
-    
-    // Stages
     { url: `${KD_RAW_URL}/src/prompts/stages/discovery.md`, dest: `${KD_DIR}/prompts/stages/discovery.md` },
     { url: `${KD_RAW_URL}/src/prompts/stages/brainstorm.md`, dest: `${KD_DIR}/prompts/stages/brainstorm.md` },
     { url: `${KD_RAW_URL}/src/prompts/stages/requirements.md`, dest: `${KD_DIR}/prompts/stages/requirements.md` },
     { url: `${KD_RAW_URL}/src/prompts/stages/architecture.md`, dest: `${KD_DIR}/prompts/stages/architecture.md` },
-    { url: `${KD_RAW_URL}/src/prompts/stages/planning.md`, dest: `${KD_DIR}/prompts/stages/planning.md` },
-    { url: `${KD_RAW_URL}/src/prompts/stages/implementation.md`, dest: `${KD_DIR}/prompts/stages/implementation.md` },
-    { url: `${KD_RAW_URL}/src/prompts/stages/testing.md`, dest: `${KD_DIR}/prompts/stages/testing.md` },
-    { url: `${KD_RAW_URL}/src/prompts/stages/quality.md`, dest: `${KD_DIR}/prompts/stages/quality.md` },
-    { url: `${KD_RAW_URL}/src/prompts/stages/deployment.md`, dest: `${KD_DIR}/prompts/stages/deployment.md` },
-    { url: `${KD_RAW_URL}/src/prompts/stages/release.md`, dest: `${KD_DIR}/prompts/stages/release.md` },
-    
-    // Language files
     { url: `${KD_RAW_URL}/src/config/language/en.json`, dest: `${KD_DIR}/config/language/en.json` },
     { url: `${KD_RAW_URL}/src/config/language/ms.json`, dest: `${KD_DIR}/config/language/ms.json` },
-    
-    // Templates
     { url: `${KD_RAW_URL}/src/templates/status.md`, dest: `${KD_DIR}/templates/status.md` },
     { url: `${KD_RAW_URL}/src/templates/product-brief.md`, dest: `${KD_DIR}/templates/product-brief.md` },
     { url: `${KD_RAW_URL}/src/templates/prd.md`, dest: `${KD_DIR}/templates/prd.md` },
@@ -277,51 +296,25 @@ async function createConfig(tools, language) {
 
 async function setupAdapter(tool) {
   const adapterConfigs = {
-    'claude-code': {
-      dir: '.claude',
-      file: 'CLAUDE.md',
-      content: `# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md`
-    },
-    'cursor': {
-      dir: '.cursor',
-      file: '.cursorrules',
-      content: `# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md`
-    },
-    'cline': {
-      dir: '.clinerules',
-      file: '.clinerules',
-      content: `# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md`
-    },
-    'kilocode': {
-      dir: '.kilocode',
-      file: '.kilocode',
-      content: `# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md`
-    },
-    'roo': {
-      dir: '.roo',
-      file: '.roo',
-      content: `# KD - AI Skill by KRACKEDDEVS
-Read .kracked/prompts/system-prompt.md for full instructions.
-Type /KD for command menu. Status: .kracked/KD_output/status/status.md`
-    },
+    'claude-code': { dir: '.claude', file: 'CLAUDE.md' },
+    'cursor': { dir: '.cursor', file: '.cursorrules' },
+    'cline': { dir: '.clinerules', file: '.clinerules' },
+    'kilocode': { dir: '.kilocode', file: '.kilocode' },
+    'roo': { dir: '.roo', file: '.roo' },
   };
 
   const config = adapterConfigs[tool];
   if (config) {
+    const content = `# KD - AI Skill by KRACKEDDEVS
+Read .kracked/prompts/system-prompt.md for full instructions.
+Type /KD for command menu. Status: .kracked/KD_output/status/status.md`;
+    
     const dirPath = path.join(process.cwd(), config.dir);
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath, { recursive: true });
     }
     const filePath = path.join(dirPath, config.file);
-    fs.writeFileSync(filePath, config.content);
+    fs.writeFileSync(filePath, content);
   }
 }
 
@@ -340,7 +333,7 @@ function showSuccess(tools, language) {
   console.log(chalk.cyan('  📋 Installed:'));
   console.log(chalk.white(`     Adapters:  ${tools.join(', ')}`));
   console.log(chalk.white(`     Language:  ${language}`));
-  console.log(chalk.white(`     Directory: ${process.cwd()}\\${KD_DIR}`));
+  console.log(chalk.white(`     Directory: ${process.cwd()}/${KD_DIR}`));
   console.log();
   console.log(chalk.cyan('  📝 Next Steps:'));
   console.log(chalk.white('     1. Open your AI tool'));
