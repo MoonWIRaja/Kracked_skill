@@ -1,6 +1,11 @@
-# KD-version-check
+---
+name: 'KD-version-check'
+description: 'Check latest versions and compatibility between technologies'
+disable-model-invocation: true
+---
 
-Check latest versions and compatibility between technologies.
+Read the full system prompt at .kracked/prompts/system-prompt.md and follow the instructions for the /KD-version-check command exactly as written.
+If specific instructions for this command are not in the system prompt, infer the intent from the command name (Check latest versions and compatibility between technologies) and execute accordingly.
 
 ## Usage
 

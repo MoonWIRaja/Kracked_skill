@@ -1,6 +1,11 @@
-# KD-role-security
+---
+name: 'KD-role-security'
+description: 'Role: Security Engineer'
+disable-model-invocation: true
+---
 
-Switch to **Security** role.
+Read the full system prompt at .kracked/prompts/system-prompt.md and follow the instructions for the /KD-role-security command exactly as written.
+If specific instructions for this command are not in the system prompt, infer the intent from the command name (Role: Security Engineer) and execute accordingly.
 
 ## Role Overview
 

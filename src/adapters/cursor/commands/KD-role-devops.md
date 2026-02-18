@@ -1,6 +1,11 @@
-# KD-role-devops
+---
+name: 'KD-role-devops'
+description: 'Role: DevOps Engineer'
+disable-model-invocation: true
+---
 
-Switch to **DevOps** role.
+Read the full system prompt at .kracked/prompts/system-prompt.md and follow the instructions for the /KD-role-devops command exactly as written.
+If specific instructions for this command are not in the system prompt, infer the intent from the command name (Role: DevOps Engineer) and execute accordingly.
 
 ## Role Overview
 

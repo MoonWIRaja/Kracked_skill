@@ -1,6 +1,11 @@
-# KD-role-release-manager
+---
+name: 'KD-role-release-manager'
+description: 'Role: Release Manager'
+disable-model-invocation: true
+---
 
-Switch to **Release Manager** role.
+Read the full system prompt at .kracked/prompts/system-prompt.md and follow the instructions for the /KD-role-release-manager command exactly as written.
+If specific instructions for this command are not in the system prompt, infer the intent from the command name (Role: Release Manager) and execute accordingly.
 
 ## Role Overview
 
