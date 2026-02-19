@@ -115,8 +115,8 @@ if (Test-Path "kd.js") {
     Write-Host "  Launching KD TUI..." -ForegroundColor Green
     Write-Host ""
     
-    # Build args with install-dir (quote the path for spaces)
-    $args = @("--install-dir=`"$ORIGINAL_DIR`"", "--no-banner")
+    # Build args with install-dir (pass as separate argument)
+    $args = @("--install-dir", $ORIGINAL_DIR, "--no-banner")
     if ($Command) { $args = @($Command) + $args }
     if ($Target) { $args += "--target", $Target }
     if ($Language) { $args += "--lang", $Language }

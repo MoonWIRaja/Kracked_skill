@@ -26,21 +26,30 @@ const noBanner = args.includes('--no-banner');
 
 // Parse options (handles both --option=value and --option value)
 function getOption(name, shortName) {
+  let value = null;
   for (const arg of args) {
     // Check for --option=value format
     if (arg.startsWith(`--${name}=`)) {
-      return arg.split('=')[1];
+      value = arg.split('=').slice(1).join('='); // Handle values with =
+      break;
     }
     if (arg.startsWith(`-${shortName}=`)) {
-      return arg.split('=')[1];
+      value = arg.split('=').slice(1).join('=');
+      break;
     }
   }
   // Check for --option value format
-  const idx = args.findIndex(a => a === `--${name}` || a === `-${shortName}`);
-  if (idx !== -1 && args[idx + 1]) {
-    return args[idx + 1];
+  if (!value) {
+    const idx = args.findIndex(a => a === `--${name}` || a === `-${shortName}`);
+    if (idx !== -1 && args[idx + 1]) {
+      value = args[idx + 1];
+    }
   }
-  return null;
+  // Strip quotes if present
+  if (value && ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'")))) {
+    value = value.slice(1, -1);
+  }
+  return value;
 }
 
 const targetOption = getOption('target', 't');

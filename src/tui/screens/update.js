@@ -126,8 +126,8 @@ async function downloadAllFiles(workDir) {
     { url: `${base}/prompts/conflict-resolution.md`, dest: `${KD_DIR}/prompts/conflict-resolution.md` },
   );
 
-  // Stages
-  for (const s of ['_stage-template', 'discovery', 'brainstorm', 'requirements', 'architecture', 'implementation', 'quality', 'deployment', 'release']) {
+  // Stages (11 files)
+  for (const s of ['_stage-template', 'discovery', 'brainstorm', 'planning', 'requirements', 'architecture', 'implementation', 'quality', 'testing', 'deployment', 'release']) {
     files.push({ url: `${base}/prompts/stages/${s}.md`, dest: `${KD_DIR}/prompts/stages/${s}.md` });
   }
 

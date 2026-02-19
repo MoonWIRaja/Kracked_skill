@@ -217,8 +217,8 @@ async function downloadAllFiles(workDir) {
 
   // Roles - SKIPPED (replaced by agents/*.agent.yaml in v5.0.0)
 
-  // Stages
-  for (const s of ['_stage-template', 'discovery', 'brainstorm', 'requirements', 'architecture', 'implementation', 'quality', 'deployment', 'release']) {
+  // Stages (11 files)
+  for (const s of ['_stage-template', 'discovery', 'brainstorm', 'planning', 'requirements', 'architecture', 'implementation', 'quality', 'testing', 'deployment', 'release']) {
     files.push({ url: `${base}/prompts/stages/${s}.md`, dest: `${KD_DIR}/prompts/stages/${s}.md` });
   }
 
