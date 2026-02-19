@@ -1,6 +1,6 @@
 /**
  * About Screen
- * KD TUI Application
+ * KD TUI Application - v5.0.0
  */
 
 import chalk from 'chalk';
@@ -32,19 +32,24 @@ export async function showAbout() {
   
   console.log(chalk.white('  Description:'));
   console.log(chalk.gray('  Structured Multi-Role AI Product Execution System'));
+  console.log(chalk.gray('  with Phase-Gate Architecture & Workflow Sharding'));
   console.log();
   
   console.log(chalk.cyan('  ┌─────────────────────────────────────────┐'));
-  console.log(chalk.cyan('  │') + chalk.bold.white('         FEATURES                          ') + chalk.cyan('│'));
+  console.log(chalk.cyan('  │') + chalk.bold.white('         v5.0.0 FEATURES                   ') + chalk.cyan('│'));
   console.log(chalk.cyan('  └─────────────────────────────────────────┘'));
   console.log();
-  console.log(chalk.gray('  • 9 Workflow Stages (discovery → release)'));
-  console.log(chalk.gray('  • 93 Commands (analyze, prd, architecture...)'));
-  console.log(chalk.gray('  • 14 AI Roles (architect, engineer, qa...)'));
-  console.log(chalk.gray('  • 16 Technical Skills (react, devops...)'));
-  console.log(chalk.gray('  • 9 Templates (prd, story-card...)'));
+  console.log(chalk.gray('  • 8 Workflow Stages (discovery → release)'));
+  console.log(chalk.gray('  • 15 Agent YAML Definitions (with persona)'));
+  console.log(chalk.gray('  • 7 Phase Gates (validation checkpoints)'));
+  console.log(chalk.gray('  • ~95 Workflow Step Files (sharded)'));
+  console.log(chalk.gray('  • 120+ Commands (analyze, prd, architecture...)'));
+  console.log(chalk.gray('  • 17 Technical Skills (react, devops...)'));
+  console.log(chalk.gray('  • 11 Templates (prd, story-card, tech-stack...)'));
   console.log(chalk.gray('  • 6 Checklists (security, code-quality...)'));
   console.log(chalk.gray('  • 5 Multi-Agent Modes (party-mode, swarm...)'));
+  console.log(chalk.gray('  • Knowledge Base (patterns & standards)'));
+  console.log(chalk.gray('  • Scale-Aware (SMALL / STANDARD / DEEP)'));
   console.log(chalk.gray('  • 6 AI Tool Adapters'));
   console.log(chalk.gray('  • Multi-Language Support (EN, MS, Custom)'));
   console.log();
@@ -59,6 +64,26 @@ export async function showAbout() {
   console.log(chalk.cyan('  [4]') + chalk.white(' Kilo Code') + chalk.gray('    → .kilocode/workflows/'));
   console.log(chalk.cyan('  [5]') + chalk.white(' Roo Code') + chalk.gray('     → .roo/commands/'));
   console.log(chalk.cyan('  [6]') + chalk.white(' Antigravity') + chalk.gray('  → .agent/workflows/'));
+  console.log();
+  
+  console.log(chalk.cyan('  ┌─────────────────────────────────────────┐'));
+  console.log(chalk.cyan('  │') + chalk.bold.white('         WHAT\'S NEW IN v5.0.0              ') + chalk.cyan('│'));
+  console.log(chalk.cyan('  └─────────────────────────────────────────┘'));
+  console.log();
+  console.log(chalk.green('  ✅') + chalk.white(' Agent YAML Definitions'));
+  console.log(chalk.gray('     Structured agent files with skills mapping'));
+  console.log();
+  console.log(chalk.green('  ✅') + chalk.white(' Phase-Gate Architecture'));
+  console.log(chalk.gray('     Validation checkpoints between phases'));
+  console.log();
+  console.log(chalk.green('  ✅') + chalk.white(' Workflow Sharding'));
+  console.log(chalk.gray('     Step-by-step workflow files'));
+  console.log();
+  console.log(chalk.green('  ✅') + chalk.white(' Knowledge Base'));
+  console.log(chalk.gray('     Patterns & standards for consistent code'));
+  console.log();
+  console.log(chalk.green('  ✅') + chalk.white(' Scale-Aware Workflows'));
+  console.log(chalk.gray('     SMALL / STANDARD / DEEP project modes'));
   console.log();
   
   console.log(chalk.cyan('  ┌─────────────────────────────────────────┐'));
